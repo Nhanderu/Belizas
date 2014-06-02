@@ -22,10 +22,10 @@ namespace Nhanderu.Belizas
             while (String.IsNullOrWhiteSpace(formula));
 
             //Verifies if the formula is valid.
-            if (TruthTable.HasDisallowedCharacters(formula, TruthTable.Expressions.Enumerate()))
-                Console.WriteLine("Fórmula inválida.");
-            else if (formula.StartsWith("?"))
+            if (formula.StartsWith("?"))
                 Console.WriteLine("Menu de opções.");
+            else if (TruthTable.HasDisallowedCharacters(formula, TruthTable.Expressions.Enumerate()))
+                Console.WriteLine("Fórmula inválida.");
             else
             {
                 //Writes the first lines of the reply.

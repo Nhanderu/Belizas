@@ -17,13 +17,19 @@ namespace Nhanderu.Belizas
             IfThen = '>',
             ThenIf = '<',
             IfAndOnlyIf = '-';
-        }
 
-        public static Char[] AllowedCharacters
-        {
-            get
+            public static Char[] Enumerate()
             {
-                return new Char[] { '\'', '.', '+', ':', '>', '<', '-' };
+                return new Char[]
+                {
+                    Negation,
+                    And,
+                    Or,
+                    Xor,
+                    IfThen,
+                    ThenIf,
+                    IfAndOnlyIf
+                };
             }
         }
 

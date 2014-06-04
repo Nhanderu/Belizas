@@ -28,6 +28,34 @@ namespace Nhanderu.Belizas
                     IfAndOnlyIf
                 };
             }
+            public static Boolean DoXor(Boolean value1, Boolean value2)
+            {
+                if ((value1 && !value2) || (!value1 && value2))
+                    return true;
+                else
+                    return false;
+            }
+            public static Boolean DoIfThen(Boolean value1, Boolean value2)
+            {
+                if (value1 && !value2)
+                    return false;
+                else
+                    return true;
+            }
+            public static Boolean DoThenIf(Boolean value1, Boolean value2)
+            {
+                if (!value1 && value2)
+                    return false;
+                else
+                    return true;
+            }
+            public static Boolean DoIfAndOnlyIf(Boolean value1, Boolean value2)
+            {
+                if (value1 == value2)
+                    return true;
+                else
+                    return false;
+            }
         }
 
         public static Boolean HasDisallowedCharacters(String text, Char[] rule)
@@ -53,7 +81,6 @@ namespace Nhanderu.Belizas
 
             return hasDisallowedCharacters;
         }
-
         public static List<Char> GetArgumentsInExpression(String formula, Int32 quantityOfArguments)
         {
             List<Char> arguments = new List<Char>();

@@ -5,7 +5,7 @@ namespace Nhanderu.Belizas
 {
     public static class TruthTable
     {
-        public static class Expressions
+        public static class Operators
         {
             public static Char Negation = '\'',
             And = '.',
@@ -14,6 +14,7 @@ namespace Nhanderu.Belizas
             IfThen = '>',
             ThenIf = '<',
             IfAndOnlyIf = '-';
+            public static Char[] Parentheses = { '(', ')' };
 
             public static Char[] Enumerate()
             {
@@ -25,36 +26,10 @@ namespace Nhanderu.Belizas
                     Xor,
                     IfThen,
                     ThenIf,
-                    IfAndOnlyIf
+                    IfAndOnlyIf,
+                    Parentheses[0],
+                    Parentheses[1]
                 };
-            }
-            public static Boolean DoXor(Boolean value1, Boolean value2)
-            {
-                if ((value1 && !value2) || (!value1 && value2))
-                    return true;
-                else
-                    return false;
-            }
-            public static Boolean DoIfThen(Boolean value1, Boolean value2)
-            {
-                if (value1 && !value2)
-                    return false;
-                else
-                    return true;
-            }
-            public static Boolean DoThenIf(Boolean value1, Boolean value2)
-            {
-                if (!value1 && value2)
-                    return false;
-                else
-                    return true;
-            }
-            public static Boolean DoIfAndOnlyIf(Boolean value1, Boolean value2)
-            {
-                if (value1 == value2)
-                    return true;
-                else
-                    return false;
             }
         }
 
@@ -85,14 +60,14 @@ namespace Nhanderu.Belizas
         {
             List<Char> arguments = new List<Char>();
 
-            if (formula.IndexOf(Expressions.Negation) >= 0)
+            if (formula.IndexOf(Operators.Negation) >= 0)
             {
                 List<Int32> symbolPositions = new List<Int32>();
-                symbolPositions.Add(formula.IndexOf(Expressions.Negation));
+                symbolPositions.Add(formula.IndexOf(Operators.Negation));
 
                 for (Int32 i = 1; i < quantityOfArguments; i++)
-                    if (formula.IndexOf(Expressions.Negation, symbolPositions[symbolPositions.Count - 1] + 1) > 0)
-                        symbolPositions.Add(formula.IndexOf(Expressions.Negation, symbolPositions[symbolPositions.Count - 1] + 1));
+                    if (formula.IndexOf(Operators.Negation, symbolPositions[symbolPositions.Count - 1] + 1) > 0)
+                        symbolPositions.Add(formula.IndexOf(Operators.Negation, symbolPositions[symbolPositions.Count - 1] + 1));
 
                 foreach (Int32 symbolPosition in symbolPositions)
                     arguments.Add(formula.ToCharArray()[symbolPosition - 1]);
@@ -118,6 +93,34 @@ namespace Nhanderu.Belizas
             }
 
             return arguments;
+        }
+        public static Boolean Xor(Boolean value1, Boolean value2)
+        {
+            if ((value1 && !value2) || (!value1 && value2))
+                return true;
+            else
+                return false;
+        }
+        public static Boolean IfThen(Boolean value1, Boolean value2)
+        {
+            if (value1 && !value2)
+                return false;
+            else
+                return true;
+        }
+        public static Boolean ThenIf(Boolean value1, Boolean value2)
+        {
+            if (!value1 && value2)
+                return false;
+            else
+                return true;
+        }
+        public static Boolean IfAndOnlyIf(Boolean value1, Boolean value2)
+        {
+            if (value1 == value2)
+                return true;
+            else
+                return false;
         }
     }
 }

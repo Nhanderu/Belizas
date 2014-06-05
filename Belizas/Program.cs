@@ -24,7 +24,7 @@ namespace Nhanderu.Belizas
             //Verifies if the formula is valid.
             if (formula.StartsWith("?"))
                 Console.WriteLine("Menu de opções.");
-            else if (TruthTable.HasDisallowedCharacters(formula, TruthTable.Expressions.Enumerate()))
+            else if (TruthTable.HasDisallowedCharacters(formula, TruthTable.Operators.Enumerate()))
                 Console.WriteLine("Fórmula inválida.");
             else
             {
@@ -107,7 +107,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de e lógico:");
 
                 //Gets arguments in formula by the position of the logical and symbol.
-                List<Char[]> andArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.And);
+                List<Char[]> andArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.And);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] andValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), andArguments.Count];
@@ -117,7 +117,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfAndArguments = new List<Int32[]>();
                     foreach (Char[] and in andArguments)
                     {
-                        Console.Write(and[0].ToString() + TruthTable.Expressions.And + and[1].ToString());
+                        Console.Write(and[0].ToString() + TruthTable.Operators.And + and[1].ToString());
                         indexesOfAndArguments.Add(new Int32[] { arguments.IndexOf(and[0]), arguments.IndexOf(and[1]) });
                     }
                     Console.WriteLine("");
@@ -142,7 +142,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de ou lógico:");
 
                 //Gets arguments in formula by the position of the logical or symbol.
-                List<Char[]> orArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.Or);
+                List<Char[]> orArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.Or);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] orValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), orArguments.Count];
@@ -152,7 +152,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfOrArguments = new List<Int32[]>();
                     foreach (Char[] or in orArguments)
                     {
-                        Console.Write(or[0].ToString() + TruthTable.Expressions.Or + or[1].ToString());
+                        Console.Write(or[0].ToString() + TruthTable.Operators.Or + or[1].ToString());
                         indexesOfOrArguments.Add(new Int32[] { arguments.IndexOf(or[0]), arguments.IndexOf(or[1]) });
                     }
                     Console.WriteLine("");
@@ -177,7 +177,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de ou exclusivo lógico:");
 
                 //Gets arguments in formula by the position of the logical xor symbol.
-                List<Char[]> xorArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.Xor);
+                List<Char[]> xorArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.Xor);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] xorValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), xorArguments.Count];
@@ -187,7 +187,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfXorArguments = new List<Int32[]>();
                     foreach (Char[] xor in xorArguments)
                     {
-                        Console.Write(xor[0].ToString() + TruthTable.Expressions.Xor + xor[1].ToString());
+                        Console.Write(xor[0].ToString() + TruthTable.Operators.Xor + xor[1].ToString());
                         indexesOfXorArguments.Add(new Int32[] { arguments.IndexOf(xor[0]), arguments.IndexOf(xor[1]) });
                     }
                     Console.WriteLine("");
@@ -197,7 +197,7 @@ namespace Nhanderu.Belizas
                     {
                         for (int column = 0; column < xorArguments.Count; column++)
                         {
-                            xorValues[line, column] = TruthTable.Expressions.DoXor(values[line, indexesOfXorArguments[column][0]], values[line, indexesOfXorArguments[column][1]]);
+                            xorValues[line, column] = TruthTable.Xor(values[line, indexesOfXorArguments[column][0]], values[line, indexesOfXorArguments[column][1]]);
                             Console.Write(" " + Convert.ToInt32(xorValues[line, column]).ToString() + "  ");
                         }
                         Console.WriteLine("");
@@ -212,7 +212,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de se/então:");
 
                 //Gets arguments in formula by the position of the if/then symbol.
-                List<Char[]> ifThenArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.IfThen);
+                List<Char[]> ifThenArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.IfThen);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] ifThenValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), ifThenArguments.Count];
@@ -222,7 +222,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfIfThenArguments = new List<Int32[]>();
                     foreach (Char[] ifThen in ifThenArguments)
                     {
-                        Console.Write(ifThen[0].ToString() + TruthTable.Expressions.IfThen + ifThen[1].ToString());
+                        Console.Write(ifThen[0].ToString() + TruthTable.Operators.IfThen + ifThen[1].ToString());
                         indexesOfIfThenArguments.Add(new Int32[] { arguments.IndexOf(ifThen[0]), arguments.IndexOf(ifThen[1]) });
                     }
                     Console.WriteLine("");
@@ -232,7 +232,7 @@ namespace Nhanderu.Belizas
                     {
                         for (int column = 0; column < ifThenArguments.Count; column++)
                         {
-                            ifThenValues[line, column] = TruthTable.Expressions.DoIfThen(values[line, indexesOfIfThenArguments[column][0]], values[line, indexesOfIfThenArguments[column][1]]);
+                            ifThenValues[line, column] = TruthTable.IfThen(values[line, indexesOfIfThenArguments[column][0]], values[line, indexesOfIfThenArguments[column][1]]);
                             Console.Write(" " + Convert.ToInt32(ifThenValues[line, column]).ToString() + "  ");
                         }
                         Console.WriteLine("");
@@ -247,7 +247,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de então/se:");
 
                 //Gets arguments in formula by the position of the then/if symbol.
-                List<Char[]> thenIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.ThenIf);
+                List<Char[]> thenIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.ThenIf);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] thenIfValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), thenIfArguments.Count];
@@ -257,7 +257,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfThenIfArguments = new List<Int32[]>();
                     foreach (Char[] thenIf in thenIfArguments)
                     {
-                        Console.Write(thenIf[0].ToString() + TruthTable.Expressions.ThenIf + thenIf[1].ToString());
+                        Console.Write(thenIf[0].ToString() + TruthTable.Operators.ThenIf + thenIf[1].ToString());
                         indexesOfThenIfArguments.Add(new Int32[] { arguments.IndexOf(thenIf[0]), arguments.IndexOf(thenIf[1]) });
                     }
                     Console.WriteLine("");
@@ -267,7 +267,7 @@ namespace Nhanderu.Belizas
                     {
                         for (int column = 0; column < thenIfArguments.Count; column++)
                         {
-                            thenIfValues[line, column] = TruthTable.Expressions.DoThenIf(values[line, indexesOfThenIfArguments[column][0]], values[line, indexesOfThenIfArguments[column][1]]);
+                            thenIfValues[line, column] = TruthTable.ThenIf(values[line, indexesOfThenIfArguments[column][0]], values[line, indexesOfThenIfArguments[column][1]]);
                             Console.Write(" " + Convert.ToInt32(thenIfValues[line, column]).ToString() + "  ");
                         }
                         Console.WriteLine("");
@@ -282,7 +282,7 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Expressões de se e somente se:");
 
                 //Gets arguments in formula by the position of the if and only if symbol.
-                List<Char[]> ifAndOnlyIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Expressions.IfAndOnlyIf);
+                List<Char[]> ifAndOnlyIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.IfAndOnlyIf);
 
                 //Verifies is there is at least one argument.
                 Boolean[,] ifAndOnlyIfValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), ifAndOnlyIfArguments.Count];
@@ -292,7 +292,7 @@ namespace Nhanderu.Belizas
                     List<Int32[]> indexesOfIfAndOnlyIfArguments = new List<Int32[]>();
                     foreach (Char[] ifAndOnlyIf in ifAndOnlyIfArguments)
                     {
-                        Console.Write(ifAndOnlyIf[0].ToString() + TruthTable.Expressions.IfAndOnlyIf + ifAndOnlyIf[1].ToString());
+                        Console.Write(ifAndOnlyIf[0].ToString() + TruthTable.Operators.IfAndOnlyIf + ifAndOnlyIf[1].ToString());
                         indexesOfIfAndOnlyIfArguments.Add(new Int32[] { arguments.IndexOf(ifAndOnlyIf[0]), arguments.IndexOf(ifAndOnlyIf[1]) });
                     }
                     Console.WriteLine("");
@@ -302,7 +302,7 @@ namespace Nhanderu.Belizas
                     {
                         for (int column = 0; column < ifAndOnlyIfArguments.Count; column++)
                         {
-                            ifAndOnlyIfValues[line, column] = TruthTable.Expressions.DoIfAndOnlyIf(values[line, indexesOfIfAndOnlyIfArguments[column][0]], values[line, indexesOfIfAndOnlyIfArguments[column][1]]);
+                            ifAndOnlyIfValues[line, column] = TruthTable.IfAndOnlyIf(values[line, indexesOfIfAndOnlyIfArguments[column][0]], values[line, indexesOfIfAndOnlyIfArguments[column][1]]);
                             Console.Write(" " + Convert.ToInt32(ifAndOnlyIfValues[line, column]).ToString() + "  ");
                         }
                         Console.WriteLine("");

@@ -6,6 +6,11 @@ namespace Nhanderu.Belizas
 {
     class Program
     {
+        static String ReplaceFirst(String text, String oldValue, String newValue)
+        {
+            return text.Substring(0, text.IndexOf(oldValue)) + newValue + text.Substring(text.IndexOf(oldValue) + oldValue.Length);
+        }
+
         static void Main(String[] args)
         {
             Console.Title = "Belizas";
@@ -60,143 +65,26 @@ namespace Nhanderu.Belizas
                 }
                 #endregion
                 Console.WriteLine("");
-                
-                #region Negation expressions
-                Console.WriteLine("Argumentos negados da tabela verdade:");
 
-                //Gets arguments in formula by the position of the negation symbol.
-                List<Char> negationArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count);
-
-                //Verifies is there is at least one argument.
-                Boolean[,] negationValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), negationArguments.Count];
-                if (negationArguments.Count > 0)
+                String expression = "";
+                while (formula != "?")
                 {
-                    //Writes the first line of the truth table: the expressions (negated arguments).
-                    List<Int32> indexesOfNegationArguments = new List<Int32>();
-                    foreach (Char negation in negationArguments)
-                    {
-                        Console.Write(negation.ToString() + "\' ");
-                        indexesOfNegationArguments.Add(arguments.IndexOf(negation));
-                    }
-                    Console.WriteLine("");
+                    if (formula.IndexOf(TruthTable.Operators.And) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.And) - 1, 3);
+                    else if (formula.IndexOf(TruthTable.Operators.Or) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Or) - 1, 3);
+                    else if (formula.IndexOf(TruthTable.Operators.Xor) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Xor) - 1, 3);
+                    else if (formula.IndexOf(TruthTable.Operators.IfThen) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfThen) - 1, 3);
+                    else if (formula.IndexOf(TruthTable.Operators.ThenIf) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.ThenIf) - 1, 3);
+                    else if (formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
+                        expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
 
-                    //Writes the first columns: the expressions (negated arguments) and its values.
-                    for (int line = 0; line < Math.Pow(2, arguments.Count); line++)
-                    {
-                        for (int column = 0; column < negationArguments.Count; column++)
-                        {
-                            negationValues[line, column] = !values[line, indexesOfNegationArguments[column]];
-                            Console.Write(Convert.ToInt32(negationValues[line, column]).ToString() + "  ");
-                        }
-                        Console.WriteLine("");
-                    }
+                    formula = ReplaceFirst(formula, expression, "?");
+                    TruthTable.LastExpressionValue = TruthTable.CalculateExpression(arguments, values, expression);
                 }
-                else
-                    Console.WriteLine("Não há argumentos negados.");
-                #endregion
-                Console.WriteLine("");
-
-                #region Logical and expressions
-                Console.WriteLine("Expressões de e lógico:");
-
-                List<Char[]> andArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.And);
-
-                Boolean[,] andValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), andArguments.Count];
-                if (andArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.And, andArguments, out andValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de e lógico.");
-                #endregion
-                Console.WriteLine("");
-
-                #region Logical or expressions
-                Console.WriteLine("Expressões de ou lógico:");
-
-                List<Char[]> orArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.Or);
-
-                Boolean[,] orValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), orArguments.Count];
-                if (orArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.Or, orArguments, out orValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de ou lógico.");
-                #endregion
-                Console.WriteLine("");
-
-                #region Logical exclusive or expressions
-                Console.WriteLine("Expressões de ou exclusivo lógico:");
-
-                List<Char[]> xorArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.Xor);
-
-                Boolean[,] xorValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), xorArguments.Count];
-                if (xorArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.Xor, xorArguments, out xorValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de ou exclusivo lógico.");
-                #endregion
-                Console.WriteLine("");
-
-                #region If/then expressions
-                Console.WriteLine("Expressões de se/então:");
-
-                List<Char[]> ifThenArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.IfThen);
-
-                Boolean[,] ifThenValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), ifThenArguments.Count];
-                if (ifThenArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.IfThen, ifThenArguments, out ifThenValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de se/então.");
-                #endregion
-                Console.WriteLine("");
-
-                #region Then/if expressions
-                Console.WriteLine("Expressões de então/se:");
-
-                List<Char[]> thenIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.ThenIf);
-
-                Boolean[,] thenIfValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), thenIfArguments.Count];
-                if (thenIfArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.ThenIf, thenIfArguments, out thenIfValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de então/se.");
-                #endregion
-                Console.WriteLine("");
-
-                #region If and only if expressions
-                Console.WriteLine("Expressões de se e somente se:");
-
-                List<Char[]> ifAndOnlyIfArguments = TruthTable.GetArgumentsInExpression(formula, arguments.Count, TruthTable.Operators.IfAndOnlyIf);
-
-                Boolean[,] ifAndOnlyIfValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), ifAndOnlyIfArguments.Count];
-                if (ifAndOnlyIfArguments.Count > 0)
-                {
-                    String[] table = TruthTable.GetTable(arguments, values, TruthTable.Operators.IfAndOnlyIf, ifAndOnlyIfArguments, out ifAndOnlyIfValues);
-                    for (int i = 0; i < table.Length; i++)
-                        Console.WriteLine(table[i]);
-                }
-                else
-                    Console.WriteLine("Não há expressões de se e somente se.");
-                #endregion
-                Console.WriteLine("");
             }
 
             Console.Title = "Belizas";

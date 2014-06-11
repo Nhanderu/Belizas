@@ -14,7 +14,6 @@ namespace Nhanderu.Belizas
             IfThen = '>',
             ThenIf = '<',
             IfAndOnlyIf = '-';
-            public static Char[] Parentheses = { '(', ')' };
 
             public static Char[] Enumerate()
             {
@@ -27,11 +26,11 @@ namespace Nhanderu.Belizas
                     IfThen,
                     ThenIf,
                     IfAndOnlyIf,
-                    Parentheses[0],
-                    Parentheses[1]
                 };
             }
         }
+
+        public static Boolean[] LastExpressionValue { get; set; }
 
         public static Boolean HasDisallowedCharacters(String text, Char[] rule)
         {
@@ -58,80 +57,72 @@ namespace Nhanderu.Belizas
             return hasDisallowedCharacters;
         }
 
-        public static List<Char> GetArgumentsInExpression(String formula, Int32 quantityOfArguments)
+        public static Boolean[] CalculateExpression(List<Char> arguments, Boolean[,] values, String expression)
         {
-            List<Char> arguments = new List<Char>();
+            Boolean[] expressionValue = new Boolean[(Int32)Math.Pow(2, arguments.Count)];
 
-            if (formula.IndexOf(Operators.Negation) >= 0)
+            Char[] expressionArguments = new Char[] { expression.ToCharArray()[0], expression.ToCharArray()[2] };
+            Char expressionOperator = expression.ToCharArray()[1];
+
+            for (Int32 line = 0; line < expressionValue.Length; line++)
             {
-                List<Int32> symbolPositions = new List<Int32>();
-                symbolPositions.Add(formula.IndexOf(Operators.Negation));
-
-                for (Int32 i = 1; i < quantityOfArguments; i++)
-                    if (formula.IndexOf(Operators.Negation, symbolPositions[symbolPositions.Count - 1] + 1) > 0)
-                        symbolPositions.Add(formula.IndexOf(Operators.Negation, symbolPositions[symbolPositions.Count - 1] + 1));
-
-                foreach (Int32 symbolPosition in symbolPositions)
-                    arguments.Add(formula.ToCharArray()[symbolPosition - 1]);
-            }
-
-            return arguments;
-        }
-        public static List<Char[]> GetArgumentsInExpression(String formula, Int32 quantityOfArguments, Char expressionOperator)
-        {
-            List<Char[]> arguments = new List<Char[]>();
-
-            if (formula.IndexOf(expressionOperator) >= 0)
-            {
-                List<Int32> symbolPositions = new List<Int32>();
-                symbolPositions.Add(formula.IndexOf(expressionOperator));
-
-                for (Int32 i = 1; i < quantityOfArguments; i++)
-                    if (formula.IndexOf(expressionOperator, symbolPositions[symbolPositions.Count - 1] + 1) > 0)
-                        symbolPositions.Add(formula.IndexOf(expressionOperator, symbolPositions[symbolPositions.Count - 1] + 1));
-
-                foreach (Int32 symbolPosition in symbolPositions)
-                    arguments.Add(new Char[] { formula.ToCharArray()[symbolPosition - 1], formula.ToCharArray()[symbolPosition + 1] });
-            }
-
-            return arguments;
-        }
-        public static String[] GetTable(List<Char> arguments, Boolean[,] values, Char expressionOperator, List<Char[]> expressionArguments, out Boolean[,] expressionValues)
-        {
-            expressionValues = new Boolean[(Int32)Math.Pow(2, arguments.Count), expressionArguments.Count];
-            String[] table = new String[(Int32)Math.Pow(2, arguments.Count) + 1];
-
-            List<Int32[]> indexes = new List<Int32[]>();
-            foreach (Char[] and in expressionArguments)
-            {
-                table[0] += and[0].ToString() + expressionOperator + and[1].ToString() + " ";
-                indexes.Add(new Int32[] { arguments.IndexOf(and[0]), arguments.IndexOf(and[1]) });
-            }
-
-            String tableLine;
-            for (int line = 0; line < Math.Pow(2, arguments.Count); line++)
-            {
-                tableLine = "";
-                for (int column = 0; column < expressionArguments.Count; column++)
+                if (expressionOperator == Operators.And)
                 {
-                    if (expressionOperator == Operators.And)
-                        expressionValues[line, column] = values[line, indexes[column][0]] && values[line, indexes[column][1]];
-                    else if (expressionOperator == Operators.Or)
-                        expressionValues[line, column] = values[line, indexes[column][0]] || values[line, indexes[column][1]];
-                    else if (expressionOperator == Operators.Xor)
-                        expressionValues[line, column] = Xor(values[line, indexes[column][0]], values[line, indexes[column][1]]);
-                    else if (expressionOperator == Operators.IfThen)
-                        expressionValues[line, column] = IfThen(values[line, indexes[column][0]], values[line, indexes[column][1]]);
-                    else if (expressionOperator == Operators.ThenIf)
-                        expressionValues[line, column] = ThenIf(values[line, indexes[column][0]], values[line, indexes[column][1]]);
-                    else if (expressionOperator == Operators.IfAndOnlyIf)
-                        expressionValues[line, column] = IfAndOnlyIf(values[line, indexes[column][0]], values[line, indexes[column][1]]);
-                    tableLine += " " + Convert.ToInt32(expressionValues[line, column]).ToString() + "  ";
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = LastExpressionValue[line] && values[line, arguments.IndexOf(expressionArguments[1])];
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] && LastExpressionValue[line];
+                    else
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] && values[line, arguments.IndexOf(expressionArguments[1])];
                 }
-                table[line + 1] = tableLine;
+                else if (expressionOperator == Operators.Or)
+                {
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = LastExpressionValue[line] || values[line, arguments.IndexOf(expressionArguments[1])];
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] || LastExpressionValue[line];
+                    else
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] || values[line, arguments.IndexOf(expressionArguments[1])];
+                }
+                else if (expressionOperator == Operators.Xor)
+                {
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = Xor(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = Xor(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                    else
+                        expressionValue[line] = Xor(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
+                }
+                else if (expressionOperator == Operators.IfThen)
+                {
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = IfThen(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = IfThen(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                    else
+                        expressionValue[line] = IfThen(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
+                }
+                else if (expressionOperator == Operators.ThenIf)
+                {
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = ThenIf(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = ThenIf(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                    else
+                        expressionValue[line] = ThenIf(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
+                }
+                else if (expressionOperator == Operators.IfAndOnlyIf)
+                {
+                    if (expressionArguments[0] == '?')
+                        expressionValue[line] = IfAndOnlyIf(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                    else if (expressionArguments[1] == '?')
+                        expressionValue[line] = IfAndOnlyIf(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                    else
+                        expressionValue[line] = IfAndOnlyIf(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
+                }
             }
 
-            return table;
+            return expressionValue;
         }
 
         #region Operators functions

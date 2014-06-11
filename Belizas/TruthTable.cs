@@ -32,29 +32,29 @@ namespace Nhanderu.Belizas
 
         public static Boolean[] LastExpressionValue { get; set; }
 
-        public static Boolean HasDisallowedCharacters(String text, Char[] rule)
+        public static Boolean IsValid(String text)
         {
             List<Boolean> charactersStatus = new List<Boolean>();
-            Boolean isDisallowed = true, hasDisallowedCharacters = false;
+            Boolean isDisallowedCharacter = true, isValid = true;
 
             foreach (Char character in text)
             {
                 if (Char.IsLetter(character))
-                    isDisallowed = false;
+                    isDisallowedCharacter = false;
                 else
-                    for (Int32 i = 0; i < rule.Length; i++)
-                        if (character == rule[i])
-                            isDisallowed = false;
+                    for (Int32 i = 0; i < Operators.Enumerate().Length; i++)
+                        if (character == Operators.Enumerate()[i])
+                            isDisallowedCharacter = false;
 
-                charactersStatus.Add(isDisallowed);
-                isDisallowed = true;
+                charactersStatus.Add(isDisallowedCharacter);
+                isDisallowedCharacter = true;
             }
 
             foreach (Boolean status in charactersStatus)
                 if (status)
-                    hasDisallowedCharacters = true;
+                    isValid = false;
 
-            return hasDisallowedCharacters;
+            return isValid;
         }
 
         public static Boolean[] CalculateExpression(List<Char> arguments, Boolean[,] values, String expression)

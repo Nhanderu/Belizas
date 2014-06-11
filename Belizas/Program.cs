@@ -26,7 +26,7 @@ namespace Nhanderu.Belizas
 
             if (formula.StartsWith("?"))
                 Console.WriteLine("Menu de opções.");
-            else if (TruthTable.HasDisallowedCharacters(formula, TruthTable.Operators.Enumerate()))
+            else if (!TruthTable.IsValid(formula))
                 Console.WriteLine("Fórmula inválida.");
             else
             {

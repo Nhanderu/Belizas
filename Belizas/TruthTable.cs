@@ -48,6 +48,7 @@ namespace Nhanderu.Belizas
                             isDisallowed = false;
 
                 charactersStatus.Add(isDisallowed);
+                isDisallowed = true;
             }
 
             foreach (Boolean status in charactersStatus)

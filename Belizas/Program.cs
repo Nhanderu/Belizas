@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Nhanderu.Belizas
 {
@@ -12,6 +13,7 @@ namespace Nhanderu.Belizas
 
         static void Main(String[] args)
         {
+            Console.Clear();
             Console.Title = "Belizas";
 
             String formula = "";
@@ -100,11 +102,17 @@ namespace Nhanderu.Belizas
                     }
                     Console.WriteLine("");
                 }
+                Console.WriteLine("");
                 #endregion
             }
 
+            Console.WriteLine("Precione \"escape\" para fechar o programa.");
             Console.Title = "Belizas";
-            Console.ReadKey();
+            ConsoleKeyInfo key = Console.ReadKey(false);
+            if (key.Key != ConsoleKey.Escape)
+                Main(new String[0]);
+            else
+                Thread.Sleep(1000);
         }
     }
 }

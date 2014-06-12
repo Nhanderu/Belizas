@@ -30,7 +30,7 @@ namespace Nhanderu.Belizas
             }
         }
 
-        public static Boolean[] LastExpressionValue { get; set; }
+        public static List<Boolean[]> ExpressionsValues { get; set; }
 
         public static Boolean IsValid(String text)
         {
@@ -56,7 +56,6 @@ namespace Nhanderu.Belizas
 
             return isValid;
         }
-
         public static Boolean[] CalculateExpression(List<Char> arguments, Boolean[,] values, String expression)
         {
             Boolean[] expressionValue = new Boolean[(Int32)Math.Pow(2, arguments.Count)];
@@ -69,56 +68,56 @@ namespace Nhanderu.Belizas
                 if (expressionOperator == Operators.And)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = LastExpressionValue[line] && values[line, arguments.IndexOf(expressionArguments[1])];
+                        expressionValue[line] = ExpressionsValues[ExpressionsValues.Count - 1][line] && values[line, arguments.IndexOf(expressionArguments[1])];
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] && LastExpressionValue[line];
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] && ExpressionsValues[ExpressionsValues.Count - 1][line];
                     else
                         expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] && values[line, arguments.IndexOf(expressionArguments[1])];
                 }
                 else if (expressionOperator == Operators.Or)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = LastExpressionValue[line] || values[line, arguments.IndexOf(expressionArguments[1])];
+                        expressionValue[line] = ExpressionsValues[ExpressionsValues.Count - 1][line] || values[line, arguments.IndexOf(expressionArguments[1])];
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] || LastExpressionValue[line];
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] || ExpressionsValues[ExpressionsValues.Count - 1][line];
                     else
                         expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] || values[line, arguments.IndexOf(expressionArguments[1])];
                 }
                 else if (expressionOperator == Operators.Xor)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = Xor(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                        expressionValue[line] = Xor(ExpressionsValues[ExpressionsValues.Count - 1][line], values[line, arguments.IndexOf(expressionArguments[1])]);
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = Xor(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                        expressionValue[line] = Xor(values[line, arguments.IndexOf(expressionArguments[0])], ExpressionsValues[ExpressionsValues.Count - 1][line]);
                     else
                         expressionValue[line] = Xor(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
                 }
                 else if (expressionOperator == Operators.IfThen)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = IfThen(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                        expressionValue[line] = IfThen(ExpressionsValues[ExpressionsValues.Count - 1][line], values[line, arguments.IndexOf(expressionArguments[1])]);
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = IfThen(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                        expressionValue[line] = IfThen(values[line, arguments.IndexOf(expressionArguments[0])], ExpressionsValues[ExpressionsValues.Count - 1][line]);
                     else
                         expressionValue[line] = IfThen(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
                 }
                 else if (expressionOperator == Operators.ThenIf)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = ThenIf(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                        expressionValue[line] = ThenIf(ExpressionsValues[ExpressionsValues.Count - 1][line], values[line, arguments.IndexOf(expressionArguments[1])]);
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = ThenIf(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                        expressionValue[line] = ThenIf(values[line, arguments.IndexOf(expressionArguments[0])], ExpressionsValues[ExpressionsValues.Count - 1][line]);
                     else
                         expressionValue[line] = ThenIf(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
                 }
                 else if (expressionOperator == Operators.IfAndOnlyIf)
                 {
                     if (expressionArguments[0] == '?')
-                        expressionValue[line] = IfAndOnlyIf(LastExpressionValue[line], values[line, arguments.IndexOf(expressionArguments[1])]);
+                        expressionValue[line] = ExpressionsValues[ExpressionsValues.Count - 1][line] == values[line, arguments.IndexOf(expressionArguments[1])];
                     else if (expressionArguments[1] == '?')
-                        expressionValue[line] = IfAndOnlyIf(values[line, arguments.IndexOf(expressionArguments[0])], LastExpressionValue[line]);
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] == ExpressionsValues[ExpressionsValues.Count - 1][line];
                     else
-                        expressionValue[line] = IfAndOnlyIf(values[line, arguments.IndexOf(expressionArguments[0])], values[line, arguments.IndexOf(expressionArguments[1])]);
+                        expressionValue[line] = values[line, arguments.IndexOf(expressionArguments[0])] == values[line, arguments.IndexOf(expressionArguments[1])];
                 }
             }
 
@@ -128,31 +127,15 @@ namespace Nhanderu.Belizas
         #region Operators functions
         public static Boolean Xor(Boolean value1, Boolean value2)
         {
-            if ((value1 && !value2) || (!value1 && value2))
-                return true;
-            else
-                return false;
+            return ((value1 && !value2) || (!value1 && value2));
         }
         public static Boolean IfThen(Boolean value1, Boolean value2)
         {
-            if (value1 && !value2)
-                return false;
-            else
-                return true;
+            return !(value1 && !value2);
         }
         public static Boolean ThenIf(Boolean value1, Boolean value2)
         {
-            if (!value1 && value2)
-                return false;
-            else
-                return true;
-        }
-        public static Boolean IfAndOnlyIf(Boolean value1, Boolean value2)
-        {
-            if (value1 == value2)
-                return true;
-            else
-                return false;
+            return !(!value1 && value2);
         }
         #endregion
     }

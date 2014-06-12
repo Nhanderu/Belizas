@@ -33,17 +33,11 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Fórmula digitada:");
                 Console.WriteLine(formula + "\n");
 
-                #region Arguments
-                Console.WriteLine("Argumentos da tabela verdade:");
-
+                #region Calculate the arguments
                 List<Char> arguments = new List<Char>();
                 foreach (Char item in formula.ToCharArray())
                     if (Char.IsLetter(item) && !arguments.Contains(item))
                         arguments.Add(item);
-
-                foreach (Char argument in arguments)
-                    Console.Write(argument.ToString() + " ");
-                Console.WriteLine("");
 
                 Boolean[,] values = new Boolean[(Int32)Math.Pow(2, arguments.Count), arguments.Count];
                 for (Int32 line = 0; line < Math.Pow(2, arguments.Count); line++)
@@ -58,14 +52,13 @@ namespace Nhanderu.Belizas
                         }
                         else
                             values[line, column] = false;
-                        Console.Write(Convert.ToInt32(values[line, column]).ToString() + " ");
                     }
-                    Console.WriteLine("");
                 }
                 #endregion
-                Console.WriteLine("");
 
+                #region Calculate the expressions
                 String expression = "";
+                TruthTable.ExpressionsValues = new List<Boolean[]>();
                 while (formula != "?")
                 {
                     if (formula.IndexOf(TruthTable.Operators.And) > 0)
@@ -82,8 +75,32 @@ namespace Nhanderu.Belizas
                         expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
 
                     formula = ReplaceFirst(formula, expression, "?");
-                    TruthTable.LastExpressionValue = TruthTable.CalculateExpression(arguments, values, expression);
+                    TruthTable.ExpressionsValues.Add(TruthTable.CalculateExpression(arguments, values, expression));
                 }
+                #endregion
+
+                #region Write the table
+                Console.WriteLine("Tabela gerada:");
+
+                for (Int32 index = 0; index < arguments.Count + TruthTable.ExpressionsValues.Count; index++)
+                    if (index < arguments.Count)
+                        Console.Write(arguments[index] + " ");
+                    else
+                        Console.Write("x ");
+                Console.WriteLine("");
+
+                for (Int32 line = 0; line < Math.Pow(2, arguments.Count); line++)
+                {
+                    for (Int32 column = 0; column < arguments.Count + TruthTable.ExpressionsValues.Count; column++)
+                    {
+                        if (column < arguments.Count)
+                            Console.Write(Convert.ToInt32(values[line, column]).ToString() + " ");
+                        else
+                            Console.Write(Convert.ToInt32(TruthTable.ExpressionsValues[column - arguments.Count][line]).ToString() + " ");
+                    }
+                    Console.WriteLine("");
+                }
+                #endregion
             }
 
             Console.Title = "Belizas";

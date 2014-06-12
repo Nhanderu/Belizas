@@ -42,8 +42,8 @@ namespace Nhanderu.Belizas
                 if (Char.IsLetter(character))
                     isDisallowedCharacter = false;
                 else
-                    for (Int32 i = 0; i < Operators.Enumerate().Length; i++)
-                        if (character == Operators.Enumerate()[i])
+                    for (Int32 index = 0; index < Operators.Enumerate().Length; index++)
+                        if (character == Operators.Enumerate()[index])
                             isDisallowedCharacter = false;
 
                 charactersStatus.Add(isDisallowedCharacter);
@@ -53,6 +53,15 @@ namespace Nhanderu.Belizas
             foreach (Boolean status in charactersStatus)
                 if (status)
                     isValid = false;
+
+            if (isValid)
+                for (Int32 index = 0; index < text.Length; index++)
+                {
+                    if (Char.IsLetter(text.ToCharArray()[index]) && isValid && index != 0)
+                        isValid = !Char.IsLetter(text.ToCharArray()[index - 1]);
+                    if (Char.IsLetter(text.ToCharArray()[index]) && isValid && index != text.Length - 1)
+                        isValid = !Char.IsLetter(text.ToCharArray()[index + 1]);
+                }
 
             return isValid;
         }

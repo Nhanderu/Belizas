@@ -30,6 +30,7 @@ namespace Nhanderu.Belizas
             }
         }
 
+        public static String Formula { get; set; }
         public static List<Boolean[]> ExpressionsValues { get; set; }
 
         public static Boolean IsValid(String text)

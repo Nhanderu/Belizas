@@ -111,6 +111,30 @@ namespace Nhanderu.Belizas
                 }
             }
         }
+        public void CalculateExpressions()
+        {
+            String expression = "", formula = Formula;
+            while (Formula.Length != 1)
+            {
+                if (Formula.IndexOf(TruthTable.Operators.Not) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Not) - 1, 2);
+                else if (Formula.IndexOf(TruthTable.Operators.And) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.And) - 1, 3);
+                else if (Formula.IndexOf(TruthTable.Operators.Or) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Or) - 1, 3);
+                else if (Formula.IndexOf(TruthTable.Operators.Xor) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Xor) - 1, 3);
+                else if (Formula.IndexOf(TruthTable.Operators.IfThen) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.IfThen) - 1, 3);
+                else if (Formula.IndexOf(TruthTable.Operators.ThenIf) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.ThenIf) - 1, 3);
+                else if (Formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
+
+                formula = ReplaceFirst(formula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
+                CalculateExpression(expression);
+            }
+        }
         public void CalculateExpression(String expression)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
@@ -146,6 +170,16 @@ namespace Nhanderu.Belizas
                     expressionValues[line] = value1 == value2;
             }
 
+            String churros = "";
+            while (HasChurros(expression))
+            {
+                foreach (Char item in expression)
+                    if (item >= Churros)
+                        churros = ReplaceFirst(expression, item.ToString(), Expressions[item - Churros]);
+                expression = churros;
+            }
+
+            Expressions.Add(expression);
             ExpressionsValues.Add(expressionValues);
         }
         public override String ToString()
@@ -175,6 +209,19 @@ namespace Nhanderu.Belizas
             table += "\n";
 
             return table;
+        }
+
+        private Boolean HasChurros(String expression)
+        {
+            Boolean hasChurros = false;
+            foreach (Char item in expression)
+                if (!hasChurros)
+                    hasChurros = Convert.ToInt32(item) >= Churros;
+            return hasChurros;
+        }
+        private String ReplaceFirst(String text, String oldValue, String newValue)
+        {
+            return text.Substring(0, text.IndexOf(oldValue)) + newValue + text.Substring(text.IndexOf(oldValue) + oldValue.Length);
         }
     }
 }

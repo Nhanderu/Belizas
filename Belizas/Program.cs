@@ -5,11 +5,6 @@ namespace Nhanderu.Belizas
 {
     class Program
     {
-        static String ReplaceFirst(String text, String oldValue, String newValue)
-        {
-            return text.Substring(0, text.IndexOf(oldValue)) + newValue + text.Substring(text.IndexOf(oldValue) + oldValue.Length);
-        }
-
         static void Main(String[] args)
         {
             Console.Clear();
@@ -72,28 +67,7 @@ namespace Nhanderu.Belizas
                 if (error == null)
                 {
                     table.CalculateArguments();
-
-                    String expression = "";
-                    while (formula.Length != 1)
-                    {
-                        if (formula.IndexOf(TruthTable.Operators.Not) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Not) - 1, 2);
-                        else if (formula.IndexOf(TruthTable.Operators.And) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.And) - 1, 3);
-                        else if (formula.IndexOf(TruthTable.Operators.Or) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Or) - 1, 3);
-                        else if (formula.IndexOf(TruthTable.Operators.Xor) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Xor) - 1, 3);
-                        else if (formula.IndexOf(TruthTable.Operators.IfThen) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfThen) - 1, 3);
-                        else if (formula.IndexOf(TruthTable.Operators.ThenIf) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.ThenIf) - 1, 3);
-                        else if (formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
-                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
-
-                        formula = ReplaceFirst(formula, expression, Convert.ToChar(table.ExpressionsValues.Count + table.Churros).ToString());
-                        table.CalculateExpression(expression);
-                    }
+                    table.CalculateExpressions();
 
                     Console.WriteLine("Tabela gerada:");
                     Console.WriteLine(table.ToString());

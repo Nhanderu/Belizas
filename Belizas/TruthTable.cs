@@ -29,8 +29,11 @@ namespace Nhanderu.Belizas
         }
 
         public static String Formula { get; set; }
+        public static List<Char> Arguments { get; set; }
+        public static Boolean[,] ArgumentsValues { get; set; }
+        public static List<String> Expressions { get; set; }
         public static List<Boolean[]> ExpressionsValues { get; set; }
-        public static Int32 Arroz { get { return 13312; } }
+        public static Int32 Churros { get { return 13312; } }
 
         public static Boolean IsValid(String text)
         {
@@ -65,50 +68,39 @@ namespace Nhanderu.Belizas
 
             return isValid;
         }
-        public static Boolean[] CalculateExpression(List<Char> arguments, Boolean[,] values, String expression)
+        public static Boolean[] CalculateExpression(String expression)
         {
-            Boolean[] expressionValue = new Boolean[(Int32)Math.Pow(2, arguments.Count)];
+            Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, TruthTable.Arguments.Count)];
             Char expressionOperator = expression.ToCharArray()[1];
             Boolean value1, value2;
 
-            for (Int32 line = 0; line < expressionValue.Length; line++)
+            for (Int32 line = 0; line < expressionValues.Length; line++)
             {
-                if (expression.ToCharArray()[0] == '?' && expression.ToCharArray()[2] == '?')
-                {
-                    value1 = ExpressionsValues[ExpressionsValues.Count - 2][line];
-                    value2 = ExpressionsValues[ExpressionsValues.Count - 1][line];
-                }
-                else if (expression.ToCharArray()[0] == '?')
-                {
-                    value1 = ExpressionsValues[ExpressionsValues.Count - 1][line];
-                    value2 = values[line, arguments.IndexOf(expression.ToCharArray()[2])];
-                }
-                else if (expression.ToCharArray()[2] == '?')
-                {
-                    value1 = values[line, arguments.IndexOf(expression.ToCharArray()[0])];
-                    value2 = ExpressionsValues[ExpressionsValues.Count - 1][line];
-                }
+                if (expression.ToCharArray()[0] >= Churros)
+                    value1 = ExpressionsValues[expression.ToCharArray()[0] - Churros][line];
                 else
-                {
-                    value1 = values[line, arguments.IndexOf(expression.ToCharArray()[0])];
-                    value2 = values[line, arguments.IndexOf(expression.ToCharArray()[2])];
-                }
+                    value1 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[0])];
+
+                if (expression.ToCharArray()[2] >= Churros)
+                    value2 = ExpressionsValues[expression.ToCharArray()[2] - Churros][line];
+                else
+                    value2 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[2])];
 
                 if (expressionOperator == Operators.And)
-                    expressionValue[line] = value1 && value2;
+                    expressionValues[line] = value1 && value2;
                 else if (expressionOperator == Operators.Or)
-                    expressionValue[line] = value1 || value2;
+                    expressionValues[line] = value1 || value2;
                 else if (expressionOperator == Operators.Xor)
-                    expressionValue[line] = (value1 && !value2) || (!value1 && value2);
+                    expressionValues[line] = (value1 && !value2) || (!value1 && value2);
                 else if (expressionOperator == Operators.IfThen)
-                    expressionValue[line] = value1 ? value2 : true;
+                    expressionValues[line] = value1 ? value2 : true;
                 else if (expressionOperator == Operators.ThenIf)
-                    expressionValue[line] = value2 ? value1 : true;
+                    expressionValues[line] = value2 ? value1 : true;
                 else if (expressionOperator == Operators.IfAndOnlyIf)
-                    expressionValue[line] = value1 == value2;
+                    expressionValues[line] = value1 == value2;
             }
 
-            return expressionValue;
+            return expressionValues;
         }
     }
 }

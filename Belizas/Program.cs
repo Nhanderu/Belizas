@@ -35,15 +35,15 @@ namespace Nhanderu.Belizas
                 Console.WriteLine(formula + "\n");
                 TruthTable.Formula = formula;
 
-                List<Char> arguments = new List<Char>();
+                TruthTable.Arguments = new List<Char>();
                 foreach (Char item in formula.ToCharArray())
-                    if (Char.IsLetter(item) && !arguments.Contains(item))
-                        arguments.Add(item);
+                    if (Char.IsLetter(item) && !TruthTable.Arguments.Contains(item))
+                        TruthTable.Arguments.Add(item);
 
                 Exception error = null;
                 try
                 {
-                    Boolean[,] valuesTest = new Boolean[(Int32)Math.Pow(2, arguments.Count), arguments.Count];
+                    Boolean[,] valuesTest = new Boolean[(Int32)Math.Pow(2, TruthTable.Arguments.Count), TruthTable.Arguments.Count];
                 }
                 catch (OutOfMemoryException exception)
                 {
@@ -51,17 +51,17 @@ namespace Nhanderu.Belizas
                     Console.WriteLine("ERRO");
                     Console.WriteLine("Sua memória é um lixo e não aguenta a quantidade de valores que a tabela resultante possui.");
                     Console.WriteLine("");
-                    Console.WriteLine("Os argumentos vão gerar uma matriz de {0}, que é a quantidade de argumentos, por {1}, que é 2 elevado à quantidade de argumentos.", arguments.Count, Math.Pow(2, arguments.Count));
-                    Console.WriteLine("Logo, o total de valores na tabela vai ser de {0} x {1} = {2} bytes.", arguments.Count, Math.Pow(2, arguments.Count), (arguments.Count * Math.Pow(2, arguments.Count)));
+                    Console.WriteLine("Os argumentos vão gerar uma matriz de {0}, que é a quantidade de argumentos, por {1}, que é 2 elevado à quantidade de argumentos.", TruthTable.Arguments.Count, Math.Pow(2, TruthTable.Arguments.Count));
+                    Console.WriteLine("Logo, o total de valores na tabela vai ser de {0} x {1} = {2} bytes.", TruthTable.Arguments.Count, Math.Pow(2, TruthTable.Arguments.Count), (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count)));
 
-                    if ((arguments.Count * Math.Pow(2, arguments.Count) / 1024) >= 1)
+                    if ((TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1024) >= 1)
                     {
-                        Console.WriteLine("{0} bytes = {1} kilobytes.", (arguments.Count * Math.Pow(2, arguments.Count)), (arguments.Count * Math.Pow(2, arguments.Count) / 1024));
-                        if ((arguments.Count * Math.Pow(2, arguments.Count) / 1048576) >= 1)
+                        Console.WriteLine("{0} bytes = {1} kilobytes.", (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count)), (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1024));
+                        if ((TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1048576) >= 1)
                         {
-                            Console.WriteLine("{0} kilobytes = {1} megabytes.", (arguments.Count * Math.Pow(2, arguments.Count) / 1024), (arguments.Count * Math.Pow(2, arguments.Count) / 1048576));
-                            if ((arguments.Count * Math.Pow(2, arguments.Count) / 1073741824) >= 1)
-                                Console.WriteLine("{0} megabytes = {1} gigabytes.", (arguments.Count * Math.Pow(2, arguments.Count) / 1048576), (arguments.Count * Math.Pow(2, arguments.Count) / 1073741824));
+                            Console.WriteLine("{0} kilobytes = {1} megabytes.", (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1024), (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1048576));
+                            if ((TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1073741824) >= 1)
+                                Console.WriteLine("{0} megabytes = {1} gigabytes.", (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1048576), (TruthTable.Arguments.Count * Math.Pow(2, TruthTable.Arguments.Count) / 1073741824));
                         }
                     }
 
@@ -75,15 +75,15 @@ namespace Nhanderu.Belizas
                 if (error == null)
                 {
                     #region Calculate the arguments
-                    Boolean[,] values = new Boolean[(Int32)Math.Pow(2, arguments.Count), arguments.Count];
-                    for (Int32 line = 0; line < Math.Pow(2, arguments.Count); line++)
+                    TruthTable.ArgumentsValues = new Boolean[(Int32)Math.Pow(2, TruthTable.Arguments.Count), TruthTable.Arguments.Count];
+                    for (Int32 line = 0; line < Math.Pow(2, TruthTable.Arguments.Count); line++)
                     {
                         Int32 calculableLine = line;
-                        for (Int32 column = 0; column < arguments.Count; column++)
+                        for (Int32 column = 0; column < TruthTable.Arguments.Count; column++)
                         {
-                            values[line, column] = calculableLine >= Math.Pow(2, (arguments.Count - 1) - column);
-                            if (values[line, column])
-                                calculableLine -= (Int32)Math.Pow(2, (arguments.Count - 1) - column);
+                            TruthTable.ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (TruthTable.Arguments.Count - 1) - column);
+                            if (TruthTable.ArgumentsValues[line, column])
+                                calculableLine -= (Int32)Math.Pow(2, (TruthTable.Arguments.Count - 1) - column);
                         }
                     }
                     #endregion
@@ -106,31 +106,31 @@ namespace Nhanderu.Belizas
                         else if (formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
                             expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
 
-                        formula = ReplaceFirst(formula, expression, Convert.ToChar(TruthTable.ExpressionsValues.Count + TruthTable.Arroz).ToString());
-                        TruthTable.ExpressionsValues.Add(TruthTable.CalculateExpression(arguments, values, expression));
+                        formula = ReplaceFirst(formula, expression, Convert.ToChar(TruthTable.ExpressionsValues.Count + TruthTable.Churros).ToString());
+                        TruthTable.ExpressionsValues.Add(TruthTable.CalculateExpression(expression));
                     }
                     #endregion
 
                     #region Write the table
                     Console.WriteLine("Tabela gerada:");
 
-                    for (Int32 index = 0; index < arguments.Count + TruthTable.ExpressionsValues.Count; index++)
-                        if (index < arguments.Count)
-                            Console.Write(arguments[index] + " ");
-                        else if (index == arguments.Count + TruthTable.ExpressionsValues.Count - 1)
+                    for (Int32 index = 0; index < TruthTable.Arguments.Count + TruthTable.ExpressionsValues.Count; index++)
+                        if (index < TruthTable.Arguments.Count)
+                            Console.Write(TruthTable.Arguments[index] + " ");
+                        else if (index == TruthTable.Arguments.Count + TruthTable.ExpressionsValues.Count - 1)
                             Console.Write(TruthTable.Formula);
                         else
                             Console.Write("x ");
                     Console.WriteLine("");
 
-                    for (Int32 line = 0; line < Math.Pow(2, arguments.Count); line++)
+                    for (Int32 line = 0; line < Math.Pow(2, TruthTable.Arguments.Count); line++)
                     {
-                        for (Int32 column = 0; column < arguments.Count + TruthTable.ExpressionsValues.Count; column++)
+                        for (Int32 column = 0; column < TruthTable.Arguments.Count + TruthTable.ExpressionsValues.Count; column++)
                         {
-                            if (column < arguments.Count)
-                                Console.Write(Convert.ToInt32(values[line, column]).ToString() + " ");
+                            if (column < TruthTable.Arguments.Count)
+                                Console.Write(Convert.ToInt32(TruthTable.ArgumentsValues[line, column]).ToString() + " ");
                             else
-                                Console.Write(Convert.ToInt32(TruthTable.ExpressionsValues[column - arguments.Count][line]).ToString() + " ");
+                                Console.Write(Convert.ToInt32(TruthTable.ExpressionsValues[column - TruthTable.Arguments.Count][line]).ToString() + " ");
                         }
                         Console.WriteLine("");
                     }

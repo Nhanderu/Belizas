@@ -3,9 +3,23 @@ using System.Collections.Generic;
 
 namespace Nhanderu.Belizas
 {
-    public static class TruthTable
+    public class TruthTable
     {
-        public static class Operators
+        public TruthTable(String formula)
+        {
+            Formula = formula;
+
+            Arguments = new List<Char>();
+            foreach (Char item in formula.ToCharArray())
+                if (Char.IsLetter(item) && !Arguments.Contains(item))
+                    Arguments.Add(item);
+
+            Expressions = new List<String>();
+            ExpressionsValues = new List<Boolean[]>();
+            Churros = 13312;
+        }
+
+        public class Operators
         {
             public static Char And = '.',
             Or = '+',
@@ -28,19 +42,19 @@ namespace Nhanderu.Belizas
             }
         }
 
-        public static String Formula { get; set; }
-        public static List<Char> Arguments { get; set; }
-        public static Boolean[,] ArgumentsValues { get; set; }
-        public static List<String> Expressions { get; set; }
-        public static List<Boolean[]> ExpressionsValues { get; set; }
-        public static Int32 Churros { get { return 13312; } }
+        public String Formula { get; private set; }
+        public List<Char> Arguments { get; private set; }
+        public Boolean[,] ArgumentsValues { get; set; }
+        public List<String> Expressions { get; private set; }
+        public List<Boolean[]> ExpressionsValues { get; private set; }
+        public Int32 Churros { get; private set; }
 
-        public static Boolean IsValid(String text)
+        public Boolean ValidateFormula()
         {
             List<Boolean> charactersStatus = new List<Boolean>();
             Boolean isDisallowedCharacter = true, isValid = true;
 
-            foreach (Char character in text)
+            foreach (Char character in Formula)
             {
                 if (Char.IsLetter(character))
                     isDisallowedCharacter = false;
@@ -58,19 +72,19 @@ namespace Nhanderu.Belizas
                     isValid = false;
 
             if (isValid)
-                for (Int32 index = 0; index < text.Length; index++)
+                for (Int32 index = 0; index < Formula.Length; index++)
                 {
-                    if (Char.IsLetter(text.ToCharArray()[index]) && isValid && index != 0)
-                        isValid = !Char.IsLetter(text.ToCharArray()[index - 1]);
-                    if (Char.IsLetter(text.ToCharArray()[index]) && isValid && index != text.Length - 1)
-                        isValid = !Char.IsLetter(text.ToCharArray()[index + 1]);
+                    if (Char.IsLetter(Formula.ToCharArray()[index]) && isValid && index != 0)
+                        isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
+                    if (Char.IsLetter(Formula.ToCharArray()[index]) && isValid && index != Formula.Length - 1)
+                        isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
                 }
 
             return isValid;
         }
-        public static Boolean[] CalculateExpression(String expression)
+        public void CalculateExpression(String expression)
         {
-            Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, TruthTable.Arguments.Count)];
+            Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
             Char expressionOperator = expression.ToCharArray()[1];
             Boolean value1, value2;
 
@@ -100,7 +114,7 @@ namespace Nhanderu.Belizas
                     expressionValues[line] = value1 == value2;
             }
 
-            return expressionValues;
+            ExpressionsValues.Add(expressionValues);
         }
     }
 }

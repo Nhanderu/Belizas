@@ -21,7 +21,8 @@ namespace Nhanderu.Belizas
 
         public class Operators
         {
-            public static Char And = '.',
+            public static Char Not = '\'',
+            And = '.',
             Or = '+',
             Xor = ':',
             IfThen = '>',
@@ -32,6 +33,7 @@ namespace Nhanderu.Belizas
             {
                 return new Char[]
                 {
+                    Not,
                     And,
                     Or,
                     Xor,
@@ -86,7 +88,7 @@ namespace Nhanderu.Belizas
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
             Char expressionOperator = expression.ToCharArray()[1];
-            Boolean value1, value2;
+            Boolean value1 = true, value2 = true;
 
             for (Int32 line = 0; line < expressionValues.Length; line++)
             {
@@ -95,17 +97,20 @@ namespace Nhanderu.Belizas
                 else
                     value1 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[0])];
 
-                if (expression.ToCharArray()[2] >= Churros)
-                    value2 = ExpressionsValues[expression.ToCharArray()[2] - Churros][line];
-                else
-                    value2 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[2])];
+                if (expression.Length == 3)
+                    if (expression.ToCharArray()[2] >= Churros)
+                        value2 = ExpressionsValues[expression.ToCharArray()[2] - Churros][line];
+                    else
+                        value2 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[2])];
 
+                if (expressionOperator == Operators.Not)
+                    expressionValues[line] = !value1;
                 if (expressionOperator == Operators.And)
                     expressionValues[line] = value1 && value2;
                 else if (expressionOperator == Operators.Or)
                     expressionValues[line] = value1 || value2;
                 else if (expressionOperator == Operators.Xor)
-                    expressionValues[line] = (value1 && !value2) || (!value1 && value2);
+                    expressionValues[line] = value1 ? !value2 : value2;
                 else if (expressionOperator == Operators.IfThen)
                     expressionValues[line] = value1 ? value2 : true;
                 else if (expressionOperator == Operators.ThenIf)

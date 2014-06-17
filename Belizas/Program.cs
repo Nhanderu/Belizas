@@ -36,10 +36,6 @@ namespace Nhanderu.Belizas
                 Console.WriteLine("Fórmula digitada:");
                 Console.WriteLine(formula + "\n");
 
-                foreach (Char item in formula.ToCharArray())
-                    if (Char.IsLetter(item) && !table.Arguments.Contains(item))
-                        table.Arguments.Add(item);
-
                 Exception error = null;
                 try
                 {
@@ -92,7 +88,9 @@ namespace Nhanderu.Belizas
                     String expression = "";
                     while (formula.Length != 1)
                     {
-                        if (formula.IndexOf(TruthTable.Operators.And) > 0)
+                        if (formula.IndexOf(TruthTable.Operators.Not) > 0)
+                            expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Not) - 1, 2);
+                        else if (formula.IndexOf(TruthTable.Operators.And) > 0)
                             expression = formula.Substring(formula.IndexOf(TruthTable.Operators.And) - 1, 3);
                         else if (formula.IndexOf(TruthTable.Operators.Or) > 0)
                             expression = formula.Substring(formula.IndexOf(TruthTable.Operators.Or) - 1, 3);

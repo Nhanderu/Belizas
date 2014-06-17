@@ -79,6 +79,10 @@ namespace Nhanderu.Belizas
 
             return isValid;
         }
+        public Char[] EnumerateOperators()
+        {
+            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf };
+        }
         public void CalculateArguments()
         {
             ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
@@ -193,17 +197,15 @@ namespace Nhanderu.Belizas
 
             return table;
         }
-        public Char[] EnumerateOperators()
-        {
-            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf };
-        }
 
         private Boolean HasChurros(String expression)
         {
             Boolean hasChurros = false;
+
             foreach (Char item in expression)
                 if (!hasChurros)
                     hasChurros = Convert.ToInt32(item) >= Churros;
+
             return hasChurros;
         }
         private String ReplaceFirst(String text, String oldValue, String newValue)

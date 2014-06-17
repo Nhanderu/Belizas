@@ -111,19 +111,19 @@ namespace Nhanderu.Belizas
             String expression = "", formula = Formula;
             while (formula.Length != 1)
             {
-                if (Formula.IndexOf(Not) > 0)
+                if (formula.IndexOf(Not) > 0)
                     expression = formula.Substring(formula.IndexOf(Not) - 1, 2);
-                else if (Formula.IndexOf(And) > 0)
+                else if (formula.IndexOf(And) > 0)
                     expression = formula.Substring(formula.IndexOf(And) - 1, 3);
-                else if (Formula.IndexOf(Or) > 0)
+                else if (formula.IndexOf(Or) > 0)
                     expression = formula.Substring(formula.IndexOf(Or) - 1, 3);
-                else if (Formula.IndexOf(Xor) > 0)
+                else if (formula.IndexOf(Xor) > 0)
                     expression = formula.Substring(formula.IndexOf(Xor) - 1, 3);
-                else if (Formula.IndexOf(IfThen) > 0)
+                else if (formula.IndexOf(IfThen) > 0)
                     expression = formula.Substring(formula.IndexOf(IfThen) - 1, 3);
-                else if (Formula.IndexOf(ThenIf) > 0)
+                else if (formula.IndexOf(ThenIf) > 0)
                     expression = formula.Substring(formula.IndexOf(ThenIf) - 1, 3);
-                else if (Formula.IndexOf(IfAndOnlyIf) > 0)
+                else if (formula.IndexOf(IfAndOnlyIf) > 0)
                     expression = formula.Substring(formula.IndexOf(IfAndOnlyIf) - 1, 3);
 
                 formula = ReplaceFirst(formula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
@@ -184,10 +184,8 @@ namespace Nhanderu.Belizas
             for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
                 if (index < Arguments.Count)
                     table += Arguments[index] + " ";
-                else if (index == Arguments.Count + ExpressionsValues.Count - 1)
-                    table += Formula;
                 else
-                    table += "x ";
+                    table += Expressions[index - Arguments.Count] + " ";
             table += "\n";
 
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
@@ -197,7 +195,18 @@ namespace Nhanderu.Belizas
                     if (column < Arguments.Count)
                         table += Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ";
                     else
+                    {
+                        if (Expressions[column - Arguments.Count].Length % 2 == 0)
+                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
+                                table += " ";
+                        else
+                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
+                                table += " ";
+
                         table += Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ";
+                        for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
+                            table += " ";
+                    }
                 }
                 table += "\n";
             }

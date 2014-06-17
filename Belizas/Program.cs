@@ -52,7 +52,7 @@ namespace Nhanderu.Belizas
                     Console.WriteLine("Sua memória é um lixo e não aguenta a quantidade de valores que a tabela resultante possui.");
                     Console.WriteLine("");
                     Console.WriteLine("Os argumentos vão gerar uma matriz de {0}, que é a quantidade de argumentos, por {1}, que é 2 elevado à quantidade de argumentos.", arguments.Count, Math.Pow(2, arguments.Count));
-                    Console.WriteLine("Agora, o total de valores na tabela vai ser de {0} x {1} = {2} bytes.", arguments.Count, Math.Pow(2, arguments.Count), (arguments.Count * Math.Pow(2, arguments.Count)));
+                    Console.WriteLine("Logo, o total de valores na tabela vai ser de {0} x {1} = {2} bytes.", arguments.Count, Math.Pow(2, arguments.Count), (arguments.Count * Math.Pow(2, arguments.Count)));
 
                     if ((arguments.Count * Math.Pow(2, arguments.Count) / 1024) >= 1)
                     {
@@ -91,7 +91,7 @@ namespace Nhanderu.Belizas
                     #region Calculate the expressions
                     String expression = "";
                     TruthTable.ExpressionsValues = new List<Boolean[]>();
-                    while (formula != "?")
+                    while (formula.Length != 1)
                     {
                         if (formula.IndexOf(TruthTable.Operators.And) > 0)
                             expression = formula.Substring(formula.IndexOf(TruthTable.Operators.And) - 1, 3);
@@ -106,7 +106,7 @@ namespace Nhanderu.Belizas
                         else if (formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
                             expression = formula.Substring(formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
 
-                        formula = ReplaceFirst(formula, expression, "?");
+                        formula = ReplaceFirst(formula, expression, Convert.ToChar(TruthTable.ExpressionsValues.Count + TruthTable.Arroz).ToString());
                         TruthTable.ExpressionsValues.Add(TruthTable.CalculateExpression(arguments, values, expression));
                     }
                     #endregion

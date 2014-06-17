@@ -7,8 +7,7 @@ namespace Nhanderu.Belizas
     {
         public static class Operators
         {
-            public static Char Negation = '\'',
-            And = '.',
+            public static Char And = '.',
             Or = '+',
             Xor = ':',
             IfThen = '>',
@@ -19,7 +18,6 @@ namespace Nhanderu.Belizas
             {
                 return new Char[]
                 {
-                    Negation,
                     And,
                     Or,
                     Xor,
@@ -32,6 +30,7 @@ namespace Nhanderu.Belizas
 
         public static String Formula { get; set; }
         public static List<Boolean[]> ExpressionsValues { get; set; }
+        public static Int32 Arroz { get { return 13312; } }
 
         public static Boolean IsValid(String text)
         {

@@ -19,30 +19,13 @@ namespace Nhanderu.Belizas
             Churros = 13312;
         }
 
-        public class Operators
-        {
-            public static Char Not = '\'',
-            And = '.',
-            Or = '+',
-            Xor = ':',
-            IfThen = '>',
-            ThenIf = '<',
-            IfAndOnlyIf = '-';
-
-            public static Char[] Enumerate()
-            {
-                return new Char[]
-                {
-                    Not,
-                    And,
-                    Or,
-                    Xor,
-                    IfThen,
-                    ThenIf,
-                    IfAndOnlyIf,
-                };
-            }
-        }
+        public Char Not { get; set; }
+        public Char And { get; set; }
+        public Char Or { get; set; }
+        public Char Xor { get; set; }
+        public Char IfThen { get; set; }
+        public Char ThenIf { get; set; }
+        public Char IfAndOnlyIf { get; set; }
 
         public String Formula { get; private set; }
         public List<Char> Arguments { get; private set; }
@@ -61,8 +44,8 @@ namespace Nhanderu.Belizas
                 if (Char.IsLetter(character))
                     isDisallowedCharacter = false;
                 else
-                    for (Int32 index = 0; index < Operators.Enumerate().Length; index++)
-                        if (character == Operators.Enumerate()[index])
+                    for (Int32 index = 0; index < EnumerateOperators().Length; index++)
+                        if (character == EnumerateOperators()[index])
                             isDisallowedCharacter = false;
 
                 charactersStatus.Add(isDisallowedCharacter);
@@ -83,12 +66,12 @@ namespace Nhanderu.Belizas
                         if (isValid && index != Formula.Length - 1)
                             isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
                     }
-                    else if (Formula.ToCharArray()[index] == Operators.Not)
+                    else if (Formula.ToCharArray()[index] == Not)
                         isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) && index != 0;
                     else
-                        foreach (Char item in Operators.Enumerate())
+                        foreach (Char item in EnumerateOperators())
                             if (isValid)
-                                if (item == Operators.Not)
+                                if (item == Not)
                                     isValid = Formula.ToCharArray()[index + 1] != item && index != 0 && index != Formula.Length - 1;
                                 else
                                     isValid = Formula.ToCharArray()[index - 1] != item && Formula.ToCharArray()[index + 1] != item && index != 0 && index != Formula.Length - 1;
@@ -116,20 +99,20 @@ namespace Nhanderu.Belizas
             String expression = "", formula = Formula;
             while (Formula.Length != 1)
             {
-                if (Formula.IndexOf(TruthTable.Operators.Not) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Not) - 1, 2);
-                else if (Formula.IndexOf(TruthTable.Operators.And) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.And) - 1, 3);
-                else if (Formula.IndexOf(TruthTable.Operators.Or) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Or) - 1, 3);
-                else if (Formula.IndexOf(TruthTable.Operators.Xor) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.Xor) - 1, 3);
-                else if (Formula.IndexOf(TruthTable.Operators.IfThen) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.IfThen) - 1, 3);
-                else if (Formula.IndexOf(TruthTable.Operators.ThenIf) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.ThenIf) - 1, 3);
-                else if (Formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(TruthTable.Operators.IfAndOnlyIf) - 1, 3);
+                if (Formula.IndexOf(Not) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(Not) - 1, 2);
+                else if (Formula.IndexOf(And) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(And) - 1, 3);
+                else if (Formula.IndexOf(Or) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(Or) - 1, 3);
+                else if (Formula.IndexOf(Xor) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(Xor) - 1, 3);
+                else if (Formula.IndexOf(IfThen) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(IfThen) - 1, 3);
+                else if (Formula.IndexOf(ThenIf) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(ThenIf) - 1, 3);
+                else if (Formula.IndexOf(IfAndOnlyIf) > 0)
+                    expression = Formula.Substring(Formula.IndexOf(IfAndOnlyIf) - 1, 3);
 
                 formula = ReplaceFirst(formula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
                 CalculateExpression(expression);
@@ -154,19 +137,19 @@ namespace Nhanderu.Belizas
                     else
                         value2 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[2])];
 
-                if (expressionOperator == Operators.Not)
+                if (expressionOperator == Not)
                     expressionValues[line] = !value1;
-                if (expressionOperator == Operators.And)
+                else if (expressionOperator == And)
                     expressionValues[line] = value1 && value2;
-                else if (expressionOperator == Operators.Or)
+                else if (expressionOperator == Or)
                     expressionValues[line] = value1 || value2;
-                else if (expressionOperator == Operators.Xor)
+                else if (expressionOperator == Xor)
                     expressionValues[line] = value1 ? !value2 : value2;
-                else if (expressionOperator == Operators.IfThen)
+                else if (expressionOperator == IfThen)
                     expressionValues[line] = value1 ? value2 : true;
-                else if (expressionOperator == Operators.ThenIf)
+                else if (expressionOperator == ThenIf)
                     expressionValues[line] = value2 ? value1 : true;
-                else if (expressionOperator == Operators.IfAndOnlyIf)
+                else if (expressionOperator == IfAndOnlyIf)
                     expressionValues[line] = value1 == value2;
             }
 
@@ -209,6 +192,10 @@ namespace Nhanderu.Belizas
             table += "\n";
 
             return table;
+        }
+        public Char[] EnumerateOperators()
+        {
+            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf };
         }
 
         private Boolean HasChurros(String expression)

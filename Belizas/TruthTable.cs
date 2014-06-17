@@ -17,6 +17,14 @@ namespace Nhanderu.Belizas
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
             Churros = 13312;
+
+            Not = '\'';
+            And = '.';
+            Or = '+';
+            Xor = ':';
+            IfThen = '>';
+            ThenIf = '<';
+            IfAndOnlyIf = '-';
         }
 
         public Char Not { get; set; }
@@ -101,22 +109,22 @@ namespace Nhanderu.Belizas
         public void CalculateExpressions()
         {
             String expression = "", formula = Formula;
-            while (Formula.Length != 1)
+            while (formula.Length != 1)
             {
                 if (Formula.IndexOf(Not) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(Not) - 1, 2);
+                    expression = formula.Substring(formula.IndexOf(Not) - 1, 2);
                 else if (Formula.IndexOf(And) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(And) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(And) - 1, 3);
                 else if (Formula.IndexOf(Or) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(Or) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(Or) - 1, 3);
                 else if (Formula.IndexOf(Xor) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(Xor) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(Xor) - 1, 3);
                 else if (Formula.IndexOf(IfThen) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(IfThen) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(IfThen) - 1, 3);
                 else if (Formula.IndexOf(ThenIf) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(ThenIf) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(ThenIf) - 1, 3);
                 else if (Formula.IndexOf(IfAndOnlyIf) > 0)
-                    expression = Formula.Substring(Formula.IndexOf(IfAndOnlyIf) - 1, 3);
+                    expression = formula.Substring(formula.IndexOf(IfAndOnlyIf) - 1, 3);
 
                 formula = ReplaceFirst(formula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
                 CalculateExpression(expression);

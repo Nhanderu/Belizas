@@ -39,7 +39,8 @@ namespace Nhanderu.Belizas
                 Exception error = null;
                 try
                 {
-                    Boolean[,] valuesTest = new Boolean[(Int32)Math.Pow(2, table.Arguments.Count), table.Arguments.Count];
+                    Boolean[,] test = new Boolean[(Int32)Math.Pow(2, table.Arguments.Count), table.Arguments.Count];
+                    test = null;
                 }
                 catch (OutOfMemoryException exception)
                 {
@@ -70,21 +71,8 @@ namespace Nhanderu.Belizas
 
                 if (error == null)
                 {
-                    #region Calculate the arguments
-                    table.ArgumentsValues = new Boolean[(Int32)Math.Pow(2, table.Arguments.Count), table.Arguments.Count];
-                    for (Int32 line = 0; line < Math.Pow(2, table.Arguments.Count); line++)
-                    {
-                        Int32 calculableLine = line;
-                        for (Int32 column = 0; column < table.Arguments.Count; column++)
-                        {
-                            table.ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (table.Arguments.Count - 1) - column);
-                            if (table.ArgumentsValues[line, column])
-                                calculableLine -= (Int32)Math.Pow(2, (table.Arguments.Count - 1) - column);
-                        }
-                    }
-                    #endregion
+                    table.CalculateArguments();
 
-                    #region Calculate the expressions
                     String expression = "";
                     while (formula.Length != 1)
                     {
@@ -106,33 +94,9 @@ namespace Nhanderu.Belizas
                         formula = ReplaceFirst(formula, expression, Convert.ToChar(table.ExpressionsValues.Count + table.Churros).ToString());
                         table.CalculateExpression(expression);
                     }
-                    #endregion
 
-                    #region Write the table
                     Console.WriteLine("Tabela gerada:");
-
-                    for (Int32 index = 0; index < table.Arguments.Count + table.ExpressionsValues.Count; index++)
-                        if (index < table.Arguments.Count)
-                            Console.Write(table.Arguments[index] + " ");
-                        else if (index == table.Arguments.Count + table.ExpressionsValues.Count - 1)
-                            Console.Write(table.Formula);
-                        else
-                            Console.Write("x ");
-                    Console.WriteLine("");
-
-                    for (Int32 line = 0; line < Math.Pow(2, table.Arguments.Count); line++)
-                    {
-                        for (Int32 column = 0; column < table.Arguments.Count + table.ExpressionsValues.Count; column++)
-                        {
-                            if (column < table.Arguments.Count)
-                                Console.Write(Convert.ToInt32(table.ArgumentsValues[line, column]).ToString() + " ");
-                            else
-                                Console.Write(Convert.ToInt32(table.ExpressionsValues[column - table.Arguments.Count][line]).ToString() + " ");
-                        }
-                        Console.WriteLine("");
-                    }
-                    Console.WriteLine("");
-                    #endregion
+                    Console.WriteLine(table.ToString());
                 }
             }
 

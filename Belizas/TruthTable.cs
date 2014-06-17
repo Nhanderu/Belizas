@@ -46,7 +46,7 @@ namespace Nhanderu.Belizas
 
         public String Formula { get; private set; }
         public List<Char> Arguments { get; private set; }
-        public Boolean[,] ArgumentsValues { get; set; }
+        public Boolean[,] ArgumentsValues { get; private set; }
         public List<String> Expressions { get; private set; }
         public List<Boolean[]> ExpressionsValues { get; private set; }
         public Int32 Churros { get; private set; }
@@ -96,6 +96,21 @@ namespace Nhanderu.Belizas
 
             return isValid;
         }
+        public void CalculateArguments()
+        {
+            ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
+
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+            {
+                Int32 calculableLine = line;
+                for (Int32 column = 0; column < Arguments.Count; column++)
+                {
+                    ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (Arguments.Count - 1) - column);
+                    if (ArgumentsValues[line, column])
+                        calculableLine -= (Int32)Math.Pow(2, (Arguments.Count - 1) - column);
+                }
+            }
+        }
         public void CalculateExpression(String expression)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
@@ -132,6 +147,34 @@ namespace Nhanderu.Belizas
             }
 
             ExpressionsValues.Add(expressionValues);
+        }
+        public override String ToString()
+        {
+            String table = "";
+
+            for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
+                if (index < Arguments.Count)
+                    table += Arguments[index] + " ";
+                else if (index == Arguments.Count + ExpressionsValues.Count - 1)
+                    table += Formula;
+                else
+                    table += "x ";
+            table += "\n";
+
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+            {
+                for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
+                {
+                    if (column < Arguments.Count)
+                        table += Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ";
+                    else
+                        table += Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ";
+                }
+                table += "\n";
+            }
+            table += "\n";
+
+            return table;
         }
     }
 }

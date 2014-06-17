@@ -76,10 +76,22 @@ namespace Nhanderu.Belizas
             if (isValid)
                 for (Int32 index = 0; index < Formula.Length; index++)
                 {
-                    if (Char.IsLetter(Formula.ToCharArray()[index]) && isValid && index != 0)
-                        isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
-                    if (Char.IsLetter(Formula.ToCharArray()[index]) && isValid && index != Formula.Length - 1)
-                        isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
+                    if (Char.IsLetter(Formula.ToCharArray()[index]))
+                    {
+                        if (isValid && index != 0)
+                            isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
+                        if (isValid && index != Formula.Length - 1)
+                            isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
+                    }
+                    else if (Formula.ToCharArray()[index] == Operators.Not)
+                        isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) && index != 0;
+                    else
+                        foreach (Char item in Operators.Enumerate())
+                            if (isValid)
+                                if (item == Operators.Not)
+                                    isValid = Formula.ToCharArray()[index + 1] != item && index != 0 && index != Formula.Length - 1;
+                                else
+                                    isValid = Formula.ToCharArray()[index - 1] != item && Formula.ToCharArray()[index + 1] != item && index != 0 && index != Formula.Length - 1;
                 }
 
             return isValid;

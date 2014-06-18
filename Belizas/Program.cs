@@ -29,7 +29,7 @@ namespace Nhanderu.Belizas
             {
                 Console.Title = "Carregando";
                 Console.WriteLine("Fórmula digitada:");
-                Console.WriteLine(formula + "\n");
+                Console.WriteLine(table.Formula + "\n");
 
                 try
                 {

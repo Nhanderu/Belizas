@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Nhanderu.Belizas
 {
@@ -183,7 +184,7 @@ namespace Nhanderu.Belizas
                     }
                     else if (Formula.ToCharArray()[index] == Not)
                     {
-                        isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) && index != 0;
+                        isValid = (Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parenthesis[0] || Formula.ToCharArray()[index - 1] == Parenthesis[1]) && index != 0;
                         if (isValid && index != Formula.Length - 1)
                             isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
                     }
@@ -317,45 +318,43 @@ namespace Nhanderu.Belizas
 
             if (hasParenthesis)
                 expression = Parenthesis[0] + expression + Parenthesis[1];
-            
+
             Expressions.Add(expression);
             ExpressionsValues.Add(expressionValues);
         }
         public override String ToString()
         {
-            String table = "";
+            StringBuilder table = new StringBuilder();
 
             for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
                 if (index < Arguments.Count)
-                    table += Arguments[index] + " ";
+                    table.Append(Arguments[index] + " ");
                 else
-                    table += Expressions[index - Arguments.Count] + " ";
-            table += "\n";
+                    table.Append(Expressions[index - Arguments.Count] + " ");
+            table.AppendLine();
 
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
                 for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
-                {
                     if (column < Arguments.Count)
-                        table += Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ";
+                        table.Append(Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
                     else
                     {
                         if (Expressions[column - Arguments.Count].Length % 2 == 0)
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
-                                table += " ";
+                                table.Append(" ");
                         else
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                                table += " ";
+                                table.Append(" ");
 
-                        table += Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ";
+                        table.Append(Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
                         for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                            table += " ";
+                            table.Append(" ");
                     }
-                }
-                table += "\n";
+                table.AppendLine();
             }
 
-            return table;
+            return table.ToString();
         }
 
         private Boolean HasChurros(String expression)

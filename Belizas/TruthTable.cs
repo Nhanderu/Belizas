@@ -151,7 +151,10 @@ namespace Nhanderu.Belizas
                 else
                     for (Int32 index = 0; index < EnumerateOperators().Length; index++)
                         if (character == EnumerateOperators()[index])
+                        {
                             isDisallowedCharacter = false;
+                            break;
+                        }
 
                 charactersStatus.Add(isDisallowedCharacter);
                 isDisallowedCharacter = true;
@@ -184,30 +187,43 @@ namespace Nhanderu.Belizas
                     }
                     else if (Formula.ToCharArray()[index] == Not)
                     {
-                        isValid = (Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[0] || Formula.ToCharArray()[index - 1] == Parentheses[1]) && index != 0;
+                        if (isValid && index != 0)
+                            isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[0] || Formula.ToCharArray()[index - 1] == Parentheses[1];
+                        else if (isValid)
+                            isValid = false;
                         if (isValid && index != Formula.Length - 1)
                             isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
                     }
                     else if (Formula.ToCharArray()[index] == Parentheses[0])
                     {
-                        isValid = (Char.IsLetter(Formula.ToCharArray()[index + 1]) || Formula.ToCharArray()[index + 1] == Parentheses[0]) && index != Formula.Length - 1;
+                        if (isValid && index != Formula.Length - 1)
+                            isValid = Char.IsLetter(Formula.ToCharArray()[index + 1]) || Formula.ToCharArray()[index + 1] == Parentheses[0];
+                        else if (isValid)
+                            isValid = false;
                         if (isValid && index != 0)
                             isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
                     }
                     else if (Formula.ToCharArray()[index] == Parentheses[1])
                     {
-                        isValid = (Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[1]) && index != 0;
+                        if (isValid && index != 0)
+                            isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[1] || Formula.ToCharArray()[index - 1] == Not;
+                        else if (isValid)
+                            isValid = false;
                         if (isValid && index != Formula.Length - 1)
                             isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
                     }
                     else
-                        foreach (Char item in EnumerateOperators())
-                            if (isValid && item != Not && item != Parentheses[0] && item != Parentheses[1])
-                            {
-                                isValid = index != 0 && index != Formula.Length - 1;
-                                if (isValid)
+                    {
+                        isValid = index != 0 && index != Formula.Length - 1;
+                        if (isValid)
+                            foreach (Char item in EnumerateOperators())
+                                if (item != Not && item != Parentheses[0] && item != Parentheses[1])
+                                {
                                     isValid = Formula.ToCharArray()[index - 1] != item && Formula.ToCharArray()[index + 1] != item;
-                            }
+                                    if (!isValid)
+                                        break;
+                                }
+                    }
 
             return isValid;
         }

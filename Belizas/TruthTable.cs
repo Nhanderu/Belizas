@@ -137,6 +137,7 @@ namespace Nhanderu.Belizas
         public Boolean[,] ArgumentsValues { get; private set; }
         public List<String> Expressions { get; private set; }
         public List<Boolean[]> ExpressionsValues { get; private set; }
+
         private Int32 Churros { get; set; }
 
         public Boolean ValidateFormula()
@@ -248,16 +249,43 @@ namespace Nhanderu.Belizas
         public void CalculateExpressions()
         {
             String expression = "", pseudoformula = "";
-            List<String> snips = new List<String>();
+            Dictionary<String, String> snips = SnipFormula();
 
-            snips.Add(Formula);
+            Int32 count = 0, counter = 0, depth = 0;
+            foreach (Char item in Formula)
+                if (item == Parentheses[0])
+                {
+                    count++;
+                    counter++;
+                    if (counter > depth)
+                        depth = counter;
+                }
+                else if (item == Parentheses[1])
+                    counter--;
 
-            while (snips[snips.Count - 1].IndexOf(Parentheses[0]) > -1)
-                snips.Add(snips[snips.Count - 1].Substring(snips[snips.Count - 1].IndexOf(Parentheses[0]) + 1, snips[snips.Count - 1].LastIndexOf(Parentheses[1]) - snips[snips.Count - 1].IndexOf(Parentheses[0]) - 1));
+            Int32[] actualID = new Int32[depth + 1], fatherID = new Int32[depth + 1];
+
+            actualID[0] = 0;
+            for (Int32 index = 1; index <= depth; index++)
+                actualID[index] = -1;
+            for (Int32 index = 0; index <= depth; index++)
+                fatherID[index] = -1;
 
             while (snips.Count != 0)
             {
-                pseudoformula = snips[snips.Count - 1];
+                while (!snips.ContainsKey(ConvertKey(actualID)))
+                {
+                    actualID[counter--] = -1;
+                    fatherID[counter] = -1;
+                }
+
+                while (snips[ConvertKey(actualID)].Contains(Parentheses[0].ToString()))
+                {
+                    fatherID[counter] = actualID[counter];
+                    actualID[++counter] = 0;
+                }
+
+                pseudoformula = snips[ConvertKey(actualID)];
                 while (pseudoformula.Length != 1)
                 {
                     if (pseudoformula.IndexOf(Not) > 0)
@@ -278,18 +306,62 @@ namespace Nhanderu.Belizas
                     pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
                     CalculateExpression(expression, pseudoformula.Length == 1);
                 }
+
                 if (snips.Count > 1)
                 {
-                    if (HasChurros(snips[snips.Count - 1]))
+                    if (HasChurros(snips[ConvertKey(actualID)]))
                         for (Int32 index = 0; index < Expressions.Count; index++)
-                            if (snips[snips.Count - 1].Contains(Convert.ToChar(Churros + index).ToString()))
-                                snips[snips.Count - 1] = snips[snips.Count - 1].Replace(Convert.ToChar(Churros + index).ToString(), Expressions[index]);
-                    snips[snips.Count - 2] = ReplaceFirst(snips[snips.Count - 2], Parentheses[0] + snips[snips.Count - 1] + Parentheses[1], pseudoformula);
+                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(Churros + index).ToString()))
+                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(Churros + index).ToString(), Expressions[index]);
+                    snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], Parentheses[0] + snips[ConvertKey(actualID)] + Parentheses[1], pseudoformula);
                 }
-                snips.Remove(snips[snips.Count - 1]);
+
+                snips.Remove(ConvertKey(actualID));
+
+                if (snips.Count > 0)
+                {
+                    actualID[counter]++;
+                }
             }
         }
-        public void CalculateExpression(String expression, Boolean hasParenthesis)
+        public override String ToString()
+        {
+            StringBuilder table = new StringBuilder();
+
+            for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
+                if (index < Arguments.Count)
+                    table.Append(Arguments[index] + " ");
+                else
+                    table.Append(Expressions[index - Arguments.Count] + " ");
+
+            table.AppendLine();
+
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+            {
+                for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
+                    if (column < Arguments.Count)
+                        table.Append(Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
+                    else
+                    {
+                        if (Expressions[column - Arguments.Count].Length % 2 == 0)
+                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
+                                table.Append(" ");
+                        else
+                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
+                                table.Append(" ");
+
+                        table.Append(Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
+                        for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
+                            table.Append(" ");
+                    }
+
+                table.AppendLine();
+            }
+
+            return table.ToString();
+        }
+
+        private void CalculateExpression(String expression, Boolean hasParenthesis)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
             Char expressionOperator = expression.ToCharArray()[1];
@@ -339,41 +411,77 @@ namespace Nhanderu.Belizas
             Expressions.Add(expression);
             ExpressionsValues.Add(expressionValues);
         }
-        public override String ToString()
+        private Dictionary<String, String> SnipFormula()
         {
-            StringBuilder table = new StringBuilder();
+            Int32 counter = 0, count = 0, depth = 0;
+            foreach (Char item in Formula)
+                if (item == Parentheses[0])
+                {
+                    count++;
+                    counter++;
+                    if (counter > depth)
+                        depth = counter;
+                }
+                else if (item == Parentheses[1])
+                    counter--;
 
-            for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
-                if (index < Arguments.Count)
-                    table.Append(Arguments[index] + " ");
-                else
-                    table.Append(Expressions[index - Arguments.Count] + " ");
-            table.AppendLine();
+            Int32[] treecode = new Int32[depth + 1];
+            if (depth > 0)
+                for (Int32 index = 1; index <= depth; index++)
+                    treecode[index] = -1;
+            treecode[0] = 0;
 
-            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
-            {
-                for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
-                    if (column < Arguments.Count)
-                        table.Append(Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
-                    else
+            List<String> pseudoformulas = new List<String>(count + 1);
+            List<Int32> snipStart = new List<Int32>(count), snipEnd = new List<Int32>(count);
+            List<Int32[]> treecodes = new List<Int32[]>(depth);
+            pseudoformulas.Add(Formula);
+            treecodes.Add(treecode);
+
+            treecode = new Int32[depth + 1];
+            treecodes[treecodes.Count - 1].CopyTo(treecode, 0);
+
+            while (snipStart.Count != count)
+                for (Int32 index = 0; index < Formula.Length; index++)
+                    if (Formula[index] == Parentheses[0])
                     {
-                        if (Expressions[column - Arguments.Count].Length % 2 == 0)
-                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
-                                table.Append(" ");
-                        else
-                            for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                                table.Append(" ");
-
-                        table.Append(Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
-                        for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                            table.Append(" ");
+                        snipStart.Add(index + 1);
+                        snipEnd.Add(-1);
+                        treecode[++counter]++;
+                        while (ContainsCode(treecodes, treecode))
+                            treecode[counter]++;
+                        treecodes.Add(treecode);
+                        treecode = new Int32[depth + 1];
+                        treecodes[treecodes.Count - 1].CopyTo(treecode, 0);
                     }
-                table.AppendLine();
+                    else if (Formula[index] == Parentheses[1])
+                    {
+                        for (Int32 position = snipStart.Count - 1; position > -1; position--)
+                            if (snipEnd[position] == -1)
+                            {
+                                snipEnd[position] = index;
+                                break;
+                            }
+                        treecode[counter--] = -1;
+                    }
+
+            for (Int32 index = 0; index < snipStart.Count; index++)
+                pseudoformulas.Add(Formula.Substring(snipStart[index], snipEnd[index] - snipStart[index]));
+
+            return OrganizeSnips(treecodes, pseudoformulas);
+        }
+        private Dictionary<String, String> OrganizeSnips(List<Int32[]> codes, List<String> texts)
+        {
+            Dictionary<String, String> snips = null;
+
+            if (codes.Count == texts.Count)
+            {
+                snips = new Dictionary<String, String>();
+                for (Int32 index = 0; index < codes.Count; index++)
+                    snips.Add(ConvertKey(codes[index]), texts[index]);
             }
 
-            return table.ToString();
+            return snips;
         }
-
         private Boolean HasChurros(String expression)
         {
             Boolean hasChurros = false;
@@ -381,8 +489,37 @@ namespace Nhanderu.Belizas
             foreach (Char item in expression)
                 if (!hasChurros)
                     hasChurros = Convert.ToInt32(item) >= Churros;
+                else
+                    break;
 
             return hasChurros;
+        }
+        private Boolean ContainsCode(List<Int32[]> list, Int32[] code)
+        {
+            Boolean contains = false;
+
+            for (Int32 listIndex = 0; listIndex < list.Count; listIndex++)
+                if (!contains)
+                    for (Int32 codeIndex = 0; codeIndex < code.Length; codeIndex++)
+                        if (contains || codeIndex == 0)
+                            contains = list[listIndex][codeIndex] == code[codeIndex];
+                        else
+                            break;
+
+            return contains;
+        }
+        private String ConvertKey(Int32[] key)
+        {
+            StringBuilder newKey = new StringBuilder();
+
+            for (Int32 index = 0; index < key.Length; index++)
+            {
+                newKey.Append(key[index].ToString());
+                if (index != key.Length - 1)
+                    newKey.Append('.');
+            }
+
+            return newKey.ToString();
         }
         private String ReplaceFirst(String text, String oldValue, String newValue)
         {

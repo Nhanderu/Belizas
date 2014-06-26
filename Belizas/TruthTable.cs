@@ -11,7 +11,7 @@ namespace Nhanderu.Belizas
             Formula = formula;
 
             Arguments = new List<Char>();
-            foreach (Char item in formula.ToCharArray())
+            foreach (Char item in formula)
                 if (Char.IsLetter(item) && !Arguments.Contains(item))
                     Arguments.Add(item);
 
@@ -179,39 +179,39 @@ namespace Nhanderu.Belizas
 
             if (isValid)
                 for (Int32 index = 0; index < Formula.Length; index++)
-                    if (Char.IsLetter(Formula.ToCharArray()[index]))
+                    if (Char.IsLetter(Formula[index]))
                     {
                         if (isValid && index != 0)
-                            isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
+                            isValid = !Char.IsLetter(Formula[index - 1]);
                         if (isValid && index != Formula.Length - 1)
-                            isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
+                            isValid = !Char.IsLetter(Formula[index + 1]);
                     }
-                    else if (Formula.ToCharArray()[index] == Not)
+                    else if (Formula[index] == Not)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[0] || Formula.ToCharArray()[index - 1] == Parentheses[1];
+                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == Parentheses[0] || Formula[index - 1] == Parentheses[1];
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != Formula.Length - 1)
-                            isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
+                            isValid = !Char.IsLetter(Formula[index + 1]);
                     }
-                    else if (Formula.ToCharArray()[index] == Parentheses[0])
+                    else if (Formula[index] == Parentheses[0])
                     {
                         if (isValid && index != Formula.Length - 1)
-                            isValid = Char.IsLetter(Formula.ToCharArray()[index + 1]) || Formula.ToCharArray()[index + 1] == Parentheses[0];
+                            isValid = Char.IsLetter(Formula[index + 1]) || Formula[index + 1] == Parentheses[0];
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != 0)
-                            isValid = !Char.IsLetter(Formula.ToCharArray()[index - 1]);
+                            isValid = !Char.IsLetter(Formula[index - 1]);
                     }
-                    else if (Formula.ToCharArray()[index] == Parentheses[1])
+                    else if (Formula[index] == Parentheses[1])
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(Formula.ToCharArray()[index - 1]) || Formula.ToCharArray()[index - 1] == Parentheses[1] || Formula.ToCharArray()[index - 1] == Not;
+                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == Parentheses[1] || Formula[index - 1] == Not;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != Formula.Length - 1)
-                            isValid = !Char.IsLetter(Formula.ToCharArray()[index + 1]);
+                            isValid = !Char.IsLetter(Formula[index + 1]);
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace Nhanderu.Belizas
                             foreach (Char item in EnumerateOperators())
                                 if (item != Not && item != Parentheses[0] && item != Parentheses[1])
                                 {
-                                    isValid = Formula.ToCharArray()[index - 1] != item && Formula.ToCharArray()[index + 1] != item;
+                                    isValid = Formula[index - 1] != item && Formula[index + 1] != item;
                                     if (!isValid)
                                         break;
                                 }
@@ -364,21 +364,21 @@ namespace Nhanderu.Belizas
         private void CalculateExpression(String expression, Boolean hasParenthesis)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
-            Char expressionOperator = expression.ToCharArray()[1];
+            Char expressionOperator = expression[1];
             Boolean value1 = true, value2 = true;
 
             for (Int32 line = 0; line < expressionValues.Length; line++)
             {
-                if (expression.ToCharArray()[0] >= Churros)
-                    value1 = ExpressionsValues[expression.ToCharArray()[0] - Churros][line];
+                if (expression[0] >= Churros)
+                    value1 = ExpressionsValues[expression[0] - Churros][line];
                 else
-                    value1 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[0])];
+                    value1 = ArgumentsValues[line, Arguments.IndexOf(expression[0])];
 
                 if (expression.Length == 3)
-                    if (expression.ToCharArray()[2] >= Churros)
-                        value2 = ExpressionsValues[expression.ToCharArray()[2] - Churros][line];
+                    if (expression[2] >= Churros)
+                        value2 = ExpressionsValues[expression[2] - Churros][line];
                     else
-                        value2 = ArgumentsValues[line, Arguments.IndexOf(expression.ToCharArray()[2])];
+                        value2 = ArgumentsValues[line, Arguments.IndexOf(expression[2])];
 
                 if (expressionOperator == Not)
                     expressionValues[line] = !value1;

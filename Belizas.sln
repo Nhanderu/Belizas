@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas", "Belizas\Belizas.csproj", "{EE003E66-CA6F-4777-894E-D7B378F86A28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BelizasTest", "BelizasTest\BelizasTest.csproj", "{EE003E66-CA6F-4777-894E-D7B378F86A28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas", "Belizas\Belizas.csproj", "{871FF968-2ECF-4CC3-B056-4183C8D57390}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EE003E66-CA6F-4777-894E-D7B378F86A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE003E66-CA6F-4777-894E-D7B378F86A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE003E66-CA6F-4777-894E-D7B378F86A28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{871FF968-2ECF-4CC3-B056-4183C8D57390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{871FF968-2ECF-4CC3-B056-4183C8D57390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{871FF968-2ECF-4CC3-B056-4183C8D57390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{871FF968-2ECF-4CC3-B056-4183C8D57390}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

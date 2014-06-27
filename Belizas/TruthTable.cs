@@ -17,7 +17,6 @@ namespace Nhanderu.Belizas
 
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
-            Churros = 13312;
 
             Operators = new Dictionary<String, Char>();
             Operators.Add("Not", '\'');
@@ -29,6 +28,39 @@ namespace Nhanderu.Belizas
             Operators.Add("IfAndOnlyIf", '-');
             Operators.Add("OpeningBracket", '(');
             Operators.Add("ClosingBracket", ')');
+        }
+        public TruthTable(String formula, IEnumerable<Char> characters)
+        {
+            Formula = formula;
+
+            Arguments = new List<Char>();
+            foreach (Char item in Formula)
+                if (Char.IsLetter(item) && !Arguments.Contains(item))
+                    Arguments.Add(item);
+
+            Expressions = new List<String>();
+            ExpressionsValues = new List<Boolean[]>();
+
+            IEnumerator<Char> operators = characters.GetEnumerator();
+            Operators = new Dictionary<String, Char>();
+
+            Operators.Add("Not", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("And", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("Or", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("Xor", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("IfThen", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("ThenIf", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("IfAndOnlyIf", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("OpeningBracket", operators.Current);
+            if (operators.MoveNext())
+                Operators.Add("ClosingBracket", operators.Current);
         }
 
         private Dictionary<String, Char> Operators;
@@ -138,7 +170,7 @@ namespace Nhanderu.Belizas
         public List<String> Expressions { get; private set; }
         public List<Boolean[]> ExpressionsValues { get; private set; }
 
-        private Int32 Churros { get; set; }
+        private Int32 Churros { get { return 13312; } }
 
         public Boolean ValidateFormula()
         {
@@ -173,8 +205,8 @@ namespace Nhanderu.Belizas
                         parenthesisCount[0]++;
                     else if (character == Brackets[1])
                         parenthesisCount[1]++;
-                if (parenthesisCount[0] != parenthesisCount[1])
-                    isValid = false;
+
+                isValid = parenthesisCount[0] == parenthesisCount[1];
             }
 
             if (isValid)
@@ -221,6 +253,94 @@ namespace Nhanderu.Belizas
                                 if (item != Not && item != Brackets[0] && item != Brackets[1])
                                 {
                                     isValid = Formula[index - 1] != item && Formula[index + 1] != item;
+                                    if (!isValid)
+                                        break;
+                                }
+                    }
+
+            return isValid;
+        }
+        public Boolean ValidateFormula(String formula)
+        {
+            List<Boolean> charactersStatus = new List<Boolean>();
+            Boolean isDisallowedCharacter = true, isValid = true;
+
+            foreach (Char character in formula)
+            {
+                if (Char.IsLetter(character))
+                    isDisallowedCharacter = false;
+                else
+                    for (Int32 index = 0; index < EnumerateOperators().Length; index++)
+                        if (character == EnumerateOperators()[index])
+                        {
+                            isDisallowedCharacter = false;
+                            break;
+                        }
+
+                charactersStatus.Add(isDisallowedCharacter);
+                isDisallowedCharacter = true;
+            }
+
+            foreach (Boolean status in charactersStatus)
+                if (status)
+                    isValid = false;
+
+            if (isValid && (formula.Contains(Brackets[0].ToString()) || formula.Contains(Brackets[1].ToString())))
+            {
+                Int32[] parenthesisCount = new Int32[2];
+                foreach (Char character in formula)
+                    if (character == Brackets[0])
+                        parenthesisCount[0]++;
+                    else if (character == Brackets[1])
+                        parenthesisCount[1]++;
+
+                isValid = parenthesisCount[0] == parenthesisCount[1];
+            }
+
+            if (isValid)
+                for (Int32 index = 0; index < formula.Length; index++)
+                    if (Char.IsLetter(formula[index]))
+                    {
+                        if (isValid && index != 0)
+                            isValid = !Char.IsLetter(formula[index - 1]);
+                        if (isValid && index != formula.Length - 1)
+                            isValid = !Char.IsLetter(formula[index + 1]);
+                    }
+                    else if (formula[index] == Not)
+                    {
+                        if (isValid && index != 0)
+                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == Brackets[0] || formula[index - 1] == Brackets[1];
+                        else if (isValid)
+                            isValid = false;
+                        if (isValid && index != formula.Length - 1)
+                            isValid = !Char.IsLetter(formula[index + 1]);
+                    }
+                    else if (formula[index] == Brackets[0])
+                    {
+                        if (isValid && index != formula.Length - 1)
+                            isValid = Char.IsLetter(formula[index + 1]) || formula[index + 1] == Brackets[0];
+                        else if (isValid)
+                            isValid = false;
+                        if (isValid && index != 0)
+                            isValid = !Char.IsLetter(formula[index - 1]);
+                    }
+                    else if (formula[index] == Brackets[1])
+                    {
+                        if (isValid && index != 0)
+                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == Brackets[1] || formula[index - 1] == Not;
+                        else if (isValid)
+                            isValid = false;
+                        if (isValid && index != formula.Length - 1)
+                            isValid = !Char.IsLetter(formula[index + 1]);
+                    }
+                    else
+                    {
+                        isValid = index != 0 && index != formula.Length - 1;
+                        if (isValid)
+                            foreach (Char item in EnumerateOperators())
+                                if (item != Not && item != Brackets[0] && item != Brackets[1])
+                                {
+                                    isValid = formula[index - 1] != item && formula[index + 1] != item;
                                     if (!isValid)
                                         break;
                                 }

@@ -43,24 +43,11 @@ namespace Nhanderu.Belizas
 
             IEnumerator<Char> operators = characters.GetEnumerator();
             Operators = new Dictionary<String, Char>();
+            String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
+            Int32 index = 0;
 
-            Operators.Add("Not", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("And", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("Or", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("Xor", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("IfThen", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("ThenIf", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("IfAndOnlyIf", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("OpeningBracket", operators.Current);
-            if (operators.MoveNext())
-                Operators.Add("ClosingBracket", operators.Current);
+            while (operators.MoveNext() || index >= 9)
+                Operators.Add(operatorsKeys[index++], operators.Current);
         }
 
         private Dictionary<String, Char> Operators;

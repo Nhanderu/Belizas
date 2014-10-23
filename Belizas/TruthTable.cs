@@ -36,7 +36,6 @@ namespace Nhanderu.Belizas
             
                 while (index < 9)
                     Operators.Add(operatorsKeys[index], operatorsDefaultValues[index++]);
-                
             }
         }
 

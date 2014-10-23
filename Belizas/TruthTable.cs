@@ -8,26 +8,7 @@ namespace Nhanderu.Belizas
     {
         public TruthTable(String formula)
         {
-            Formula = formula;
-
-            Arguments = new List<Char>();
-            foreach (Char item in Formula)
-                if (Char.IsLetter(item) && !Arguments.Contains(item))
-                    Arguments.Add(item);
-
-            Expressions = new List<String>();
-            ExpressionsValues = new List<Boolean[]>();
-
-            Operators = new Dictionary<String, Char>();
-            Operators.Add("Not", '\'');
-            Operators.Add("And", '.');
-            Operators.Add("Or", '+');
-            Operators.Add("Xor", ':');
-            Operators.Add("IfThen", '>');
-            Operators.Add("ThenIf", '<');
-            Operators.Add("IfAndOnlyIf", '-');
-            Operators.Add("OpeningBracket", '(');
-            Operators.Add("ClosingBracket", ')');
+            TruthTable(formula, new IEnumerable<Char>() { '\'', '.', '+', ':', '>', '<', '-', '(', ')' });
         }
         public TruthTable(String formula, IEnumerable<Char> characters)
         {
@@ -40,14 +21,23 @@ namespace Nhanderu.Belizas
 
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
-
-            IEnumerator<Char> operators = characters.GetEnumerator();
             Operators = new Dictionary<String, Char>();
+
+            IEnumerator<Char> charactersEnumerator = characters.GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
-
-            while (operators.MoveNext() || index >= 9)
-                Operators.Add(operatorsKeys[index++], operators.Current);
+            
+            while (charactersEnumerator.MoveNext() && index < 9)
+                Operators.Add(operatorsKeys[index++], charactersEnumerator.Current);
+            
+            if (index < 9)
+            {
+                Char[] operatorsDefaultValues = new Char[9]() { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
+            
+                while (index < 9)
+                    Operators.Add(operatorsKeys[index], operatorsDefaultValues[index++]);
+                
+            }
         }
 
         private Dictionary<String, Char> Operators;

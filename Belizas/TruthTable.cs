@@ -135,19 +135,28 @@ namespace Nhanderu.Belizas
                     Operators["IfAndOnlyIf"] = value;
             }
         }
-        public Char[] Brackets
+        public Char OpeningBracket
         {
             get
             {
-                return new Char[] { Operators["OpeningBracket"], Operators["ClosingBracket"] };
+                return Operators["OpeningBracket"];
             }
             set
             {
-                if (value.Length == 2 && !Operators.ContainsValue(value[0]) && !Operators.ContainsValue(value[1]) && Convert.ToInt32(value[0]) < Churros && Convert.ToInt32(value[1]) < Churros)
-                {
-                    Operators["OpeningBracket"] = value[0];
-                    Operators["ClosingBracket"] = value[1];
-                }
+                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
+                    Operators["OpeningBracket"] = value;
+            }
+        }
+        public Char ClosingBracket
+        {
+            get
+            {
+                return Operators["ClosingBracket"];
+            }
+            set
+            {
+                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
+                    Operators["ClosingBracket"] = value;
             }
         }
 
@@ -184,13 +193,13 @@ namespace Nhanderu.Belizas
                 if (status)
                     isValid = false;
 
-            if (isValid && (Formula.Contains(Brackets[0].ToString()) || Formula.Contains(Brackets[1].ToString())))
+            if (isValid && (Formula.Contains(OpeningBracket.ToString()) || Formula.Contains(ClosingBracket.ToString())))
             {
                 Int32[] parenthesisCount = new Int32[2];
                 foreach (Char character in Formula)
-                    if (character == Brackets[0])
+                    if (character == OpeningBracket)
                         parenthesisCount[0]++;
-                    else if (character == Brackets[1])
+                    else if (character == ClosingBracket)
                         parenthesisCount[1]++;
 
                 isValid = parenthesisCount[0] == parenthesisCount[1];
@@ -208,25 +217,25 @@ namespace Nhanderu.Belizas
                     else if (Formula[index] == Not)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == Brackets[0] || Formula[index - 1] == Brackets[1];
+                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == OpeningBracket || Formula[index - 1] == ClosingBracket;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != Formula.Length - 1)
                             isValid = !Char.IsLetter(Formula[index + 1]);
                     }
-                    else if (Formula[index] == Brackets[0])
+                    else if (Formula[index] == OpeningBracket)
                     {
                         if (isValid && index != Formula.Length - 1)
-                            isValid = Char.IsLetter(Formula[index + 1]) || Formula[index + 1] == Brackets[0];
+                            isValid = Char.IsLetter(Formula[index + 1]) || Formula[index + 1] == OpeningBracket;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != 0)
                             isValid = !Char.IsLetter(Formula[index - 1]);
                     }
-                    else if (Formula[index] == Brackets[1])
+                    else if (Formula[index] == ClosingBracket)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == Brackets[1] || Formula[index - 1] == Not;
+                            isValid = Char.IsLetter(Formula[index - 1]) || Formula[index - 1] == ClosingBracket || Formula[index - 1] == Not;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != Formula.Length - 1)
@@ -237,7 +246,7 @@ namespace Nhanderu.Belizas
                         isValid = index != 0 && index != Formula.Length - 1;
                         if (isValid)
                             foreach (Char item in EnumerateOperators())
-                                if (item != Not && item != Brackets[0] && item != Brackets[1])
+                                if (item != Not && item != OpeningBracket && item != ClosingBracket)
                                 {
                                     isValid = Formula[index - 1] != item && Formula[index + 1] != item;
                                     if (!isValid)
@@ -272,13 +281,13 @@ namespace Nhanderu.Belizas
                 if (status)
                     isValid = false;
 
-            if (isValid && (formula.Contains(Brackets[0].ToString()) || formula.Contains(Brackets[1].ToString())))
+            if (isValid && (formula.Contains(OpeningBracket.ToString()) || formula.Contains(ClosingBracket.ToString())))
             {
                 Int32[] parenthesisCount = new Int32[2];
                 foreach (Char character in formula)
-                    if (character == Brackets[0])
+                    if (character == OpeningBracket)
                         parenthesisCount[0]++;
-                    else if (character == Brackets[1])
+                    else if (character == ClosingBracket)
                         parenthesisCount[1]++;
 
                 isValid = parenthesisCount[0] == parenthesisCount[1];
@@ -296,25 +305,25 @@ namespace Nhanderu.Belizas
                     else if (formula[index] == Not)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == Brackets[0] || formula[index - 1] == Brackets[1];
+                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == OpeningBracket || formula[index - 1] == ClosingBracket;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != formula.Length - 1)
                             isValid = !Char.IsLetter(formula[index + 1]);
                     }
-                    else if (formula[index] == Brackets[0])
+                    else if (formula[index] == OpeningBracket)
                     {
                         if (isValid && index != formula.Length - 1)
-                            isValid = Char.IsLetter(formula[index + 1]) || formula[index + 1] == Brackets[0];
+                            isValid = Char.IsLetter(formula[index + 1]) || formula[index + 1] == OpeningBracket;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != 0)
                             isValid = !Char.IsLetter(formula[index - 1]);
                     }
-                    else if (formula[index] == Brackets[1])
+                    else if (formula[index] == ClosingBracket)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == Brackets[1] || formula[index - 1] == Not;
+                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == ClosingBracket || formula[index - 1] == Not;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != formula.Length - 1)
@@ -325,7 +334,7 @@ namespace Nhanderu.Belizas
                         isValid = index != 0 && index != formula.Length - 1;
                         if (isValid)
                             foreach (Char item in EnumerateOperators())
-                                if (item != Not && item != Brackets[0] && item != Brackets[1])
+                                if (item != Not && item != OpeningBracket && item != ClosingBracket)
                                 {
                                     isValid = formula[index - 1] != item && formula[index + 1] != item;
                                     if (!isValid)
@@ -337,7 +346,7 @@ namespace Nhanderu.Belizas
         }
         public Char[] EnumerateOperators()
         {
-            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf, Brackets[0], Brackets[1] };
+            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf, OpeningBracket, ClosingBracket };
         }
         public void CalculateArguments()
         {
@@ -360,14 +369,14 @@ namespace Nhanderu.Belizas
 
             Int32 count = 0, counter = 0, depth = 0;
             foreach (Char item in Formula)
-                if (item == Brackets[0])
+                if (item == OpeningBracket)
                 {
                     count++;
                     counter++;
                     if (counter > depth)
                         depth = counter;
                 }
-                else if (item == Brackets[1])
+                else if (item == ClosingBracket)
                     counter--;
 
             Int32[] actualID = new Int32[depth + 1], fatherID = new Int32[depth + 1];
@@ -386,7 +395,7 @@ namespace Nhanderu.Belizas
                     fatherID[counter] = -1;
                 }
 
-                while (snips[ConvertKey(actualID)].Contains(Brackets[0].ToString()))
+                while (snips[ConvertKey(actualID)].Contains(OpeningBracket.ToString()))
                 {
                     fatherID[counter] = actualID[counter];
                     actualID[++counter] = 0;
@@ -420,7 +429,7 @@ namespace Nhanderu.Belizas
                         for (Int32 index = 0; index < Expressions.Count; index++)
                             if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(Churros + index).ToString()))
                                 snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(Churros + index).ToString(), Expressions[index]);
-                    snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], Brackets[0] + snips[ConvertKey(actualID)] + Brackets[1], pseudoformula);
+                    snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], OpeningBracket + snips[ConvertKey(actualID)] + ClosingBracket, pseudoformula);
                 }
 
                 snips.Remove(ConvertKey(actualID));
@@ -513,7 +522,7 @@ namespace Nhanderu.Belizas
             }
 
             if (hasParenthesis)
-                expression = Brackets[0] + expression + Brackets[1];
+                expression = OpeningBracket + expression + ClosingBracket;
 
             Expressions.Add(expression);
             ExpressionsValues.Add(expressionValues);
@@ -522,14 +531,14 @@ namespace Nhanderu.Belizas
         {
             Int32 counter = 0, count = 0, depth = 0;
             foreach (Char item in Formula)
-                if (item == Brackets[0])
+                if (item == OpeningBracket)
                 {
                     count++;
                     counter++;
                     if (counter > depth)
                         depth = counter;
                 }
-                else if (item == Brackets[1])
+                else if (item == ClosingBracket)
                     counter--;
 
             Int32[] treecode = new Int32[depth + 1];
@@ -549,7 +558,7 @@ namespace Nhanderu.Belizas
 
             while (snipStart.Count != count)
                 for (Int32 index = 0; index < Formula.Length; index++)
-                    if (Formula[index] == Brackets[0])
+                    if (Formula[index] == OpeningBracket)
                     {
                         snipStart.Add(index + 1);
                         snipEnd.Add(-1);
@@ -560,7 +569,7 @@ namespace Nhanderu.Belizas
                         treecode = new Int32[depth + 1];
                         treecodes[treecodes.Count - 1].CopyTo(treecode, 0);
                     }
-                    else if (Formula[index] == Brackets[1])
+                    else if (Formula[index] == ClosingBracket)
                     {
                         for (Int32 position = snipStart.Count - 1; position > -1; position--)
                             if (snipEnd[position] == -1)

@@ -1,172 +1,162 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Nhanderu.Belizas
 {
     public class TruthTable
     {
-        public TruthTable(String formula)
+        private String _formula;
+        private Dictionary<String, Char> _operators;
+        private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
+        private const Int32 _churros = 13312;
+
+        #region Operators
+        public Char Not
         {
-            TruthTable(formula, new IEnumerable<Char>() { '\'', '.', '+', ':', '>', '<', '-', '(', ')' });
+            get { return _operators["Not"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["Not"] = value;
+            }
         }
-        public TruthTable(String formula, IEnumerable<Char> characters)
+
+        public Char And
+        {
+            get { return _operators["And"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["And"] = value;
+            }
+        }
+
+        public Char Or
+        {
+            get { return _operators["Or"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["Or"] = value;
+            }
+        }
+
+        public Char Xor
+        {
+            get { return _operators["Xor"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["Xor"] = value;
+            }
+        }
+
+        public Char IfThen
+        {
+            get { return _operators["IfThen"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["IfThen"] = value;
+            }
+        }
+
+        public Char ThenIf
+        {
+            get { return _operators["ThenIf"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["ThenIf"] = value;
+            }
+        }
+
+        public Char IfAndOnlyIf
+        {
+            get { return _operators["IfAndOnlyIf"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["IfAndOnlyIf"] = value;
+            }
+        }
+
+        public Char OpeningBracket
+        {
+            get { return _operators["OpeningBracket"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["OpeningBracket"] = value;
+            }
+        }
+
+        public Char ClosingBracket
+        {
+            get { return _operators["ClosingBracket"]; }
+            set
+            {
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                    _operators["ClosingBracket"] = value;
+            }
+        }
+        #endregion
+
+        #region Truth table data properties
+        public String Formula
+        {
+            get { return _formula; }
+            private set
+            {
+                _formula = value;
+
+                Arguments = new List<Char>();
+                foreach (Char item in _formula)
+                    if (Char.IsLetter(item) && !Arguments.Contains(item))
+                        Arguments.Add(item);
+
+                CalculateArguments();
+            }
+        }
+
+        public List<Char> Arguments { get; private set; }
+
+        public Boolean[,] ArgumentsValues { get; private set; }
+
+        public List<String> Expressions { get; private set; }
+
+        public List<Boolean[]> ExpressionsValues { get; private set; }
+        #endregion
+
+        public TruthTable(String formula, IEnumerable<Char> characters = null)
         {
             Formula = formula;
 
-            Arguments = new List<Char>();
-            foreach (Char item in Formula)
-                if (Char.IsLetter(item) && !Arguments.Contains(item))
-                    Arguments.Add(item);
-
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
-            Operators = new Dictionary<String, Char>();
+            _operators = new Dictionary<String, Char>();
 
-            IEnumerator<Char> charactersEnumerator = characters.GetEnumerator();
+            IEnumerator<Char> charactersEnumerator = characters.GetEnumerator() ?? _defaultOperators.GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
-            
+
             while (charactersEnumerator.MoveNext() && index < 9)
-                Operators.Add(operatorsKeys[index++], charactersEnumerator.Current);
-            
-            if (index < 9)
-            {
-                Char[] operatorsDefaultValues = new Char[9]() { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
-            
-                while (index < 9)
-                    Operators.Add(operatorsKeys[index], operatorsDefaultValues[index++]);
-            }
+                _operators.Add(operatorsKeys[index++], charactersEnumerator.Current);
+
+            while (index < 9)
+                _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
         }
 
-        private Dictionary<String, Char> Operators;
-        public Char Not
+        public Boolean ValidateFormula(String formula = null)
         {
-            get
-            {
-                return Operators["Not"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["Not"] = value;
-            }
-        }
-        public Char And
-        {
-            get
-            {
-                return Operators["And"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["And"] = value;
-            }
-        }
-        public Char Or
-        {
-            get
-            {
-                return Operators["Or"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["Or"] = value;
-            }
-        }
-        public Char Xor
-        {
-            get
-            {
-                return Operators["Xor"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["Xor"] = value;
-            }
-        }
-        public Char IfThen
-        {
-            get
-            {
-                return Operators["IfThen"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["IfThen"] = value;
-            }
-        }
-        public Char ThenIf
-        {
-            get
-            {
-                return Operators["ThenIf"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["ThenIf"] = value;
-            }
-        }
-        public Char IfAndOnlyIf
-        {
-            get
-            {
-                return Operators["IfAndOnlyIf"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["IfAndOnlyIf"] = value;
-            }
-        }
-        public Char OpeningBracket
-        {
-            get
-            {
-                return Operators["OpeningBracket"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["OpeningBracket"] = value;
-            }
-        }
-        public Char ClosingBracket
-        {
-            get
-            {
-                return Operators["ClosingBracket"];
-            }
-            set
-            {
-                if (!Operators.ContainsValue(value) && Convert.ToInt32(value) < Churros)
-                    Operators["ClosingBracket"] = value;
-            }
-        }
+            String sentence = formula ?? Formula;
 
-        public String Formula { get; private set; }
-        public List<Char> Arguments { get; private set; }
-        public Boolean[,] ArgumentsValues { get; private set; }
-        public List<String> Expressions { get; private set; }
-        public List<Boolean[]> ExpressionsValues { get; private set; }
-
-        private Int32 Churros { get { return 13312; } }
-
-        public Boolean ValidateFormula()
-        {
-            return ValidateFormula(Formula);
-        }
-        public Boolean ValidateFormula(String formula)
-        {
             List<Boolean> charactersStatus = new List<Boolean>();
             Boolean isDisallowedCharacter = true, isValid = true;
 
-            foreach (Char character in formula)
+            foreach (Char character in sentence)
             {
                 if (Char.IsLetter(character))
                     isDisallowedCharacter = false;
@@ -186,10 +176,10 @@ namespace Nhanderu.Belizas
                 if (status)
                     isValid = false;
 
-            if (isValid && (formula.Contains(OpeningBracket.ToString()) || formula.Contains(ClosingBracket.ToString())))
+            if (isValid && (sentence.Contains(OpeningBracket.ToString()) || sentence.Contains(ClosingBracket.ToString())))
             {
                 Int32[] parenthesisCount = new Int32[2];
-                foreach (Char character in formula)
+                foreach (Char character in sentence)
                     if (character == OpeningBracket)
                         parenthesisCount[0]++;
                     else if (character == ClosingBracket)
@@ -199,49 +189,49 @@ namespace Nhanderu.Belizas
             }
 
             if (isValid)
-                for (Int32 index = 0; index < formula.Length; index++)
-                    if (Char.IsLetter(formula[index]))
+                for (Int32 index = 0; index < sentence.Length; index++)
+                    if (Char.IsLetter(sentence[index]))
                     {
                         if (isValid && index != 0)
-                            isValid = !Char.IsLetter(formula[index - 1]);
-                        if (isValid && index != formula.Length - 1)
-                            isValid = !Char.IsLetter(formula[index + 1]);
+                            isValid = !Char.IsLetter(sentence[index - 1]);
+                        if (isValid && index != sentence.Length - 1)
+                            isValid = !Char.IsLetter(sentence[index + 1]);
                     }
-                    else if (formula[index] == Not)
+                    else if (sentence[index] == Not)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == OpeningBracket || formula[index - 1] == ClosingBracket;
+                            isValid = Char.IsLetter(sentence[index - 1]) || sentence[index - 1] == OpeningBracket || sentence[index - 1] == ClosingBracket;
                         else if (isValid)
                             isValid = false;
-                        if (isValid && index != formula.Length - 1)
-                            isValid = !Char.IsLetter(formula[index + 1]);
+                        if (isValid && index != sentence.Length - 1)
+                            isValid = !Char.IsLetter(sentence[index + 1]);
                     }
-                    else if (formula[index] == OpeningBracket)
+                    else if (sentence[index] == OpeningBracket)
                     {
-                        if (isValid && index != formula.Length - 1)
-                            isValid = Char.IsLetter(formula[index + 1]) || formula[index + 1] == OpeningBracket;
+                        if (isValid && index != sentence.Length - 1)
+                            isValid = Char.IsLetter(sentence[index + 1]) || sentence[index + 1] == OpeningBracket;
                         else if (isValid)
                             isValid = false;
                         if (isValid && index != 0)
-                            isValid = !Char.IsLetter(formula[index - 1]);
+                            isValid = !Char.IsLetter(sentence[index - 1]);
                     }
-                    else if (formula[index] == ClosingBracket)
+                    else if (sentence[index] == ClosingBracket)
                     {
                         if (isValid && index != 0)
-                            isValid = Char.IsLetter(formula[index - 1]) || formula[index - 1] == ClosingBracket || formula[index - 1] == Not;
+                            isValid = Char.IsLetter(sentence[index - 1]) || sentence[index - 1] == ClosingBracket || sentence[index - 1] == Not;
                         else if (isValid)
                             isValid = false;
-                        if (isValid && index != formula.Length - 1)
-                            isValid = !Char.IsLetter(formula[index + 1]);
+                        if (isValid && index != sentence.Length - 1)
+                            isValid = !Char.IsLetter(sentence[index + 1]);
                     }
                     else
                     {
-                        isValid = index != 0 && index != formula.Length - 1;
+                        isValid = index != 0 && index != sentence.Length - 1;
                         if (isValid)
                             foreach (Char item in EnumerateOperators())
                                 if (item != Not && item != OpeningBracket && item != ClosingBracket)
                                 {
-                                    isValid = formula[index - 1] != item && formula[index + 1] != item;
+                                    isValid = sentence[index - 1] != item && sentence[index + 1] != item;
                                     if (!isValid)
                                         break;
                                 }
@@ -249,24 +239,12 @@ namespace Nhanderu.Belizas
 
             return isValid;
         }
+
         public Char[] EnumerateOperators()
         {
             return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf, OpeningBracket, ClosingBracket };
         }
-        public void CalculateArguments()
-        {
-            ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
-            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
-            {
-                Int32 calculableLine = line;
-                for (Int32 column = 0; column < Arguments.Count; column++)
-                {
-                    ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (Arguments.Count - 1) - column);
-                    if (ArgumentsValues[line, column])
-                        calculableLine -= (Int32)Math.Pow(2, (Arguments.Count - 1) - column);
-                }
-            }
-        }
+
         public void CalculateExpressions()
         {
             String expression = "", pseudoformula = "";
@@ -324,7 +302,7 @@ namespace Nhanderu.Belizas
                     else if (pseudoformula.IndexOf(IfAndOnlyIf) > 0)
                         expression = pseudoformula.Substring(pseudoformula.IndexOf(IfAndOnlyIf) - 1, 3);
 
-                    pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + Churros).ToString());
+                    pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + _churros).ToString());
                     CalculateExpression(expression, pseudoformula.Length == 1);
                 }
 
@@ -332,8 +310,8 @@ namespace Nhanderu.Belizas
                 {
                     if (HasChurros(snips[ConvertKey(actualID)]))
                         for (Int32 index = 0; index < Expressions.Count; index++)
-                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(Churros + index).ToString()))
-                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(Churros + index).ToString(), Expressions[index]);
+                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(_churros + index).ToString()))
+                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(_churros + index).ToString(), Expressions[index]);
                     snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], OpeningBracket + snips[ConvertKey(actualID)] + ClosingBracket, pseudoformula);
                 }
 
@@ -345,6 +323,7 @@ namespace Nhanderu.Belizas
                 }
             }
         }
+
         public override String ToString()
         {
             StringBuilder table = new StringBuilder();
@@ -382,6 +361,23 @@ namespace Nhanderu.Belizas
             return table.ToString();
         }
 
+        #region Private helper methods
+        private void CalculateArguments()
+        {
+            ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
+
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+            {
+                Int32 calculableLine = line;
+                for (Int32 column = 0; column < Arguments.Count; column++)
+                {
+                    ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (Arguments.Count - 1) - column);
+                    if (ArgumentsValues[line, column])
+                        calculableLine -= (Int32)Math.Pow(2, (Arguments.Count - 1) - column);
+                }
+            }
+        }
+
         private void CalculateExpression(String expression, Boolean hasParenthesis)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];
@@ -390,14 +386,14 @@ namespace Nhanderu.Belizas
 
             for (Int32 line = 0; line < expressionValues.Length; line++)
             {
-                if (expression[0] >= Churros)
-                    value1 = ExpressionsValues[expression[0] - Churros][line];
+                if (expression[0] >= _churros)
+                    value1 = ExpressionsValues[expression[0] - _churros][line];
                 else
                     value1 = ArgumentsValues[line, Arguments.IndexOf(expression[0])];
 
                 if (expression.Length == 3)
-                    if (expression[2] >= Churros)
-                        value2 = ExpressionsValues[expression[2] - Churros][line];
+                    if (expression[2] >= _churros)
+                        value2 = ExpressionsValues[expression[2] - _churros][line];
                     else
                         value2 = ArgumentsValues[line, Arguments.IndexOf(expression[2])];
 
@@ -421,8 +417,8 @@ namespace Nhanderu.Belizas
             while (HasChurros(expression))
             {
                 foreach (Char item in expression)
-                    if (item >= Churros)
-                        churros = ReplaceFirst(expression, item.ToString(), Expressions[item - Churros]);
+                    if (item >= _churros)
+                        churros = ReplaceFirst(expression, item.ToString(), Expressions[item - _churros]);
                 expression = churros;
             }
 
@@ -432,6 +428,7 @@ namespace Nhanderu.Belizas
             Expressions.Add(expression);
             ExpressionsValues.Add(expressionValues);
         }
+
         private Dictionary<String, String> SnipFormula()
         {
             Int32 counter = 0, count = 0, depth = 0;
@@ -490,6 +487,7 @@ namespace Nhanderu.Belizas
 
             return OrganizeSnips(treecodes, pseudoformulas);
         }
+
         private Dictionary<String, String> OrganizeSnips(List<Int32[]> codes, List<String> texts)
         {
             Dictionary<String, String> snips = null;
@@ -503,18 +501,20 @@ namespace Nhanderu.Belizas
 
             return snips;
         }
+
         private Boolean HasChurros(String expression)
         {
             Boolean hasChurros = false;
 
             foreach (Char item in expression)
                 if (!hasChurros)
-                    hasChurros = Convert.ToInt32(item) >= Churros;
+                    hasChurros = Convert.ToInt32(item) >= _churros;
                 else
                     break;
 
             return hasChurros;
         }
+
         private Boolean ContainsCode(List<Int32[]> list, Int32[] code)
         {
             Boolean contains = false;
@@ -529,6 +529,7 @@ namespace Nhanderu.Belizas
 
             return contains;
         }
+
         private String ConvertKey(Int32[] key)
         {
             StringBuilder newKey = new StringBuilder();
@@ -542,9 +543,11 @@ namespace Nhanderu.Belizas
 
             return newKey.ToString();
         }
+
         private String ReplaceFirst(String text, String oldValue, String newValue)
         {
             return text.Substring(0, text.IndexOf(oldValue)) + newValue + text.Substring(text.IndexOf(oldValue) + oldValue.Length);
         }
+        #endregion
     }
 }

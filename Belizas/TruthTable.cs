@@ -131,12 +131,6 @@ namespace Nhanderu.Belizas
 
         public TruthTable(String formula, IEnumerable<Char> characters = null)
         {
-            Formula = formula;
-
-            Expressions = new List<String>();
-            ExpressionsValues = new List<Boolean[]>();
-            _operators = new Dictionary<String, Char>();
-
             IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
@@ -146,6 +140,12 @@ namespace Nhanderu.Belizas
 
             while (index < 9)
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
+
+            Formula = formula;
+
+            Expressions = new List<String>();
+            ExpressionsValues = new List<Boolean[]>();
+            _operators = new Dictionary<String, Char>();
         }
 
         public Boolean ValidateFormula(String formula = null)

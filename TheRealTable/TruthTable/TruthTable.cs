@@ -1,4 +1,4 @@
-﻿using Nhanderu.TheRealTable.TruthTable.Exceptions;
+using Nhanderu.TheRealTable.TruthTable.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -322,9 +322,7 @@ namespace Nhanderu.TheRealTable.TruthTable
                     snips.Remove(ConvertKey(actualID));
 
                     if (snips.Count > 0)
-                    {
                         actualID[counter]++;
-                    }
                 }
             }
         }

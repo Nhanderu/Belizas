@@ -137,7 +137,7 @@ namespace Nhanderu.Belizas
             ExpressionsValues = new List<Boolean[]>();
             _operators = new Dictionary<String, Char>();
 
-            IEnumerator<Char> charactersEnumerator = characters.GetEnumerator() ?? _defaultOperators.GetEnumerator();
+            IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
 
@@ -363,7 +363,11 @@ namespace Nhanderu.Belizas
         #region Private helper methods
         private void CalculateArguments()
         {
-            ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
+            try
+            {
+                ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
+            }
+            catch (OutOfMemoryException) { throw new TooMuchArgumentsInTruthTableException(Arguments.Count); }
 
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nhanderu.TheRealTable.TruthTable
+namespace Nhanderu.TheRealTable.TruthTable.Exceptions
 {
     class InvalidFormulaException : Exception
     {

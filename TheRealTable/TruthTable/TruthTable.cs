@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nhanderu.TheRealTable.TruthTable.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -432,8 +433,12 @@ namespace Nhanderu.TheRealTable.TruthTable
             if (hasParenthesis)
                 expression = OpeningBracket + expression + ClosingBracket;
 
-            Expressions.Add(expression);
-            ExpressionsValues.Add(expressionValues);
+            try
+            {
+                Expressions.Add(expression);
+                ExpressionsValues.Add(expressionValues);
+            }
+            catch (OutOfMemoryException) { throw new TooMuchExpressionsInTruthTableException(); }
         }
 
         private Dictionary<String, String> SnipFormula()

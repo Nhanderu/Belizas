@@ -1,11 +1,12 @@
 ﻿using Nhanderu.TheRealTable.TruthTable.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Nhanderu.TheRealTable.TruthTable
 {
-    public class TruthTable
+    public class TruthTable : ITruthTable
     {
         private String _formula;
         private Dictionary<String, Char> _operators;
@@ -121,13 +122,13 @@ namespace Nhanderu.TheRealTable.TruthTable
             }
         }
 
-        public List<Char> Arguments { get; private set; }
+        public IList<Char> Arguments { get; private set; }
 
         public Boolean[,] ArgumentsValues { get; private set; }
 
-        public List<String> Expressions { get; private set; }
+        public IList<String> Expressions { get; private set; }
 
-        public List<Boolean[]> ExpressionsValues { get; private set; }
+        public IList<Boolean[]> ExpressionsValues { get; private set; }
         #endregion
 
         public TruthTable(String formula, IEnumerable<Char> characters = null)
@@ -161,7 +162,7 @@ namespace Nhanderu.TheRealTable.TruthTable
                 if (Char.IsLetter(character))
                     isDisallowedCharacter = false;
                 else
-                    for (Int32 index = 0; index < EnumerateOperators().Length; index++)
+                    for (Int32 index = 0; index < EnumerateOperators().Count(); index++)
                         if (character == EnumerateOperators()[index])
                         {
                             isDisallowedCharacter = false;
@@ -240,7 +241,7 @@ namespace Nhanderu.TheRealTable.TruthTable
             return isValid;
         }
 
-        public Char[] EnumerateOperators()
+        public IList<Char> EnumerateOperators()
         {
             return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf, OpeningBracket, ClosingBracket };
         }

@@ -7,8 +7,8 @@
     <ProjectGuid>{871FF968-2ECF-4CC3-B056-4183C8D57390}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BelizasTeste</RootNamespace>
-    <AssemblyName>BelizasTeste</AssemblyName>
+    <RootNamespace>Nhanderu.Belizas</RootNamespace>
+    <AssemblyName>Belizas</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvalidFormulaException.cs" />
     <Compile Include="TooMuchArgumentsInTruthTableException.cs" />
     <Compile Include="TruthTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

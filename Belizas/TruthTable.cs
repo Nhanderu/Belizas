@@ -246,79 +246,83 @@ namespace Nhanderu.Belizas
 
         public void CalculateExpressions()
         {
-            String expression = "", pseudoformula = "";
-            Dictionary<String, String> snips = SnipFormula();
-
-            Int32 count = 0, counter = 0, depth = 0;
-            foreach (Char item in Formula)
-                if (item == OpeningBracket)
-                {
-                    count++;
-                    counter++;
-                    if (counter > depth)
-                        depth = counter;
-                }
-                else if (item == ClosingBracket)
-                    counter--;
-
-            Int32[] actualID = new Int32[depth + 1], fatherID = new Int32[depth + 1];
-
-            actualID[0] = 0;
-            for (Int32 index = 1; index <= depth; index++)
-                actualID[index] = -1;
-            for (Int32 index = 0; index <= depth; index++)
-                fatherID[index] = -1;
-
-            while (snips.Count != 0)
+            if (!ValidateFormula()) throw new InvalidFormulaException();
+            else
             {
-                while (!snips.ContainsKey(ConvertKey(actualID)))
+                String expression = "", pseudoformula = "";
+                Dictionary<String, String> snips = SnipFormula();
+
+                Int32 count = 0, counter = 0, depth = 0;
+                foreach (Char item in Formula)
+                    if (item == OpeningBracket)
+                    {
+                        count++;
+                        counter++;
+                        if (counter > depth)
+                            depth = counter;
+                    }
+                    else if (item == ClosingBracket)
+                        counter--;
+
+                Int32[] actualID = new Int32[depth + 1], fatherID = new Int32[depth + 1];
+
+                actualID[0] = 0;
+                for (Int32 index = 1; index <= depth; index++)
+                    actualID[index] = -1;
+                for (Int32 index = 0; index <= depth; index++)
+                    fatherID[index] = -1;
+
+                while (snips.Count != 0)
                 {
-                    actualID[counter--] = -1;
-                    fatherID[counter] = -1;
-                }
+                    while (!snips.ContainsKey(ConvertKey(actualID)))
+                    {
+                        actualID[counter--] = -1;
+                        fatherID[counter] = -1;
+                    }
 
-                while (snips[ConvertKey(actualID)].Contains(OpeningBracket.ToString()))
-                {
-                    fatherID[counter] = actualID[counter];
-                    actualID[++counter] = 0;
-                }
+                    while (snips[ConvertKey(actualID)].Contains(OpeningBracket.ToString()))
+                    {
+                        fatherID[counter] = actualID[counter];
+                        actualID[++counter] = 0;
+                    }
 
-                pseudoformula = snips[ConvertKey(actualID)];
-                while (pseudoformula.Length != 1)
-                {
-                    if (pseudoformula.IndexOf(Not) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(Not) - 1, 2);
-                    else if (pseudoformula.IndexOf(And) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(And) - 1, 3);
-                    else if (pseudoformula.IndexOf(Or) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(Or) - 1, 3);
-                    else if (pseudoformula.IndexOf(Xor) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(Xor) - 1, 3);
-                    else if (pseudoformula.IndexOf(IfThen) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(IfThen) - 1, 3);
-                    else if (pseudoformula.IndexOf(ThenIf) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(ThenIf) - 1, 3);
-                    else if (pseudoformula.IndexOf(IfAndOnlyIf) > 0)
-                        expression = pseudoformula.Substring(pseudoformula.IndexOf(IfAndOnlyIf) - 1, 3);
+                    pseudoformula = snips[ConvertKey(actualID)];
+                    while (pseudoformula.Length != 1)
+                    {
+                        if (pseudoformula.IndexOf(Not) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(Not) - 1, 2);
+                        else if (pseudoformula.IndexOf(And) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(And) - 1, 3);
+                        else if (pseudoformula.IndexOf(Or) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(Or) - 1, 3);
+                        else if (pseudoformula.IndexOf(Xor) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(Xor) - 1, 3);
+                        else if (pseudoformula.IndexOf(IfThen) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(IfThen) - 1, 3);
+                        else if (pseudoformula.IndexOf(ThenIf) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(ThenIf) - 1, 3);
+                        else if (pseudoformula.IndexOf(IfAndOnlyIf) > 0)
+                            expression = pseudoformula.Substring(pseudoformula.IndexOf(IfAndOnlyIf) - 1, 3);
 
-                    pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + _churros).ToString());
-                    CalculateExpression(expression, pseudoformula.Length == 1);
-                }
+                        pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + _churros).ToString());
+                        CalculateExpression(expression, pseudoformula.Length == 1);
+                    }
 
-                if (snips.Count > 1)
-                {
-                    if (HasChurros(snips[ConvertKey(actualID)]))
-                        for (Int32 index = 0; index < Expressions.Count; index++)
-                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(_churros + index).ToString()))
-                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(_churros + index).ToString(), Expressions[index]);
-                    snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], OpeningBracket + snips[ConvertKey(actualID)] + ClosingBracket, pseudoformula);
-                }
+                    if (snips.Count > 1)
+                    {
+                        if (HasChurros(snips[ConvertKey(actualID)]))
+                            for (Int32 index = 0; index < Expressions.Count; index++)
+                                if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(_churros + index).ToString()))
+                                    snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(_churros + index).ToString(), Expressions[index]);
+                        snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], OpeningBracket + snips[ConvertKey(actualID)] + ClosingBracket, pseudoformula);
+                    }
 
-                snips.Remove(ConvertKey(actualID));
+                    snips.Remove(ConvertKey(actualID));
 
-                if (snips.Count > 0)
-                {
-                    actualID[counter]++;
+                    if (snips.Count > 0)
+                    {
+                        actualID[counter]++;
+                    }
                 }
             }
         }

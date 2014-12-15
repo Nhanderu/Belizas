@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nhanderu.Belizas
+namespace Nhanderu.TheRealTable.TruthTable
 {
     class TooMuchArgumentsInTruthTableException : OutOfMemoryException
     {

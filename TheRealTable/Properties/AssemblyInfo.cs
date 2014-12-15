@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nhanderu.Belizas")]
+[assembly: AssemblyTitle("TheRealTable")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Nhanderu")]
-[assembly: AssemblyProduct("Belizas")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("TheRealTable")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1336718c-7ed4-40ef-acc2-e8fc97124b3a")]
+[assembly: Guid("b71a8d69-8d74-43d7-9535-910751c07c80")]
 
 // Version information for an assembly consists of the following four values:
 //

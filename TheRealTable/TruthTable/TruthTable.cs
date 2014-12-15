@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nhanderu.Belizas
+namespace Nhanderu.TheRealTable.TruthTable
 {
+
     public class TruthTable
     {
         private String _formula;

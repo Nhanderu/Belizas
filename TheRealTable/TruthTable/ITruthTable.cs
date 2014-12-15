@@ -41,6 +41,8 @@ namespace Nhanderu.TheRealTable.TruthTable
 
         IList<Char> EnumerateOperators();
 
+        void Calculate();
+
         String ToString();
     }
 }

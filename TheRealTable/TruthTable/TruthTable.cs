@@ -4,7 +4,6 @@ using System.Text;
 
 namespace Nhanderu.TheRealTable.TruthTable
 {
-
     public class TruthTable
     {
         private String _formula;

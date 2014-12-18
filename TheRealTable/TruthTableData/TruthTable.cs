@@ -11,6 +11,7 @@ namespace Nhanderu.TheRealTable.TruthTableData
     /// </summary>
     public class TruthTable : ITruthTable
     {
+        private String _formula;
         private Dictionary<String, Char> _operators;
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
         private const Int32 _churros = 13312;
@@ -136,9 +137,17 @@ namespace Nhanderu.TheRealTable.TruthTableData
 
         #region Truth table data properties
         /// <summary>
-        /// Gets the formula that rules the truth table.
+        /// Gets and sets the formula that rules the truth table.
         /// </summary>
-        public String Formula { get; private set; }
+        public String Formula
+        {
+            get { return _formula; }
+            set
+            {
+                _formula = value;
+                Calculate();
+            }
+        }
 
         /// <summary>
         /// Gets a list of the arguments in the formula.
@@ -166,8 +175,8 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// </summary>
         /// <param name="formula">The formula that will rule the truth table.</param>
         /// <param name="characters">The characters that will represent the operators.</param>
-        /// <param name="autocalculate">A boolean value that indicates if the table will be calculated automatically in the constructor or it will be calculated by calling the method Calculate.</param>
-        public TruthTable(String formula, IEnumerable<Char> characters = null, Boolean autocalculate = false)
+        /// <param name="calculate">A boolean value that indicates if the table will be calculated automatically in the constructor or it will be calculated by calling the method Calculate.</param>
+        public TruthTable(String formula, IEnumerable<Char> characters = null, Boolean calculate = false)
         {
             IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
@@ -179,14 +188,14 @@ namespace Nhanderu.TheRealTable.TruthTableData
             while (index < 9)
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
-            Formula = formula;
+            _formula = formula;
 
             Arguments = new List<Char>();
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
             _operators = new Dictionary<String, Char>();
 
-            if (autocalculate) Calculate();
+            if (calculate) Calculate();
         }
 
         /// <summary>
@@ -450,7 +459,7 @@ namespace Nhanderu.TheRealTable.TruthTableData
 
             }
         }
-        
+
         private void CalculateExpression(String expression, Boolean hasParenthesis)
         {
             Boolean[] expressionValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count)];

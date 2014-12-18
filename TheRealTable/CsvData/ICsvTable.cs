@@ -6,11 +6,11 @@ namespace Nhanderu.TheRealTable.CsvData
     {
         Boolean Validate();
 
-        void Read();
+        void Read(String data);
 
-        void ReadFile();
+        void ReadFile(String path);
 
-        void WriteFile();
+        void WriteFile(String path);
 
         String ToString();
     }

@@ -2,7 +2,7 @@
 
 namespace Nhanderu.TheRealTable.TruthTableData.Exceptions
 {
-    class TooMuchArgumentsInTruthTableException : TooMuchInformationInTruthTableException
+    public class TooMuchArgumentsInTruthTableException : TooMuchInformationInTruthTableException
     {
         public TooMuchArgumentsInTruthTableException() : base("There's a lot of arguments in the formula, which is more than the memory of this computer can handle or than the OS has reserved for this program.") { }
 

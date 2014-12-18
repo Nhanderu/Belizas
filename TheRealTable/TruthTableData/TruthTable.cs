@@ -12,7 +12,7 @@ namespace Nhanderu.TheRealTable.TruthTableData
     public class TruthTable : ITruthTable
     {
         private String _formula;
-        private Dictionary<String, Char> _operators;
+        private Dictionary<String, Char> _operators = new Dictionary<String, Char>();
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
         private const Int32 _churros = 13312;
 
@@ -174,9 +174,9 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// Initializes a new instance of the TruthTable class to the value indicated by the formula.
         /// </summary>
         /// <param name="formula">The formula that will rule the truth table.</param>
-        /// <param name="characters">The characters that will represent the operators.</param>
         /// <param name="calculate">A boolean value that indicates if the table will be calculated automatically in the constructor or it will be calculated by calling the method Calculate.</param>
-        public TruthTable(String formula, IEnumerable<Char> characters = null, Boolean calculate = false)
+        /// <param name="characters">The characters that will represent the operators.</param>
+        public TruthTable(String formula, Boolean calculate = false, IEnumerable<Char> characters = null)
         {
             IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
@@ -193,7 +193,6 @@ namespace Nhanderu.TheRealTable.TruthTableData
             Arguments = new List<Char>();
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
-            _operators = new Dictionary<String, Char>();
 
             if (calculate) Calculate();
         }
@@ -205,10 +204,13 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// <returns>True if the formula is under all the conditions, false if not.</returns>
         public Boolean ValidateFormula(String formula = null)
         {
-            String sentence = formula ?? Formula;
+            String sentence = (formula ?? Formula).Replace(" ", "");
 
             List<Boolean> charactersStatus = new List<Boolean>();
             Boolean isDisallowedCharacter = true, isValid = true;
+
+            if (String.IsNullOrEmpty(sentence))
+                isValid = false;
 
             foreach (Char character in sentence)
             {

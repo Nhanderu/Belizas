@@ -332,27 +332,27 @@ namespace Nhanderu.TheRealTable.TruthTableData
 
             for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
                 if (index < Arguments.Count)
-                    table.Append(Arguments[index] + " ");
+                    TryAppend(table, Arguments[index] + " ");
                 else
-                    table.Append(Expressions[index - Arguments.Count] + " ");
+                    TryAppend(table, Expressions[index - Arguments.Count] + " ");
 
-            table.AppendLine();
+            TryAppend(table, "\n");
 
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
                 for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
                     if (column < Arguments.Count)
-                        table.Append(Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
+                        TryAppend(table, Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
                     else
                     {
                         if (Expressions[column - Arguments.Count].Length % 2 == 0)
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
-                                table.Append(" ");
+                                TryAppend(table, " ");
                         else
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                                table.Append(" ");
+                                TryAppend(table, " ");
 
-                        table.Append(Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
+                        TryAppend(table, Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
                         for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
                             table.Append(" ");
                     }
@@ -635,6 +635,18 @@ namespace Nhanderu.TheRealTable.TruthTableData
         private String ReplaceFirst(String text, String oldValue, String newValue)
         {
             return text.Substring(0, text.IndexOf(oldValue)) + newValue + text.Substring(text.IndexOf(oldValue) + oldValue.Length);
+        }
+
+        private void TryAppend(StringBuilder stringBuilder, String text)
+        {
+            try
+            {
+                stringBuilder.Append(text);
+            }
+            catch (OutOfMemoryException)
+            {
+                throw new TooMuchInformationInTruthTableException("Trying to convert the table to a text, the program has exceeded the limits of memory that the OS has reserved.");
+            }
         }
         #endregion
     }

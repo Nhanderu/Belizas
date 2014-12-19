@@ -92,8 +92,19 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// <summary>
         /// Returns all the operators.
         /// </summary>
+        /// <param name="includeNot">If the not operator will be included in the enumeration.</param>
+        /// <param name="includeBrackets">If the brackets will be included in the enumeration.</param>
         /// <returns>A list with all the operators.</returns>
-        IList<Char> EnumerateOperators();
+        IList<Char> EnumerateOperators(Boolean includeNot = true, Boolean includeBrackets = true);
+
+        /// <summary>
+        /// Verifies if the following character represents any operator.
+        /// </summary>
+        /// <param name="character">The character to be verified.</param>
+        /// <param name="includeNot">If the not operator will be included in the verification.</param>
+        /// <param name="includeBrackets">If the brackets will be included in the verification.</param>
+        /// <returns>True if the character is an operator, false if it isn't.</returns>
+        Boolean IsAnOperator(Char character, Boolean includeNot = true, Boolean includeBrackets = true);
 
         /// <summary>
         /// Calculates the truth table using the formula.

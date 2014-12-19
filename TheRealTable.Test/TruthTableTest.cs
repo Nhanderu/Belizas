@@ -41,9 +41,10 @@ namespace Nhanderu.TheRealTable.Test
 
         #region ValidateFormula
         [TestMethod]
-        public void ValidateFormula_EmptyStringAsFormula_InvalidFormula()
+        public void ValidateFormula_FormulaIsEmpty_InvalidFormula()
         {
             Assert.AreEqual(false, _exampleTable.ValidateFormula(""));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula("              "));
         }
         [TestMethod]
         public void ValidateFormula_FormulaWithUnclosedBrackets_InvalidFormula()
@@ -55,18 +56,41 @@ namespace Nhanderu.TheRealTable.Test
         public void ValidateFormula_FormulaWithFollowingOperators_InvalidFormula()
         {
             Assert.AreEqual(false, _exampleTable.ValidateFormula("a.b+c>d<f--g"));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula("a.a+a:a>a<a-a'.a+a:a>a<a-a'.a+a:a>>a<a-a'"));
         }
 
         [TestMethod]
-        public void ValidateFormula_FormulaEndingWithOperator_InvalidFormula()
+        public void ValidateFormula_FormulaStartingAndEndingWithOperator_InvalidFormula()
         {
             Assert.AreEqual(false, _exampleTable.ValidateFormula("a.b+c>d<f-"));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula(".b+c>d<f-a"));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula(".b+c>d<f-"));
         }
 
         [TestMethod]
         public void ValidateFormula_FormulaWithDisallowedCharacter_InvalidFormula()
         {
             Assert.AreEqual(false, _exampleTable.ValidateFormula("a.b+c>d<f?g"));
+        }
+
+        [TestMethod]
+        public void ValidateFormula_FormulaWithBracketsOnly_InvalidFormula()
+        {
+            Assert.AreEqual(false, _exampleTable.ValidateFormula("()"));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula("((((()))))"));
+            Assert.AreEqual(false, _exampleTable.ValidateFormula("((((()()()()))))"));
+        }
+
+        [TestMethod]
+        public void ValidateFormula_SimpleFormula_ValidFormula()
+        {
+            Assert.AreEqual(true, _exampleTable.ValidateFormula("a.b"));
+        }
+
+        [TestMethod]
+        public void ValidateFormula_ComplexFormula_ValidFormula()
+        {
+            Assert.AreEqual(true, _exampleTable.ValidateFormula("a+(b.c>(a'+b')'<b':((c-c')-a))'"));
         }
         #endregion
     }

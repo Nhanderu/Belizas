@@ -59,7 +59,7 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// <summary>
         /// Gets the formula that rules the truth table.
         /// </summary>
-        String Formula { get; }
+        String Formula { get; set; }
 
         /// <summary>
         /// Gets a list of the arguments in the formula.

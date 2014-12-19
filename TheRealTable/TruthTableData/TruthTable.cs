@@ -204,105 +204,100 @@ namespace Nhanderu.TheRealTable.TruthTableData
         /// <returns>True if the formula is under all the conditions, false if not.</returns>
         public Boolean ValidateFormula(String formula = null)
         {
+            //Uses the Formula property if the parameter is null.
+            //Removes all white spaces.
             String sentence = (formula ?? Formula).Replace(" ", "");
 
-            List<Boolean> charactersStatus = new List<Boolean>();
-            Boolean isDisallowedCharacter = true, isValid = true;
-
+            //Verifies if the sentence is empty.
             if (String.IsNullOrEmpty(sentence))
-                isValid = false;
+                return false;
 
+            //Iterates through the sentence to verify if it has any disallowed character.
             foreach (Char character in sentence)
-            {
-                if (Char.IsLetter(character))
-                    isDisallowedCharacter = false;
-                else
-                    for (Int32 index = 0; index < EnumerateOperators().Count(); index++)
-                        if (character == EnumerateOperators()[index])
-                        {
-                            isDisallowedCharacter = false;
-                            break;
-                        }
+                if (!Char.IsLetter(character) && !IsAnOperator(character))
+                    return false;
 
-                charactersStatus.Add(isDisallowedCharacter);
-                isDisallowedCharacter = true;
-            }
-
-            foreach (Boolean status in charactersStatus)
-                if (status)
-                    isValid = false;
-
-            if (isValid && (sentence.Contains(OpeningBracket.ToString()) || sentence.Contains(ClosingBracket.ToString())))
+            //Verifies if the sentence has the same amount of opening and closing brackets.
+            if (sentence.Contains(OpeningBracket.ToString()) || sentence.Contains(ClosingBracket.ToString()))
             {
                 Int32[] parenthesisCount = new Int32[2];
+
                 foreach (Char character in sentence)
+                    //If it is an opening bracket, sum 1 to opening brackets count.
                     if (character == OpeningBracket)
                         parenthesisCount[0]++;
+                    //If it is an closing bracket, sum 1 to closing brackets count.
                     else if (character == ClosingBracket)
                         parenthesisCount[1]++;
 
-                isValid = parenthesisCount[0] == parenthesisCount[1];
+                //Verifies if the amount of brackets is different.
+                if (parenthesisCount[0] != parenthesisCount[1])
+                    return false;
             }
 
-            if (isValid)
-                for (Int32 index = 0; index < sentence.Length; index++)
-                    if (Char.IsLetter(sentence[index]))
-                    {
-                        if (isValid && index != 0)
-                            isValid = !Char.IsLetter(sentence[index - 1]);
-                        if (isValid && index != sentence.Length - 1)
-                            isValid = !Char.IsLetter(sentence[index + 1]);
-                    }
-                    else if (sentence[index] == Not)
-                    {
-                        if (isValid && index != 0)
-                            isValid = Char.IsLetter(sentence[index - 1]) || sentence[index - 1] == OpeningBracket || sentence[index - 1] == ClosingBracket;
-                        else if (isValid)
-                            isValid = false;
-                        if (isValid && index != sentence.Length - 1)
-                            isValid = !Char.IsLetter(sentence[index + 1]);
-                    }
-                    else if (sentence[index] == OpeningBracket)
-                    {
-                        if (isValid && index != sentence.Length - 1)
-                            isValid = Char.IsLetter(sentence[index + 1]) || sentence[index + 1] == OpeningBracket;
-                        else if (isValid)
-                            isValid = false;
-                        if (isValid && index != 0)
-                            isValid = !Char.IsLetter(sentence[index - 1]);
-                    }
-                    else if (sentence[index] == ClosingBracket)
-                    {
-                        if (isValid && index != 0)
-                            isValid = Char.IsLetter(sentence[index - 1]) || sentence[index - 1] == ClosingBracket || sentence[index - 1] == Not;
-                        else if (isValid)
-                            isValid = false;
-                        if (isValid && index != sentence.Length - 1)
-                            isValid = !Char.IsLetter(sentence[index + 1]);
-                    }
-                    else
-                    {
-                        isValid = index != 0 && index != sentence.Length - 1;
-                        if (isValid)
-                            foreach (Char item in EnumerateOperators())
-                                if (item != Not && item != OpeningBracket && item != ClosingBracket)
-                                {
-                                    isValid = sentence[index - 1] != item && sentence[index + 1] != item;
-                                    if (!isValid)
-                                        break;
-                                }
-                    }
+            //Iterates through the sentence to verify the sequence of characters.
+            for (Int32 index = 0; index < sentence.Length; index++)
+                if (index == 0)
+                {
+                    //Verifies if the first character isn't a letter and an opening bracket.
+                    if (!Char.IsLetter(sentence[index]) && sentence[index] != OpeningBracket)
+                        return false;
 
-            return isValid;
-        }
+                    //Verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    else if (Char.IsLetter(sentence[index]) && !IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)
+                        return false;
 
-        /// <summary>
-        /// Returns all the operators.
-        /// </summary>
-        /// <returns>A list with all the operators.</returns>
-        public IList<Char> EnumerateOperators()
-        {
-            return new Char[] { Not, And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf, OpeningBracket, ClosingBracket };
+                    //Verifies if the opening bracket have, on its right, a character that isn't a letter nor opening bracket.
+                    else if (sentence[index] == OpeningBracket && !Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)
+                        return false;
+                }
+                else if (index == sentence.Length - 1)
+                {
+                    //Verifies if the last character isn't a letter, not operator and a closing bracket.
+                    if (!Char.IsLetter(sentence[index]) && sentence[index] != Not && sentence[index] != ClosingBracket)
+                        return false;
+
+                    //Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
+                    else if (Char.IsLetter(sentence[index]) && !IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket)
+                        return false;
+
+                    //Verifies if the not operators have, on its left, a character that isn't a not operator, a letter and a closing bracket.
+                    else if (sentence[index] == Not && !Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket)
+                        return false;
+
+                    //Verifies if the closing bracket have, on its left, a character that isn't a closing bracket, a letter and a not operator.
+                    else if (sentence[index] == ClosingBracket && !Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket)
+                        return false;
+                }
+                else
+                {
+                    //Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
+                    //Also verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    if (Char.IsLetter(sentence[index]) && ((!IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
+                        return false;
+
+                    //Verifies if the not operators have, on its left, a character that isn't a letter, a not operator and a closing bracket.
+                    //Also verifies if the not operators have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    else if (sentence[index] == Not && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
+                        return false;
+
+                    //Verifies if the opening bracket have, on its left, a character that isn't a operator (except not) and an opening bracket.
+                    //Also verifies if the opening bracket have, on its right, a character that isn't a letter and opening bracket.
+                    else if (sentence[index] == OpeningBracket && ((!IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket) || (!Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)))
+                        return false;
+
+                    //Verifies if the closing bracket have, on its left, a character that isn't a letter, a not operator and a closing bracket.
+                    //Also verifies if the closing bracket have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    else if (sentence[index] == ClosingBracket && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
+                        return false;
+
+                    //Verifies if the operators (except not) have, on its left, a character that isn't a have a letter, a closing bracket and a not operator.
+                    //Also verifies if the operators (except not) have, on its right, a character that isn't a letter and an opening bracket.
+                    else if (IsAnOperator(sentence[index], false, false) && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != ClosingBracket && sentence[index - 1] != Not) || (!Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)))
+                        return false;
+                }
+
+            return true;
         }
 
         /// <summary>
@@ -320,6 +315,44 @@ namespace Nhanderu.TheRealTable.TruthTableData
                 CalculateArguments();
                 CalculateExpressions();
             }
+        }
+
+        /// <summary>
+        /// Returns all the operators.
+        /// </summary>
+        /// <param name="includeNot">If the not operator will be included in the enumeration.</param>
+        /// <param name="includeBrackets">If the brackets will be included in the enumeration.</param>
+        /// <returns>A list with all the operators.</returns>
+        public IList<Char> EnumerateOperators(Boolean includeNot = true, Boolean includeBrackets = true)
+        {
+            List<Char> operators = new List<Char>();
+
+            if (includeNot) operators.Add(Not);
+
+            operators.AddRange(new List<Char>() { And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf });
+
+            if (includeBrackets)
+            {
+                operators.Add(OpeningBracket);
+                operators.Add(ClosingBracket);
+            }
+
+            return operators;
+        }
+
+        /// <summary>
+        /// Verifies if the following character represents any operator.
+        /// </summary>
+        /// <param name="character">The character to be verified.</param>
+        /// <param name="includeNot">If the not operator will be included in the verification.</param>
+        /// <param name="includeBrackets">If the brackets will be included in the verification.</param>
+        /// <returns>True if the character is an operator, false if it isn't.</returns>
+        public Boolean IsAnOperator(Char character, Boolean includeNot = true, Boolean includeBrackets = true)
+        {
+            foreach (Char item in EnumerateOperators(includeNot, includeBrackets))
+                if (character == item) return true;
+
+            return false;
         }
 
         /// <summary>

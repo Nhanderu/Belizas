@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nhanderu.TheRealTable.TruthTableData;
 using Nhanderu.TheRealTable.TruthTableData.Exceptions;
 

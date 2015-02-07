@@ -6,8 +6,8 @@
     <ProjectGuid>{66EC2FFB-A62A-4893-9323-954D4DC9C653}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nhanderu.TheRealTable.Test</RootNamespace>
-    <AssemblyName>TheRealTable.Test</AssemblyName>
+    <RootNamespace>Nhanderu.Belizas.Test</RootNamespace>
+    <AssemblyName>Belizas.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -54,9 +54,9 @@
     <Compile Include="TruthTableTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TheRealTable\TheRealTable.csproj">
+    <ProjectReference Include="..\Belizas\Belizas.csproj">
       <Project>{b71a8d69-8d74-43d7-9535-910751c07c80}</Project>
-      <Name>TheRealTable</Name>
+      <Name>Belizas</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheRealTable", "TheRealTable\TheRealTable.csproj", "{B71A8D69-8D74-43D7-9535-910751C07C80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas", "Belizas\Belizas.csproj", "{B71A8D69-8D74-43D7-9535-910751C07C80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheRealTable.Test", "TheRealTable.Test\TheRealTable.Test.csproj", "{66EC2FFB-A62A-4893-9323-954D4DC9C653}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas.Test", "Belizas.Test\Belizas.Test.csproj", "{66EC2FFB-A62A-4893-9323-954D4DC9C653}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

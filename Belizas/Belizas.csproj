@@ -7,8 +7,8 @@
     <ProjectGuid>{B71A8D69-8D74-43D7-9535-910751C07C80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Nhanderu.TheRealTable</RootNamespace>
-    <AssemblyName>TheRealTable</AssemblyName>
+    <RootNamespace>Nhanderu.Belizas</RootNamespace>
+    <AssemblyName>Belizas</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,16 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CsvData\CsvTable.cs" />
-    <Compile Include="CsvData\ICsvTable.cs" />
-    <Compile Include="ITable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TruthTableData\Exceptions\InvalidFormulaException.cs" />
-    <Compile Include="TruthTableData\Exceptions\TooMuchArgumentsInTruthTableException.cs" />
-    <Compile Include="TruthTableData\Exceptions\TooMuchExpressionsInTruthTableException.cs" />
-    <Compile Include="TruthTableData\Exceptions\TooMuchInformationInTruthTableException.cs" />
-    <Compile Include="TruthTableData\ITruthTable.cs" />
-    <Compile Include="TruthTableData\TruthTable.cs" />
+    <Compile Include="Exceptions\InvalidFormulaException.cs" />
+    <Compile Include="Exceptions\TooMuchArgumentsInTruthTableException.cs" />
+    <Compile Include="Exceptions\TooMuchExpressionsInTruthTableException.cs" />
+    <Compile Include="Exceptions\TooMuchInformationInTruthTableException.cs" />
+    <Compile Include="ITruthTable.cs" />
+    <Compile Include="TruthTable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

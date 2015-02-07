@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nhanderu.TheRealTable.TruthTableData.Exceptions
+namespace Nhanderu.Belizas.Exceptions
 {
     public class TooMuchExpressionsInTruthTableException : TooMuchInformationInTruthTableException
     {

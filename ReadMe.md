@@ -1,5 +1,4 @@
-The Real Table!
+Belizas!
 =======
 
-Includes:
 A truth table generator!

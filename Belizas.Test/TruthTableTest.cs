@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Nhanderu.TheRealTable.TruthTableData;
-using Nhanderu.TheRealTable.TruthTableData.Exceptions;
+using Nhanderu.Belizas;
+using Nhanderu.Belizas.Exceptions;
 
-namespace Nhanderu.TheRealTable.Test
+namespace Nhanderu.Belizas.Test
 {
     [TestClass]
     public class TruthTableTest

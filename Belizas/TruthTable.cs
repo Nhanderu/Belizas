@@ -136,7 +136,7 @@ namespace Nhanderu.Belizas
 
         #region Truth table data properties
         /// <summary>
-        /// Gets and sets the formula that rules the truth table.
+        /// Gets and sets the formula that rules the truth table and calculates the table automatically.
         /// </summary>
         public String Formula
         {
@@ -304,13 +304,16 @@ namespace Nhanderu.Belizas
         /// </summary>
         public void Calculate()
         {
+            //Verifies if the formula is valid.
             if (!ValidateFormula()) throw new InvalidFormulaException();
             else
             {
+                //Gets the arguments.
                 foreach (Char item in Formula)
                     if (Char.IsLetter(item) && !Arguments.Contains(item))
                         Arguments.Add(item);
 
+                //Calculates the arguments ans the expressions.
                 CalculateArguments();
                 CalculateExpressions();
             }
@@ -326,10 +329,13 @@ namespace Nhanderu.Belizas
         {
             List<Char> operators = new List<Char>();
 
+            //Verifies if the Not operator is included in the enumaration.
             if (includeNot) operators.Add(Not);
 
+            //Includes the operators in the enumaration.
             operators.AddRange(new List<Char>() { And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf });
 
+            //Verifies if the brackets are included in the enumaration.
             if (includeBrackets)
             {
                 operators.Add(OpeningBracket);
@@ -348,6 +354,7 @@ namespace Nhanderu.Belizas
         /// <returns>True if the character is an operator, false if it isn't.</returns>
         public Boolean IsAnOperator(Char character, Boolean includeNot = true, Boolean includeBrackets = true)
         {
+            //Iterates through all the operators and verifies if the character is a operator.
             foreach (Char item in EnumerateOperators(includeNot, includeBrackets))
                 if (character == item) return true;
 

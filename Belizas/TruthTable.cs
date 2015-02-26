@@ -177,22 +177,28 @@ namespace Nhanderu.Belizas
         /// <param name="characters">The characters that will represent the operators.</param>
         public TruthTable(String formula, Boolean calculate = false, IEnumerable<Char> characters = null)
         {
+            //Gets the enumarator of the characters that will represent the operators.
             IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
 
+            //Iterates through the enumerator until it reaches its end or the ninth position and adds the current character in the operators list.
             while (charactersEnumerator.MoveNext() && index < 9)
                 _operators.Add(operatorsKeys[index++], charactersEnumerator.Current);
 
+            //Verifies it the enumerator had less than 9 characters and adds the default operators to the rest of the positions in the list.
             while (index < 9)
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
+            //Sets the formula as the argument.
             _formula = formula;
 
+            //Initializes the TruthTable properties.
             Arguments = new List<Char>();
             Expressions = new List<String>();
             ExpressionsValues = new List<Boolean[]>();
 
+            //Verifies if it's necessary to calculate automatically.
             if (calculate) Calculate();
         }
 
@@ -313,7 +319,7 @@ namespace Nhanderu.Belizas
                     if (Char.IsLetter(item) && !Arguments.Contains(item))
                         Arguments.Add(item);
 
-                //Calculates the arguments ans the expressions.
+                //Calculates the arguments and the expressions.
                 CalculateArguments();
                 CalculateExpressions();
             }
@@ -367,23 +373,34 @@ namespace Nhanderu.Belizas
         /// <returns>The truth table in a text.</returns>
         public override String ToString()
         {
+            //Initializes the string that will represent the table.
             StringBuilder table = new StringBuilder();
 
+            //Creates the first line: the arguments and the expressions.
+            //Iterates until it reaches the sum of the quantities of the arguments and the expressions to write them.
             for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
+                //Writes the arguments.
                 if (index < Arguments.Count)
                     TryAppend(table, Arguments[index] + " ");
+                //If the iteration reach the argument limit, starts to write the expressions.
                 else
                     TryAppend(table, Expressions[index - Arguments.Count] + " ");
 
             TryAppend(table, "\n");
 
+            //Create the other lines: the logical values.
+            //Iterates until it reaches 2 power the number of arguments to make the lines.
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
+                //Iterates until it reaches the sum of the quantities of the arguments and the expressions to make the columns.
                 for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
+                    //Writes the arguments values.
                     if (column < Arguments.Count)
                         TryAppend(table, Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
+                    //If the iteration reach the argument limit, starts to write the expressions values.
                     else
                     {
+                        //Verifies if the size of the expression string is even to add proportionals black spaces to justify the text.
                         if (Expressions[column - Arguments.Count].Length % 2 == 0)
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
                                 TryAppend(table, " ");
@@ -391,12 +408,15 @@ namespace Nhanderu.Belizas
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
                                 TryAppend(table, " ");
 
+                        //Writes the current expression value.
                         TryAppend(table, Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
+                        
+                        //Writes the rest of the blank spaces to justify 
                         for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
-                            table.Append(" ");
+                            TryAppend(table, " ");
                     }
 
-                table.AppendLine();
+                TryAppend(table, "\n");
             }
 
             return table.ToString();

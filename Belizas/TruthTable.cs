@@ -143,7 +143,7 @@ namespace Nhanderu.Belizas
             get { return _formula; }
             set
             {
-                _formula = value;
+                _formula = value.Replace(" ", "");
                 Calculate();
             }
         }
@@ -191,7 +191,7 @@ namespace Nhanderu.Belizas
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
             //Sets the formula as the argument.
-            _formula = formula;
+            _formula = formula.Replace(" ", "");
 
             //Initializes the TruthTable properties.
             Arguments = new List<Char>();
@@ -211,7 +211,7 @@ namespace Nhanderu.Belizas
         {
             //Uses the Formula property if the parameter is null.
             //Removes all white spaces.
-            String sentence = (formula ?? Formula).Replace(" ", "");
+            String sentence = (formula ?? Formula);
 
             //Verifies if the sentence is empty.
             if (String.IsNullOrEmpty(sentence))

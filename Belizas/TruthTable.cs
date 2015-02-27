@@ -13,7 +13,7 @@ namespace Nhanderu.Belizas
         private String _formula;
         private Dictionary<String, Char> _operators = new Dictionary<String, Char>();
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
-        private const Int32 _churros = 13312;
+        private const Int32 _er = 13312;
 
         #region Operators
         /// <summary>
@@ -24,7 +24,7 @@ namespace Nhanderu.Belizas
             get { return _operators["Not"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["Not"] = value;
             }
         }
@@ -37,7 +37,7 @@ namespace Nhanderu.Belizas
             get { return _operators["And"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["And"] = value;
             }
         }
@@ -50,7 +50,7 @@ namespace Nhanderu.Belizas
             get { return _operators["Or"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["Or"] = value;
             }
         }
@@ -63,7 +63,7 @@ namespace Nhanderu.Belizas
             get { return _operators["Xor"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["Xor"] = value;
             }
         }
@@ -76,7 +76,7 @@ namespace Nhanderu.Belizas
             get { return _operators["IfThen"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["IfThen"] = value;
             }
         }
@@ -89,7 +89,7 @@ namespace Nhanderu.Belizas
             get { return _operators["ThenIf"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["ThenIf"] = value;
             }
         }
@@ -102,7 +102,7 @@ namespace Nhanderu.Belizas
             get { return _operators["IfAndOnlyIf"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["IfAndOnlyIf"] = value;
             }
         }
@@ -115,7 +115,7 @@ namespace Nhanderu.Belizas
             get { return _operators["OpeningBracket"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["OpeningBracket"] = value;
             }
         }
@@ -128,7 +128,7 @@ namespace Nhanderu.Belizas
             get { return _operators["ClosingBracket"]; }
             set
             {
-                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _churros)
+                if (!_operators.ContainsValue(value) && Convert.ToInt32(value) < _er)
                     _operators["ClosingBracket"] = value;
             }
         }
@@ -500,16 +500,16 @@ namespace Nhanderu.Belizas
                     else if (pseudoformula.IndexOf(IfAndOnlyIf) > 0)
                         expression = pseudoformula.Substring(pseudoformula.IndexOf(IfAndOnlyIf) - 1, 3);
 
-                    pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + _churros).ToString());
+                    pseudoformula = ReplaceFirst(pseudoformula, expression, Convert.ToChar(ExpressionsValues.Count + _er).ToString());
                     CalculateExpression(expression, pseudoformula.Length == 1);
                 }
 
                 if (snips.Count > 1)
                 {
-                    if (HasChurros(snips[ConvertKey(actualID)]))
+                    if (HasER(snips[ConvertKey(actualID)]))
                         for (Int32 index = 0; index < Expressions.Count; index++)
-                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(_churros + index).ToString()))
-                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(_churros + index).ToString(), Expressions[index]);
+                            if (snips[ConvertKey(actualID)].Contains(Convert.ToChar(_er + index).ToString()))
+                                snips[ConvertKey(actualID)] = snips[ConvertKey(actualID)].Replace(Convert.ToChar(_er + index).ToString(), Expressions[index]);
                     snips[ConvertKey(fatherID)] = ReplaceFirst(snips[ConvertKey(fatherID)], OpeningBracket + snips[ConvertKey(actualID)] + ClosingBracket, pseudoformula);
                 }
 
@@ -529,14 +529,14 @@ namespace Nhanderu.Belizas
 
             for (Int32 line = 0; line < expressionValues.Length; line++)
             {
-                if (expression[0] >= _churros)
-                    value1 = ExpressionsValues[expression[0] - _churros][line];
+                if (expression[0] >= _er)
+                    value1 = ExpressionsValues[expression[0] - _er][line];
                 else
                     value1 = ArgumentsValues[line, Arguments.IndexOf(expression[0])];
 
                 if (expression.Length == 3)
-                    if (expression[2] >= _churros)
-                        value2 = ExpressionsValues[expression[2] - _churros][line];
+                    if (expression[2] >= _er)
+                        value2 = ExpressionsValues[expression[2] - _er][line];
                     else
                         value2 = ArgumentsValues[line, Arguments.IndexOf(expression[2])];
 
@@ -557,11 +557,11 @@ namespace Nhanderu.Belizas
             }
 
             String churros = "";
-            while (HasChurros(expression))
+            while (HasER(expression))
             {
                 foreach (Char item in expression)
-                    if (item >= _churros)
-                        churros = ReplaceFirst(expression, item.ToString(), Expressions[item - _churros]);
+                    if (item >= _er)
+                        churros = ReplaceFirst(expression, item.ToString(), Expressions[item - _er]);
                 expression = churros;
             }
 
@@ -649,13 +649,13 @@ namespace Nhanderu.Belizas
             return snips;
         }
 
-        private Boolean HasChurros(String expression)
+        private Boolean HasER(String expression)
         {
             Boolean hasChurros = false;
 
             foreach (Char item in expression)
                 if (!hasChurros)
-                    hasChurros = Convert.ToInt32(item) >= _churros;
+                    hasChurros = Convert.ToInt32(item) >= _er;
                 else
                     break;
 

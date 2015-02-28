@@ -11,6 +11,11 @@ namespace Nhanderu.Belizas
     public class TruthTable : ITruthTable
     {
         private String _formula;
+        private IList<Char> _arguments;
+        private Boolean[,] _argumentsValues;
+        private IList<String> _expressions;
+        private IList<Boolean[]> _expressionsValues;
+
         private Dictionary<String, Char> _operators = new Dictionary<String, Char>();
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
         private const Int32 _er = 13312;
@@ -143,30 +148,67 @@ namespace Nhanderu.Belizas
             get { return _formula; }
             set
             {
+                // Sets the formula and removes all white spaces.
                 _formula = value.Replace(" ", "");
-                Calculate();
+
+                // Clears all others properties.
+                Arguments = null;
+                Expressions = null;
+                ExpressionsValues = null;
             }
         }
 
         /// <summary>
         /// Gets a list of the arguments in the formula.
         /// </summary>
-        public IList<Char> Arguments { get; private set; }
+        public IList<Char> Arguments
+        {
+            get {
+                // Verifies if the 
+                if (_arguments == null) throw new NullReferenceException();
+                else return _arguments;
+            }
+            private set { _arguments = value; }
+        }
 
         /// <summary>
         /// Gets the values of the arguments in the formula.
         /// </summary>
-        public Boolean[,] ArgumentsValues { get; private set; }
+        public Boolean[,] ArgumentsValues
+        {
+            get
+            {
+                if (_argumentsValues == null) throw new NullReferenceException();
+                else return _argumentsValues;
+            }
+            private set { _argumentsValues = value; }
+        }
 
         /// <summary>
         /// Gets a list of the expressions in the formula.
         /// </summary>
-        public IList<String> Expressions { get; private set; }
+        public IList<String> Expressions
+        {
+            get
+            {
+                if (_expressions == null) throw new NullReferenceException();
+                else return _expressions;
+            }
+            private set { _expressions = value; }
+        }
 
         /// <summary>
         /// Gets the values of the arguments in the formula.
         /// </summary>
-        public IList<Boolean[]> ExpressionsValues { get; private set; }
+        public IList<Boolean[]> ExpressionsValues
+        {
+            get
+            {
+                if (_expressionsValues == null) throw new NullReferenceException();
+                else return _expressionsValues;
+            }
+            private set { _expressionsValues = value; }
+        }
         #endregion
 
         /// <summary>
@@ -177,28 +219,23 @@ namespace Nhanderu.Belizas
         /// <param name="characters">The characters that will represent the operators.</param>
         public TruthTable(String formula, Boolean calculate = false, IEnumerable<Char> characters = null)
         {
-            //Gets the enumarator of the characters that will represent the operators.
+            // Gets the enumerator of the characters that will represent the operators.
             IEnumerator<Char> charactersEnumerator = (characters ?? _defaultOperators).GetEnumerator();
             String[] operatorsKeys = new String[9] { "Not", "And", "Or", "Xor", "IfThen", "ThenIf", "IfAndOnlyIf", "OpeningBracket", "ClosingBracket" };
             Int32 index = 0;
 
-            //Iterates through the enumerator until it reaches its end or the ninth position and adds the current character in the operators list.
+            // Iterates through the enumerator until it reaches its end or the ninth position and adds the current character in the operators list.
             while (charactersEnumerator.MoveNext() && index < 9)
                 _operators.Add(operatorsKeys[index++], charactersEnumerator.Current);
 
-            //Verifies it the enumerator had less than 9 characters and adds the default operators to the rest of the positions in the list.
+            // Verifies it the enumerator had less than 9 characters and adds the default operators to the rest of the positions in the list.
             while (index < 9)
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
-            //Sets the formula as the argument.
-            _formula = formula.Replace(" ", "");
+            // Sets the formula as the argument.
+            Formula = formula;
 
-            //Initializes the TruthTable properties.
-            Arguments = new List<Char>();
-            Expressions = new List<String>();
-            ExpressionsValues = new List<Boolean[]>();
-
-            //Verifies if it's necessary to calculate automatically.
+            // Verifies if it's necessary to calculate automatically.
             if (calculate) Calculate();
         }
 
@@ -209,95 +246,95 @@ namespace Nhanderu.Belizas
         /// <returns>True if the formula is under all the conditions, false if not.</returns>
         public Boolean ValidateFormula(String formula = null)
         {
-            //Uses the Formula property if the parameter is null.
-            //Removes all white spaces.
+            // Uses the Formula property if the parameter is null.
+            // Removes all white spaces.
             String sentence = (formula ?? Formula);
 
-            //Verifies if the sentence is empty.
+            // Verifies if the sentence is empty.
             if (String.IsNullOrEmpty(sentence))
                 return false;
 
-            //Iterates through the sentence to verify if it has any disallowed character.
+            // Iterates through the sentence to verify if it has any disallowed character.
             foreach (Char character in sentence)
                 if (!Char.IsLetter(character) && !IsAnOperator(character))
                     return false;
 
-            //Verifies if the sentence has the same amount of opening and closing brackets.
+            // Verifies if the sentence has the same amount of opening and closing brackets.
             if (sentence.Contains(OpeningBracket.ToString()) || sentence.Contains(ClosingBracket.ToString()))
             {
                 Int32[] parenthesisCount = new Int32[2];
 
                 foreach (Char character in sentence)
-                    //If it is an opening bracket, sum 1 to opening brackets count.
+                    // If it is an opening bracket, sum 1 to opening brackets count.
                     if (character == OpeningBracket)
                         parenthesisCount[0]++;
-                    //If it is an closing bracket, sum 1 to closing brackets count.
+                    // If it is an closing bracket, sum 1 to closing brackets count.
                     else if (character == ClosingBracket)
                         parenthesisCount[1]++;
 
-                //Verifies if the amount of brackets is different.
+                // Verifies if the amount of brackets is different.
                 if (parenthesisCount[0] != parenthesisCount[1])
                     return false;
             }
 
-            //Iterates through the sentence to verify the sequence of characters.
+            // Iterates through the sentence to verify the sequence of characters.
             for (Int32 index = 0; index < sentence.Length; index++)
                 if (index == 0)
                 {
-                    //Verifies if the first character isn't a letter and an opening bracket.
+                    // Verifies if the first character isn't a letter and an opening bracket.
                     if (!Char.IsLetter(sentence[index]) && sentence[index] != OpeningBracket)
                         return false;
 
-                    //Verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    // Verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
                     else if (Char.IsLetter(sentence[index]) && !IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)
                         return false;
 
-                    //Verifies if the opening bracket have, on its right, a character that isn't a letter nor opening bracket.
+                    // Verifies if the opening bracket have, on its right, a character that isn't a letter nor opening bracket.
                     else if (sentence[index] == OpeningBracket && !Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)
                         return false;
                 }
                 else if (index == sentence.Length - 1)
                 {
-                    //Verifies if the last character isn't a letter, not operator and a closing bracket.
+                    // Verifies if the last character isn't a letter, not operator and a closing bracket.
                     if (!Char.IsLetter(sentence[index]) && sentence[index] != Not && sentence[index] != ClosingBracket)
                         return false;
 
-                    //Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
+                    // Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
                     else if (Char.IsLetter(sentence[index]) && !IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket)
                         return false;
 
-                    //Verifies if the not operators have, on its left, a character that isn't a not operator, a letter and a closing bracket.
+                    // Verifies if the not operators have, on its left, a character that isn't a not operator, a letter and a closing bracket.
                     else if (sentence[index] == Not && !Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket)
                         return false;
 
-                    //Verifies if the closing bracket have, on its left, a character that isn't a closing bracket, a letter and a not operator.
+                    // Verifies if the closing bracket have, on its left, a character that isn't a closing bracket, a letter and a not operator.
                     else if (sentence[index] == ClosingBracket && !Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket)
                         return false;
                 }
                 else
                 {
-                    //Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
-                    //Also verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    // Verifies if the letters have, on its left, a character that isn't an operator (except not) and an opening bracket.
+                    // Also verifies if the letters have, on its right, a character that isn't an operator (including not) and a closing bracket.
                     if (Char.IsLetter(sentence[index]) && ((!IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
                         return false;
 
-                    //Verifies if the not operators have, on its left, a character that isn't a letter, a not operator and a closing bracket.
-                    //Also verifies if the not operators have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    // Verifies if the not operators have, on its left, a character that isn't a letter, a not operator and a closing bracket.
+                    // Also verifies if the not operators have, on its right, a character that isn't an operator (including not) and a closing bracket.
                     else if (sentence[index] == Not && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
                         return false;
 
-                    //Verifies if the opening bracket have, on its left, a character that isn't a operator (except not) and an opening bracket.
-                    //Also verifies if the opening bracket have, on its right, a character that isn't a letter and opening bracket.
+                    // Verifies if the opening bracket have, on its left, a character that isn't a operator (except not) and an opening bracket.
+                    // Also verifies if the opening bracket have, on its right, a character that isn't a letter and opening bracket.
                     else if (sentence[index] == OpeningBracket && ((!IsAnOperator(sentence[index - 1], false, false) && sentence[index - 1] != OpeningBracket) || (!Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)))
                         return false;
 
-                    //Verifies if the closing bracket have, on its left, a character that isn't a letter, a not operator and a closing bracket.
-                    //Also verifies if the closing bracket have, on its right, a character that isn't an operator (including not) and a closing bracket.
+                    // Verifies if the closing bracket have, on its left, a character that isn't a letter, a not operator and a closing bracket.
+                    // Also verifies if the closing bracket have, on its right, a character that isn't an operator (including not) and a closing bracket.
                     else if (sentence[index] == ClosingBracket && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != Not && sentence[index - 1] != ClosingBracket) || (!IsAnOperator(sentence[index + 1], true, false) && sentence[index + 1] != ClosingBracket)))
                         return false;
 
-                    //Verifies if the operators (except not) have, on its left, a character that isn't a have a letter, a closing bracket and a not operator.
-                    //Also verifies if the operators (except not) have, on its right, a character that isn't a letter and an opening bracket.
+                    // Verifies if the operators (except not) have, on its left, a character that isn't a have a letter, a closing bracket and a not operator.
+                    // Also verifies if the operators (except not) have, on its right, a character that isn't a letter and an opening bracket.
                     else if (IsAnOperator(sentence[index], false, false) && ((!Char.IsLetter(sentence[index - 1]) && sentence[index - 1] != ClosingBracket && sentence[index - 1] != Not) || (!Char.IsLetter(sentence[index + 1]) && sentence[index + 1] != OpeningBracket)))
                         return false;
                 }
@@ -310,16 +347,21 @@ namespace Nhanderu.Belizas
         /// </summary>
         public void Calculate()
         {
-            //Verifies if the formula is valid.
+            // Verifies if the formula is valid.
             if (!ValidateFormula()) throw new InvalidFormulaException();
             else
             {
-                //Gets the arguments.
+                // Initializes the TruthTable properties.
+                Arguments = new List<Char>();
+                Expressions = new List<String>();
+                ExpressionsValues = new List<Boolean[]>();
+
+                // Gets the arguments.
                 foreach (Char item in Formula)
                     if (Char.IsLetter(item) && !Arguments.Contains(item))
                         Arguments.Add(item);
 
-                //Calculates the arguments and the expressions.
+                // Calculates the arguments and the expressions.
                 CalculateArguments();
                 CalculateExpressions();
             }
@@ -335,13 +377,13 @@ namespace Nhanderu.Belizas
         {
             List<Char> operators = new List<Char>();
 
-            //Verifies if the Not operator is included in the enumaration.
+            // Verifies if the Not operator is included in the enumaration.
             if (includeNot) operators.Add(Not);
 
-            //Includes the operators in the enumaration.
+            // Includes the operators in the enumaration.
             operators.AddRange(new List<Char>() { And, Or, Xor, IfThen, ThenIf, IfAndOnlyIf });
 
-            //Verifies if the brackets are included in the enumaration.
+            // Verifies if the brackets are included in the enumaration.
             if (includeBrackets)
             {
                 operators.Add(OpeningBracket);
@@ -360,7 +402,7 @@ namespace Nhanderu.Belizas
         /// <returns>True if the character is an operator, false if it isn't.</returns>
         public Boolean IsAnOperator(Char character, Boolean includeNot = true, Boolean includeBrackets = true)
         {
-            //Iterates through all the operators and verifies if the character is a operator.
+            // Iterates through all the operators and verifies if the character is a operator.
             foreach (Char item in EnumerateOperators(includeNot, includeBrackets))
                 if (character == item) return true;
 
@@ -373,34 +415,34 @@ namespace Nhanderu.Belizas
         /// <returns>The truth table in a text.</returns>
         public override String ToString()
         {
-            //Initializes the string that will represent the table.
+            // Initializes the string that will represent the table.
             StringBuilder table = new StringBuilder();
 
-            //Creates the first line: the arguments and the expressions.
-            //Iterates until it reaches the sum of the quantities of the arguments and the expressions to write them.
+            // Creates the first line: the arguments and the expressions.
+            // Iterates until it reaches the sum of the quantities of the arguments and the expressions to write them.
             for (Int32 index = 0; index < Arguments.Count + ExpressionsValues.Count; index++)
-                //Writes the arguments.
+                // Writes the arguments.
                 if (index < Arguments.Count)
                     TryAppend(table, Arguments[index] + " ");
-                //If the iteration reach the argument limit, starts to write the expressions.
+                // If the iteration reach the argument limit, starts to write the expressions.
                 else
                     TryAppend(table, Expressions[index - Arguments.Count] + " ");
 
             TryAppend(table, "\n");
 
-            //Create the other lines: the logical values.
-            //Iterates until it reaches 2 power the number of arguments to make the lines.
+            // Create the other lines: the logical values.
+            // Iterates until it reaches 2 power the number of arguments to make the lines.
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
-                //Iterates until it reaches the sum of the quantities of the arguments and the expressions to make the columns.
+                // Iterates until it reaches the sum of the quantities of the arguments and the expressions to make the columns.
                 for (Int32 column = 0; column < Arguments.Count + ExpressionsValues.Count; column++)
-                    //Writes the arguments values.
+                    // Writes the arguments values.
                     if (column < Arguments.Count)
                         TryAppend(table, Convert.ToInt32(ArgumentsValues[line, column]).ToString() + " ");
-                    //If the iteration reach the argument limit, starts to write the expressions values.
+                    // If the iteration reach the argument limit, starts to write the expressions values.
                     else
                     {
-                        //Verifies if the size of the expression string is even to add proportionals black spaces to justify the text.
+                        // Verifies if the size of the expression string is even to add proportionals black spaces to justify the text.
                         if (Expressions[column - Arguments.Count].Length % 2 == 0)
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2 - 1; i++)
                                 TryAppend(table, " ");
@@ -408,10 +450,10 @@ namespace Nhanderu.Belizas
                             for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
                                 TryAppend(table, " ");
 
-                        //Writes the current expression value.
+                        // Writes the current expression value.
                         TryAppend(table, Convert.ToInt32(ExpressionsValues[column - Arguments.Count][line]).ToString() + " ");
-                        
-                        //Writes the rest of the blank spaces to justify 
+
+                        // Writes the rest of the blank spaces to justify 
                         for (Int32 i = 0; i < Expressions[column - Arguments.Count].Length / 2; i++)
                             TryAppend(table, " ");
                     }
@@ -425,7 +467,7 @@ namespace Nhanderu.Belizas
         #region Private helper methods
         private void CalculateArguments()
         {
-            //Verifies if the memory has enough space for the arguments.
+            // Verifies if the memory has enough space for the arguments.
             try
             {
                 ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];

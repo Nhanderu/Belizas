@@ -5,7 +5,7 @@ Belizas is a simple .NET library for truth table calculus.
 ##### How to start
 Just make an instance of TruthTable, pass the formula and calculate.
 ```c#
-var table = new TruthTable("a.b");
+var table = new TruthTable("a.b'+(a-c)'");
 table.Calculate();
 ```
 Or you can calculate automatically from the constructor:

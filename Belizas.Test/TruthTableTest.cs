@@ -35,16 +35,6 @@ namespace Nhanderu.Belizas.Test
         }
         #endregion
 
-        #region Formula
-        [TestMethod]
-        [ExpectedException(typeof(InvalidFormulaException))]
-        public void Formula_EmptyStringAsFormula_InvalidFormulaExceptionThrown()
-        {
-            TruthTable table = new TruthTable("");
-            table.Formula = "";
-        }
-        #endregion
-
         #region ValidateFormula
         [TestMethod]
         public void ValidateFormula_FormulaIsEmpty_InvalidFormula()

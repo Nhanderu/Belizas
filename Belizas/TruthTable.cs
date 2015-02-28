@@ -143,7 +143,7 @@ namespace Nhanderu.Belizas
             get { return _formula; }
             set
             {
-                _formula = value.Replace(" ", "").ToLower();
+                _formula = value.Replace(" ", "");
                 Calculate();
             }
         }
@@ -191,7 +191,7 @@ namespace Nhanderu.Belizas
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
             //Sets the formula as the argument.
-            _formula = formula.Replace(" ", "").ToLower();
+            _formula = formula.Replace(" ", "");
 
             //Initializes the TruthTable properties.
             Arguments = new List<Char>();
@@ -431,6 +431,7 @@ namespace Nhanderu.Belizas
                 ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];
             }
             catch (OutOfMemoryException) { throw new TooMuchArgumentsInTruthTableException(Arguments.Count); }
+
 
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {

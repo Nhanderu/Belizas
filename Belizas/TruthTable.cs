@@ -143,7 +143,7 @@ namespace Nhanderu.Belizas
             get { return _formula; }
             set
             {
-                _formula = value.Replace(" ", "");
+                _formula = value.Replace(" ", "").ToLower();
                 Calculate();
             }
         }
@@ -191,7 +191,7 @@ namespace Nhanderu.Belizas
                 _operators.Add(operatorsKeys[index], _defaultOperators[index++]);
 
             //Sets the formula as the argument.
-            _formula = formula.Replace(" ", "");
+            _formula = formula.Replace(" ", "").ToLower();
 
             //Initializes the TruthTable properties.
             Arguments = new List<Char>();
@@ -425,6 +425,7 @@ namespace Nhanderu.Belizas
         #region Private helper methods
         private void CalculateArguments()
         {
+            //Verifies if the memory has enough space for the arguments.
             try
             {
                 ArgumentsValues = new Boolean[(Int32)Math.Pow(2, Arguments.Count), Arguments.Count];

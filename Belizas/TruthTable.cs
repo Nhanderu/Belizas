@@ -10,13 +10,15 @@ namespace Nhanderu.Belizas
     /// </summary>
     public class TruthTable : ITruthTable
     {
+        // Properties fields.
         private String _formula;
         private IList<Char> _arguments;
         private Boolean[,] _argumentsValues;
         private IList<String> _expressions;
         private IList<Boolean[]> _expressionsValues;
-
         private Dictionary<String, Char> _operators = new Dictionary<String, Char>();
+
+        // Private variables.
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
         private const Int32 _er = 13312;
 

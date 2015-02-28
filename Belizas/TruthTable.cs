@@ -164,8 +164,8 @@ namespace Nhanderu.Belizas
         public IList<Char> Arguments
         {
             get {
-                // Verifies if the 
-                if (_arguments == null) throw new NullReferenceException();
+                // Verifies if the arguments were calculated.
+                if (_arguments == null) throw new TableNotCalculatedException();
                 else return _arguments;
             }
             private set { _arguments = value; }
@@ -178,7 +178,8 @@ namespace Nhanderu.Belizas
         {
             get
             {
-                if (_argumentsValues == null) throw new NullReferenceException();
+                // Verifies if the arguments values were calculated.
+                if (_argumentsValues == null) throw new TableNotCalculatedException();
                 else return _argumentsValues;
             }
             private set { _argumentsValues = value; }
@@ -191,7 +192,8 @@ namespace Nhanderu.Belizas
         {
             get
             {
-                if (_expressions == null) throw new NullReferenceException();
+                // Verifies if the expressions were calculated.
+                if (_expressions == null) throw new TableNotCalculatedException();
                 else return _expressions;
             }
             private set { _expressions = value; }
@@ -204,7 +206,8 @@ namespace Nhanderu.Belizas
         {
             get
             {
-                if (_expressionsValues == null) throw new NullReferenceException();
+                // Verifies if the expression values were calculated.
+                if (_expressionsValues == null) throw new TableNotCalculatedException();
                 else return _expressionsValues;
             }
             private set { _expressionsValues = value; }

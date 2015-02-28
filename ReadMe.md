@@ -32,7 +32,7 @@ table.ClosingBracket = Console.Read();
 ```
 
 All the following properties are only set by the `Calculate` method, but `Formula`.
-* `String Formula` *(get and set)*: The formula that generated the table. Everytime it is set, the `Calculate` method is called and the other properties are updated.
+* `String Formula` *(get and set)*: The formula that generated the table. Everytime it is set, the other properties are set as `null` and can only be updated when `Calculate` method is called.
 * `IList<Char> Arguments` *(get)*: The arguments of the table (only letters, e.g. "a").
 * `Boolean[,] ArgumentsValues` *(get)*: The binary values of the arguments.
 * `IList<String> Expressions` *(get)*: The expressions in order to be calculated (e.g. "a+b").

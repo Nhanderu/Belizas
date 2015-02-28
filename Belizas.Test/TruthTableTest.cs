@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Nhanderu.Belizas;
+using System;
 using Nhanderu.Belizas.Exceptions;
 
 namespace Nhanderu.Belizas.Test
@@ -7,6 +7,40 @@ namespace Nhanderu.Belizas.Test
     [TestClass]
     public class TruthTableTest
     {
+        #region Properties
+        [TestMethod]
+        [ExpectedException(typeof(TableNotCalculatedException))]
+        public void Arguments_NotCalculated_TableNotCalculatedExceptionThrown()
+        {
+            TruthTable table = new TruthTable("a.b");
+            Int32 hellhound = table.Arguments.Count;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TableNotCalculatedException))]
+        public void ArgumentsValues_NotCalculated_TableNotCalculatedExceptionThrown()
+        {
+            TruthTable table = new TruthTable("a.b");
+            Int32 on = table.ArgumentsValues.Length;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TableNotCalculatedException))]
+        public void Expressions_NotCalculated_TableNotCalculatedExceptionThrown()
+        {
+            TruthTable table = new TruthTable("a.b");
+            Int32 my = table.Expressions.Count;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TableNotCalculatedException))]
+        public void ExpressionsValues_NotCalculated_TableNotCalculatedExceptionThrown()
+        {
+            TruthTable table = new TruthTable("a.b");
+            Int32 trail = table.ExpressionsValues.Count;
+        }
+        #endregion
+
         #region Calculate
         [TestMethod]
         [ExpectedException(typeof(InvalidFormulaException))]

@@ -7,15 +7,6 @@ namespace Nhanderu.Belizas.Test
     [TestClass]
     public class TruthTableTest
     {
-        #region Constructor
-        [TestMethod]
-        [ExpectedException(typeof(InvalidFormulaException))]
-        public void Constructor_EmptyStringAsFormula_InvalidFormulaExceptionThrown()
-        {
-            TruthTable table = new TruthTable("", true);
-        }
-        #endregion
-
         #region Calculate
         [TestMethod]
         [ExpectedException(typeof(InvalidFormulaException))]

@@ -1,7 +1,9 @@
 using Nhanderu.Belizas.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Nhanderu.Belizas
 {
@@ -467,6 +469,39 @@ namespace Nhanderu.Belizas
             }
 
             return table.ToString();
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <param name="htmlAttributes">The attributes of the "table" tag.</param>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable(Object tableAttributes)
+        {
+            Dictionary<String, Object> htmlAttributesDictionary = new Dictionary<String, Object>();
+
+            //Converts the properties in a object to the values in a dictionary, iterating through them.
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tableAttributes))
+                htmlAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tableAttributes));
+
+            // Returns the table.
+            return ToHtmlTable(htmlAttributesDictionary);
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <param name="htmlAttributes">The attributes of the "table" tag.</param>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable(IDictionary<String, Object> tableAttributes = null)
+        {
+            // Creates the <table>.
+            TagBuilder tagTable = new TagBuilder("table");
+
+            // Sets the attributes.
+            tagTable.MergeAttributes(tableAttributes);
+
+            return tagTable.ToString();
         }
 
         #region Private helper methods

@@ -253,7 +253,7 @@ namespace Nhanderu.Belizas
         /// <returns>True if the formula is under all the conditions, false if not.</returns>
         public static Boolean ValidateFormula(String formula, IEnumerable<Char> characters = null)
         {
-            return (new TruthTable(formula, true, characters)).ValidateFormula();
+            return (new TruthTable(formula, false, characters)).ValidateFormula();
         }
 
         /// <summary>

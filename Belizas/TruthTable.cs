@@ -18,7 +18,7 @@ namespace Nhanderu.Belizas
         private IList<Boolean[]> _expressionsValues;
         private Dictionary<String, Char> _operators = new Dictionary<String, Char>();
 
-        // Private variables.
+        // Private constants.
         private readonly List<Char> _defaultOperators = new List<Char> { '\'', '.', '+', ':', '>', '<', '-', '(', ')' };
         private const Int32 _er = 13312;
 

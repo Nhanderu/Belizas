@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas", "Belizas\Belizas.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas.Test", "Belizas.Test\Belizas.Test.csproj", "{66EC2FFB-A62A-4893-9323-954D4DC9C653}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Belizas.Demo", "Belizas.Demo\Belizas.Demo.csproj", "{FD1190E8-FC99-46E1-869C-494910DEBAAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{66EC2FFB-A62A-4893-9323-954D4DC9C653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66EC2FFB-A62A-4893-9323-954D4DC9C653}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66EC2FFB-A62A-4893-9323-954D4DC9C653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1190E8-FC99-46E1-869C-494910DEBAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1190E8-FC99-46E1-869C-494910DEBAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1190E8-FC99-46E1-869C-494910DEBAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1190E8-FC99-46E1-869C-494910DEBAAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -167,7 +167,8 @@ namespace Nhanderu.Belizas
         /// </summary>
         public IList<Char> Arguments
         {
-            get {
+            get
+            {
                 // Verifies if the arguments were calculated.
                 if (_arguments == null) throw new TableNotCalculatedException();
                 else return _arguments;
@@ -495,11 +496,50 @@ namespace Nhanderu.Belizas
         /// <returns>The truth table in a "table" HTML tag.</returns>
         public String ToHtmlTable(IDictionary<String, Object> tableAttributes = null)
         {
-            // Creates the <table>.
+            // Creates the <table>, the <thead>, the <tbody>, the <th>, the <tr> and the <td>.
             TagBuilder tagTable = new TagBuilder("table");
+            TagBuilder tagTHead = new TagBuilder("thead");
+            TagBuilder tagTBody = new TagBuilder("tbody");
+            TagBuilder tagTH = new TagBuilder("th");
+            TagBuilder tagTR = new TagBuilder("tr");
+            TagBuilder tagTD = new TagBuilder("td");
 
             // Sets the attributes.
             tagTable.MergeAttributes(tableAttributes);
+
+            // Iterates through the arguments and the expressions, sets a <tr> and adds it in the <th>.
+            foreach (Char argument in Arguments)
+            {
+                tagTR.SetInnerText(argument.ToString());
+                tagTH.InnerHtml += tagTR.ToString();
+            }
+            foreach (String expression in Expressions)
+            {
+                tagTR.SetInnerText(expression.ToString());
+                tagTH.InnerHtml += tagTR.ToString();
+            }
+
+            // Adds the <th> in the <thead>.
+            tagTHead.InnerHtml = tagTH.ToString();
+
+            // Gets the table values (i.e. everything but the arguments and the expressions) as some Strings, one for line.
+            String[] tableValues = this.ToString().Split('\n');
+
+            for (Int32 index = 1; index < tableValues.Length; index++)
+                tableValues[index] = tableValues[index].Replace(" ", "");
+
+            // Iterates through the table values, sets a <tr> and adds it in the <td>. When a <td> is done, adds it in the <tbody>.
+            for (Int32 index = 1; index < tableValues.Length; index++)
+            {
+                foreach (Char item in tableValues[index])
+                {
+                    tagTR.SetInnerText(item.ToString());
+                    tagTD.InnerHtml += tagTR.ToString();
+                }
+                tagTBody.InnerHtml += tagTD.ToString();
+            }
+
+            tagTable.InnerHtml = tagTHead.ToString() + tagTBody.ToString();
 
             return tagTable.ToString();
         }

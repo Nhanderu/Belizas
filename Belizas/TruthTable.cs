@@ -475,73 +475,146 @@ namespace Nhanderu.Belizas
         /// <summary>
         /// Generates a HTML code with a "table" tag that represents the truth table.
         /// </summary>
-        /// <param name="htmlAttributes">The attributes of the "table" tag.</param>
         /// <returns>The truth table in a "table" HTML tag.</returns>
-        public String ToHtmlTable(Object tableAttributes)
+        public String ToHtmlTable()
         {
-            Dictionary<String, Object> htmlAttributesDictionary = new Dictionary<String, Object>();
-
-            //Converts the properties in a object to the values in a dictionary, iterating through them.
-            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tableAttributes))
-                htmlAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tableAttributes));
-
-            // Returns the table.
-            return ToHtmlTable(htmlAttributesDictionary);
+            return ToHtmlTable(null, null, null, null, null, null);
         }
 
         /// <summary>
         /// Generates a HTML code with a "table" tag that represents the truth table.
         /// </summary>
-        /// <param name="htmlAttributes">The attributes of the "table" tag.</param>
+        /// <param name="tableAttributes">The attributes of the "table" tag.</param>
+        /// <param name="theadAttributes">The attributes of the "thead" tag.</param>
+        /// <param name="tbodyAttributes">The attributes of the "tbody" tag.</param>
+        /// <param name="trAttributes">The attributes of the "tr" tag.</param>
+        /// <param name="thAttributes">The attributes of the "th" tag.</param>
+        /// <param name="tdAttributes">The attributes of the "td" tag.</param>
         /// <returns>The truth table in a "table" HTML tag.</returns>
-        public String ToHtmlTable(IDictionary<String, Object> tableAttributes = null)
+        public String ToHtmlTable
+        (
+            Object tableAttributes = null,
+            Object theadAttributes = null,
+            Object tbodyAttributes = null,
+            Object trAttributes = null,
+            Object thAttributes = null,
+            Object tdAttributes = null
+        )
+        {
+            IDictionary<String, Object> tableAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> theadAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> tbodyAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> trAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> thAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> tdAttributesDictionary = new Dictionary<String, Object>();
+
+            //Converts the properties in a object to the values in a dictionary, iterating through them.
+            if (tableAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tableAttributes))
+                    tableAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tableAttributes));
+            else tableAttributesDictionary = null;
+
+            if (theadAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(theadAttributes))
+                    theadAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(theadAttributes));
+            else theadAttributesDictionary = null;
+
+            if (tbodyAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tbodyAttributes))
+                    tbodyAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tbodyAttributes));
+            else tbodyAttributesDictionary = null;
+
+            if (trAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(trAttributes))
+                    trAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(trAttributes));
+            else trAttributesDictionary = null;
+
+            if (thAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(thAttributes))
+                    thAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(thAttributes));
+            else thAttributesDictionary = null;
+
+            if (tdAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tdAttributes))
+                    tdAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tdAttributes));
+            else tdAttributesDictionary = null;
+
+            // Returns the table.
+            return ToHtmlTable(tableAttributesDictionary, theadAttributesDictionary, tbodyAttributesDictionary, trAttributesDictionary, thAttributesDictionary, tdAttributesDictionary);
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <param name="tableAttributes">The attributes of the "table" tag.</param>
+        /// <param name="theadAttributes">The attributes of the "thead" tag.</param>
+        /// <param name="tbodyAttributes">The attributes of the "tbody" tag.</param>
+        /// <param name="trAttributes">The attributes of the "tr" tag.</param>
+        /// <param name="thAttributes">The attributes of the "th" tag.</param>
+        /// <param name="tdAttributes">The attributes of the "td" tag.</param>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable
+        (
+            IDictionary<String, Object> tableAttributes = null,
+            IDictionary<String, Object> theadAttributes = null,
+            IDictionary<String, Object> tbodyAttributes = null,
+            IDictionary<String, Object> trAttributes = null,
+            IDictionary<String, Object> thAttributes = null,
+            IDictionary<String, Object> tdAttributes = null
+        )
         {
             // Creates the <table>, the <thead>, the <tbody>, the <th>, the <tr> and the <td>.
-            TagBuilder tagTable = new TagBuilder("table");
-            TagBuilder tagTHead = new TagBuilder("thead");
-            TagBuilder tagTBody = new TagBuilder("tbody");
-            TagBuilder tagTH = new TagBuilder("th");
-            TagBuilder tagTR = new TagBuilder("tr");
-            TagBuilder tagTD = new TagBuilder("td");
+            TagBuilder table = new TagBuilder("table");
+            TagBuilder thead = new TagBuilder("thead");
+            TagBuilder tbody = new TagBuilder("tbody");
+            TagBuilder tr = new TagBuilder("tr");
+            TagBuilder th = new TagBuilder("th");
+            TagBuilder td = new TagBuilder("td");
 
             // Sets the attributes.
-            tagTable.MergeAttributes(tableAttributes);
+            if (tableAttributes != null) table.MergeAttributes(tableAttributes);
+            if (theadAttributes != null) thead.MergeAttributes(theadAttributes);
+            if (tbodyAttributes != null) tbody.MergeAttributes(tbodyAttributes);
+            if (trAttributes != null) tr.MergeAttributes(trAttributes);
+            if (thAttributes != null) th.MergeAttributes(thAttributes);
+            if (tdAttributes != null) td.MergeAttributes(tdAttributes);
 
-            // Iterates through the arguments and the expressions, sets a <tr> and adds it in the <th>.
+            // Iterates through the arguments and the expressions, sets a <th> and adds it in the <tr>.
             foreach (Char argument in Arguments)
             {
-                tagTR.SetInnerText(argument.ToString());
-                tagTH.InnerHtml += tagTR.ToString();
+                th.SetInnerText(argument.ToString());
+                tr.InnerHtml += th.ToString();
             }
             foreach (String expression in Expressions)
             {
-                tagTR.SetInnerText(expression.ToString());
-                tagTH.InnerHtml += tagTR.ToString();
+                th.SetInnerText(expression.ToString());
+                tr.InnerHtml += th.ToString();
             }
 
-            // Adds the <th> in the <thead>.
-            tagTHead.InnerHtml = tagTH.ToString();
+            // Adds the <tr> in the <thead>.
+            thead.InnerHtml = tr.ToString();
 
             // Gets the table values (i.e. everything but the arguments and the expressions) as some Strings, one for line.
-            String[] tableValues = this.ToString().Split('\n');
+            String[] tableValues = ToString().Split('\n');
 
             for (Int32 index = 1; index < tableValues.Length; index++)
                 tableValues[index] = tableValues[index].Replace(" ", "");
 
-            // Iterates through the table values, sets a <tr> and adds it in the <td>. When a <td> is done, adds it in the <tbody>.
+            // Iterates through the table values, sets a <td> and adds it in the <tr>. When a <tr> is done, adds it in the <tbody>.
             for (Int32 index = 1; index < tableValues.Length; index++)
             {
                 foreach (Char item in tableValues[index])
                 {
-                    tagTR.SetInnerText(item.ToString());
-                    tagTD.InnerHtml += tagTR.ToString();
+                    td.SetInnerText(item.ToString());
+                    tr.InnerHtml += td.ToString();
                 }
-                tagTBody.InnerHtml += tagTD.ToString();
+                tbody.InnerHtml += tr.ToString();
             }
 
-            tagTable.InnerHtml = tagTHead.ToString() + tagTBody.ToString();
+            // Puts the <thead> and the <tbody> in the <table>.
+            table.InnerHtml = thead.ToString() + tbody.ToString();
 
-            return tagTable.ToString();
+            return table.ToString();
         }
 
         #region Private helper methods

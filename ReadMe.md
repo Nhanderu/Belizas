@@ -42,8 +42,9 @@ All the following properties are only set by the `Calculate` method, but `Formul
 * Add comments and XML docs in all code.
 * Finish tests.
 * Finish read me file.
-* TruthTable method to convert the table data to a HTML table.
+* TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
 * Add a exception for invalid character set to an operator.
+* Formula D.
 
 ### Licence
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

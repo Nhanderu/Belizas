@@ -115,6 +115,14 @@ namespace Nhanderu.Belizas.Test
         }
 
         [TestMethod]
+        public void ValidateFormula_FormulaWithJustOneArgument_ValidFormula()
+        {
+            TruthTable table = new TruthTable("");
+
+            Assert.AreEqual(true, table.ValidateFormula("d"));
+        }
+
+        [TestMethod]
         public void ValidateFormula_SimpleFormula_ValidFormula()
         {
             TruthTable table = new TruthTable("");

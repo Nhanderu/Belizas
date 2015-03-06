@@ -165,7 +165,8 @@ namespace Nhanderu.Belizas
         /// </summary>
         public IList<Char> Arguments
         {
-            get {
+            get
+            {
                 // Verifies if the arguments were calculated.
                 if (_arguments == null) throw new TableNotCalculatedException();
                 else return _arguments;
@@ -220,7 +221,7 @@ namespace Nhanderu.Belizas
         /// Initializes a new instance of the TruthTable class to the value indicated by the formula.
         /// </summary>
         /// <param name="formula">The formula that will rule the truth table.</param>
-        /// <param name="calculate">A boolean value that indicates if the table will be calculated automatically in the constructor or it will be calculated by calling the method Calculate.</param>
+        /// <param name="calculate">A boolean value that indicates if the table will be calculated automatically in the constructor.</param>
         /// <param name="characters">The characters that will represent the operators.</param>
         public TruthTable(String formula, Boolean calculate = false, IEnumerable<Char> characters = null)
         {
@@ -245,6 +246,17 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
+        /// Verifies the formula, if it is under all the conditions to be a consistent truth table formula.
+        /// </summary>        
+        /// <param name="formula">The formula to be validated.</param>
+        /// <param name="characters">The characters that will represent the operators.</param>
+        /// <returns>True if the formula is under all the conditions, false if not.</returns>
+        public static Boolean ValidateFormula(String formula, IEnumerable<Char> characters = null)
+        {
+            return (new TruthTable(formula, true, characters)).ValidateFormula();
+        }
+
+        /// <summary>
         /// Verifies the formula, if it is under all the conditions to be a consistent truth table formula. 
         /// </summary>
         /// <param name="formula">The formula to be validated. If null, validate the formula that rules the instance.</param>
@@ -253,7 +265,7 @@ namespace Nhanderu.Belizas
         {
             // Uses the Formula property if the parameter is null.
             // Removes all white spaces.
-            String sentence = (formula ?? Formula);
+            String sentence = formula ?? Formula;
 
             // Verifies if the sentence is empty.
             if (String.IsNullOrEmpty(sentence))

@@ -38,6 +38,21 @@ All the following properties are only set by the `Calculate` method, but `Formul
 * `IList<String> Expressions` *(get)*: The expressions in order to be calculated (e.g. "a+b").
 * `IList<Boolean[]> ExpressionsValues` *(get)*: The binary values of the expressions.
 
+##### Methods of the TruthTable class
+The methods will be explained and followed by their parameters.
+* `Boolean ValidateFormula`: Verifies if the formula is valid - if it is under all conditions to be a consistent truth table formula.
+ * `String formula` *(optional)*: The formula to be validated. If not defined, validate the formula that rules the instance.
+* `static Boolean ValidateFormula`: Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.
+ * `String formula`: The formula to be validated.
+ * `IEnumerable<Char> characters` *(optional)*: The caracters that will represent the operators (same rules of the "characters" in the constructor).
+* `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` are only populated after this method is called.
+* `IList<Char> EnumerateOperators`: Returns a list with all the operators.
+ * `Boolean includeNot`: If the "not" operator should be included in the list. Default to `true`.
+ * `Boolean includeBrackets`: If the brackets should be included in the list. Default to `true`.
+* `Boolean IsAnOperator`: Verifies if the character passed is really an operator.
+
+
+
 ### To-do list
 * Add comments and XML docs in all code.
 * Finish tests.

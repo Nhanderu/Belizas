@@ -246,7 +246,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Verifies the formula, if it is under all the conditions to be a consistent truth table formula.
+        /// Verifies if the formula is under all the conditions to be a consistent truth table formula.
         /// </summary>        
         /// <param name="formula">The formula to be validated.</param>
         /// <param name="characters">The characters that will represent the operators.</param>

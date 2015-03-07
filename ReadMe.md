@@ -45,19 +45,84 @@ The methods will be explained and followed by their parameters.
 * `static Boolean ValidateFormula`: Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.
  * `String formula`: The formula to be validated.
  * `IEnumerable<Char> characters` *(optional)*: The caracters that will represent the operators (same rules of the "characters" in the constructor).
-* `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` are only populated after this method is called.
+* `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. **Call this method after setting the formula!**
 * `IList<Char> EnumerateOperators`: Returns a list with all the operators.
  * `Boolean includeNot`: If the "not" operator should be included in the list. Default to `true`.
  * `Boolean includeBrackets`: If the brackets should be included in the list. Default to `true`.
-* `Boolean IsAnOperator`: Verifies if the character passed is really an operator.
+* `Boolean IsAnOperator`: Verifies if the character passed is an operator.
+ * `Char character`: The character to be verified.
+ * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Default to `true`.
+ * `Boolean includeBrackets` *(optional)*: If the "not" operator should be counted in the verification. Default to `true`.
+* `String ToString`: Converts the table to a text.
 
+The following method is under construction (in the branch "test").
+* `ToHtmlTable`: Converts the truth table to a HTML code.
+ * `Object tableAttributes` *(optional)*: The attributes of the tag "table".
+ * `Object theadAttributes` *(optional)*: The attributes of the tag "thead".
+ * `Object tbodyAttributes` *(optional)*: The attributes of the tag "tbody".
+ * `Object trAttributes` *(optional)*: The attributes of the tag "tr".
+ * `Object thAttributes` *(optional)*: The attributes of the tag "th".
+ * `Object tdAttributes` *(optional)*: The attributes of the tag "td".
 
+The usage of the parameters is exactly the same as in the ASP.NET HTML helpers. For example, something like this:
+```c#
+table.ToHtmlTable(new { foo = "bar", nhan = "deru" });
+```
+Will return this:
+```html
+<table foo="bar" nhan="deru">
+...
+</table>
+```
+If some tags will have attributes and others won't, I highly recommend you to use named parameters on it, but you can just pass `null` to some parameters. See below both ways:
+```c#
+// Named parameters.
+table.ToHtmlTable(
+    tableAttributes: new { note_the_underline = "now-it-is-a-hyphen" },
+    trAttributes: new { @class = "cool" },
+    tdAttributes: new { vai = "curintia" }
+);
+
+// Null parameters.
+table.ToHtmlTable(new { note_the_underline = "now-it-is-a-hyphen" }, null, null, new { @class ="cool" }, null, new { vai = "curintia" });
+```
+Which results to this:
+```html
+<table note-the-underline="now-it-is-a-hyphen">
+    <thead>
+        <tr class="cool">
+            <th>...</th>
+        </tr>
+        <tr class="cool">
+            <td var="curintia">...</td>
+        </tr>
+    </thead>
+</table>
+```
+
+Or, besides the example above, you can use this overload:
+* `ToHtmlTable`: Converts the truth table to a HTML code.
+ * `IDictionary<String, Object> tableAttributes` *(optional)*: The attributes of the tag "table".
+ * `IDictionary<String, Object> theadAttributes` *(optional)*: The attributes of the tag "thead".
+ * `IDictionary<String, Object> tbodyAttributes` *(optional)*: The attributes of the tag "tbody".
+ * `IDictionary<String, Object> trAttributes` *(optional)*: The attributes of the tag "tr".
+ * `IDictionary<String, Object> thAttributes` *(optional)*: The attributes of the tag "th".
+ * `IDictionary<String, Object> tdAttributes` *(optional)*: The attributes of the tag "td".
+
+In practice:
+```c#
+var attributes = new Dictionary<String, Object>();
+attributes.Add("foo", "bar");
+attributes.Add("nhan", "deru");
+
+table.ToHtmlTable(attributes);
+```
 
 ### To-do list
 * Add comments and XML docs in all code.
-* Finish tests.
+* Make unit tests for every method.
 * Finish read me file.
-* TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
+* TruthTable method to convert the table data to a HTML table (in construcion in branch "test").
 * Add a exception for invalid character set to an operator.
 * Formula D.
 

@@ -24,15 +24,15 @@ var table = new TruthTable("a.b", true);
 
 ##### Properties of the TruthTable class
 There's a property for every operator (and the brackets).
-* `Char Not` *(get and set)*: The "not" operator. Default to `'`.
-* `Char And` *(get and set)*: The "and" operator. Default to `.`.
-* `Char Or` *(get and set)*: The "or" operator. Default to `+`.
-* `Char Xor` *(get and set)*: The "xor" operator. Default to `:`.
-* `Char IfThen` *(get and set)*: The "if-then" operator. Default to `>`.
-* `Char ThenIf` *(get and set)*: The "then-if" operator. Default to `<`.
-* `Char IfAndOnlyIf` *(get and set)*: The "if-and-only-if" operator. Default to `-`.
-* `Char OpeningBracket` *(get and set)*: The opening bracket. Default to `(`.
-* `Char ClosingBracket` *(get and set)*: The closing bracket. Default to `)`.
+* `Char Not` *(get and set)*: The "not" operator. Defaults to `'`.
+* `Char And` *(get and set)*: The "and" operator. Defaults to `.`.
+* `Char Or` *(get and set)*: The "or" operator. Defaults to `+`.
+* `Char Xor` *(get and set)*: The "xor" operator. Defaults to `:`.
+* `Char IfThen` *(get and set)*: The "if-then" operator. Defaults to `>`.
+* `Char ThenIf` *(get and set)*: The "then-if" operator. Defaults to `<`.
+* `Char IfAndOnlyIf` *(get and set)*: The "if-and-only-if" operator. Defaults to `-`.
+* `Char OpeningBracket` *(get and set)*: The opening bracket. Defaults to `(`.
+* `Char ClosingBracket` *(get and set)*: The closing bracket. Defaults to `)`.
 
 You can change the values of the operators due to your necessities, e.g.:
 ```c#
@@ -56,12 +56,12 @@ The methods will be explained and followed by their parameters.
  * `IEnumerable<Char> characters` *(optional)*: The caracters that will represent the operators (same rules of the "characters" in the constructor).
 * `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. **Call this method after setting the formula!**
 * `IList<Char> EnumerateOperators`: Returns a list with all the operators.
- * `Boolean includeNot` *(optional)*: If the "not" operator should be included in the list. Default to `true`.
- * `Boolean includeBrackets` *(optional)*: If the brackets should be included in the list. Default to `true`.
+ * `Boolean includeNot` *(optional)*: If the "not" operator should be included in the list. Defaults to `true`.
+ * `Boolean includeBrackets` *(optional)*: If the brackets should be included in the list. Defaults to `true`.
 * `Boolean IsAnOperator`: Verifies if the character passed is an operator.
  * `Char character`: The character to be verified.
- * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Default to `true`.
- * `Boolean includeBrackets` *(optional)*: If the "not" operator should be counted in the verification. Default to `true`.
+ * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
+ * `Boolean includeBrackets` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
 * `String ToString`: Converts the table to a text.
 
 The following method is under construction (in the branch "test").

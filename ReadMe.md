@@ -123,7 +123,6 @@ table.ToHtmlTable(attributes);
 * Make unit tests for every method.
 * Finish read me file.
 * TruthTable method to convert the table data to a HTML table (in construcion in branch "test").
-* Add a exception for invalid character set to an operator.
 * Formula D.
 
 ### Licence

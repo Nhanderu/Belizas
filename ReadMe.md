@@ -4,8 +4,8 @@ Belizas is a simple .NET library for truth table calculus.
 ### Index
 1. [Usage](#usage)
  1. [How to start](#how-to-start)
- 2. [Properties of the TruthTable class](properties-of-the-truthtable-class)
- 3. [Methods of the TruthTable class](methods-of-the-truthtable-class)
+ 2. [Properties of the TruthTable class](#properties-of-the-truthtable-class)
+ 3. [Methods of the TruthTable class](#methods-of-the-truthtable-class)
 2. [Exceptions](#exceptions)
 3. [To-do list](#to-do-list)
 4. [License](#license)

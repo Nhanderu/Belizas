@@ -47,8 +47,8 @@ The methods will be explained and followed by their parameters.
  * `IEnumerable<Char> characters` *(optional)*: The caracters that will represent the operators (same rules of the "characters" in the constructor).
 * `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. **Call this method after setting the formula!**
 * `IList<Char> EnumerateOperators`: Returns a list with all the operators.
- * `Boolean includeNot`: If the "not" operator should be included in the list. Default to `true`.
- * `Boolean includeBrackets`: If the brackets should be included in the list. Default to `true`.
+ * `Boolean includeNot` *(optional)*: If the "not" operator should be included in the list. Default to `true`.
+ * `Boolean includeBrackets` *(optional)*: If the brackets should be included in the list. Default to `true`.
 * `Boolean IsAnOperator`: Verifies if the character passed is an operator.
  * `Char character`: The character to be verified.
  * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Default to `true`.

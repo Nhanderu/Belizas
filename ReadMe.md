@@ -127,7 +127,12 @@ attributes.Add("nhan", "deru");
 table.ToHtmlTable(attributes);
 ```
 
-##### Exeptions
+##### Exceptions
+* `InvalidFormulaException`: Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
+* `TableNotCalculatedException`: Thrown when a porperty is called before the table was calculated, i.e. before the `Calculate` method is called and the "calculate" parameter in constructor is not set as true.
+* `TooMuchArgumentsInTruthTableException`: When the arguments and its values passes the limit of the memory.
+* `TooMuchExpressionsInTruthTableException`: When the expressions and its values passes the limit of the memory.
+* `TooMuchInformationInTruthTableException`: When another thing in the table passes the limit of the memory.
 
 ### To-do list
 * Add comments and XML docs in all code.

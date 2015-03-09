@@ -141,5 +141,5 @@ table.ToHtmlTable(attributes);
 * TruthTable method to convert the table data to a HTML table (in construcion in branch "test").
 * Formula D.
 
-### Licence
+### License
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

@@ -138,7 +138,8 @@ table.ToHtmlTable(attributes);
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
 * Finish read me file.
-* TruthTable method to convert the table data to a HTML table (in construcion in branch "test").
+* TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
+* TruthTable method to convert the table data to a CSV text.
 * Formula D.
 
 ### License

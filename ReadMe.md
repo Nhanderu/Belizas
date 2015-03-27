@@ -1,7 +1,9 @@
 # Belizas
+
 Belizas is a simple .NET library for truth table calculus.
 
-### Index
+## Index
+
 1. [Usage](#usage)
  1. [How to start](#how-to-start)
  2. [Properties of the TruthTable class](#properties-of-the-truthtable-class)
@@ -10,8 +12,10 @@ Belizas is a simple .NET library for truth table calculus.
 2. [To-do list](#to-do-list)
 3. [License](#license)
 
-### Usage
-##### How to start
+## Usage
+
+### How to start
+
 Just make an instance of TruthTable, pass the formula and calculate.
 ```c#
 var table = new TruthTable("a.b'+(a-c)'");
@@ -22,47 +26,102 @@ Or you can calculate automatically from the constructor:
 var table = new TruthTable("a.b", true);
 ```
 
-##### Properties of the TruthTable class
+### Properties of the TruthTable class
+
 There's a property for every operator (and the brackets).
-* `Char Not` *(get and set)*: The "not" operator. Defaults to `'`.
-* `Char And` *(get and set)*: The "and" operator. Defaults to `.`.
-* `Char Or` *(get and set)*: The "or" operator. Defaults to `+`.
-* `Char Xor` *(get and set)*: The "xor" operator. Defaults to `:`.
-* `Char IfThen` *(get and set)*: The "if-then" operator. Defaults to `>`.
-* `Char ThenIf` *(get and set)*: The "then-if" operator. Defaults to `<`.
-* `Char IfAndOnlyIf` *(get and set)*: The "if-and-only-if" operator. Defaults to `-`.
-* `Char OpeningBracket` *(get and set)*: The opening bracket. Defaults to `(`.
-* `Char ClosingBracket` *(get and set)*: The closing bracket. Defaults to `)`.
+
+* #### `Char` Not *(get and set)*
+ ###### Defaults to `'`
+ The character that represents the "not" operator.
+
+* #### `Char` And *(get and set)*
+ ###### Defaults to `.`
+ The character that represents the "and" operator.
+
+* #### `Char` Or *(get and set)*
+ ###### Defaults to `+`
+ The character that represents the "or" operator.
+
+* #### `Char` Xor *(get and set)*
+ ###### Defaults to `:`
+ The character that represents the "xor" operator.
+
+* #### `Char` IfThen *(get and set)*
+ ###### Defaults to `>`
+ The character that represents the "if then" operator.
+
+* #### `Char` ThenIf *(get and set)*
+ ###### Defaults to `<`
+ The character that represents the "then if" operator.
+
+* #### `Char` IfAndOnlyIf *(get and set)*
+ ###### Defaults to `-`
+ The character that represents the "if and only if" operator.
+
+* #### `Char` OpeningBracket *(get and set)*
+ ###### Defaults to `(`
+ The character that represents the opening bracket.
+
+* #### `Char` ClosingBracket *(get and set)*
+ ###### Defaults to `)`
+ The character that represents the closing bracket.
 
 You can change the values of the operators due to your necessities, e.g.:
+
 ```c#
 table.OpeningBracket = '[';
-table.ClosingBracket = Console.Read();
+table.ClosingBracket = '}';
 ```
 
 All the following properties are only set by the `Calculate` method, but `Formula`.
-* `String Formula` *(get and set)*: The formula that generated the table. Everytime it is set, the other properties are set as `null` and can only be updated when `Calculate` method is called.
-* `IList<Char> Arguments` *(get)*: The arguments of the table (only letters, e.g. "a").
-* `Boolean[,] ArgumentsValues` *(get)*: The binary values of the arguments.
-* `IList<String> Expressions` *(get)*: The expressions in order to be calculated (e.g. "a+b").
-* `IList<Boolean[]> ExpressionsValues` *(get)*: The binary values of the expressions.
+* #### `String` Formula *(get and set)*
+ The formula that generated the table. Everytime it is set, the other properties are set as `null` and can only be updated when `Calculate` method is called.
 
-##### Methods of the TruthTable class
+* #### `IList<Char>` Arguments *(get)*
+ The arguments of the table (only letters, e.g. "a").
+
+* #### `Boolean[,]` ArgumentsValues *(get)*
+ The binary values of the arguments.
+
+* #### `IList<String>` Expressions *(get)*
+ The expressions in order to be calculated (e.g. "a+b").
+
+* #### `IList<Boolean[]>` ExpressionsValues *(get)*
+ The binary values of the expressions.
+
+### Methods of the TruthTable class
+
 The methods will be explained and followed by their parameters.
-* `Boolean ValidateFormula`: Verifies if the formula is valid - if it is under all conditions to be a consistent truth table formula.
- * `String formula` *(optional)*: The formula to be validated. If not defined, validate the formula that rules the instance.
-* `static Boolean ValidateFormula`: Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.
- * `String formula`: The formula to be validated.
- * `IEnumerable<Char> characters` *(optional)*: The caracters that will represent the operators (same rules of the "characters" in the constructor).
-* `void Calculate`: Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. **Call this method after setting the formula!**
-* `IList<Char> EnumerateOperators`: Returns a list with all the operators.
+
+* #### `Boolean` ValidateFormula
+ Verifies if the formula is valid - if it is under all conditions to be a consistent truth table formula.
+ * __`String` formula__ *(optional)*
+  The formula to be validated. If not defined, it validates the formula that rules the instance.
+
+* #### `static Boolean` ValidateFormula
+ Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.
+ ##### Parameters:
+ * __`String` formula__
+  The formula to be validated.
+ * __`IEnumerable<Char>` characters__ *(optional)*
+  The caracters that will represent the operators (same rules of the "characters" in the constructor).
+
+* #### `void` Calculate
+ Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. __Call this method after setting the formula!__
+
+* #### `IList<Char>` EnumerateOperators
+ Returns a list with all the operators.
  * `Boolean includeNot` *(optional)*: If the "not" operator should be included in the list. Defaults to `true`.
  * `Boolean includeBrackets` *(optional)*: If the brackets should be included in the list. Defaults to `true`.
-* `Boolean IsAnOperator`: Verifies if the character passed is an operator.
+
+* #### `Boolean` IsAnOperator
+ Verifies if the character passed is an operator.
  * `Char character`: The character to be verified.
  * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
  * `Boolean includeBrackets` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
-* `String ToString`: Converts the table to a text.
+
+* #### `String` ToString
+ Converts the table to a text.
 
 The following method is under construction (in the branch "test").
 * `ToHtmlTable`: Converts the truth table to a HTML code.
@@ -83,7 +142,7 @@ Will return this:
 ...
 </table>
 ```
-If some tags will have attributes and others won't, I highly recommend you to use named parameters on it, but you can just pass `null` to some parameters. See below both ways:
+If some tags will have attributes and others won't, you can use named parameters or just pass `null` to some parameters. See below both ways:
 ```c#
 // Named parameters.
 table.ToHtmlTable(
@@ -103,7 +162,7 @@ Which results to this:
             <th>...</th>
         </tr>
         <tr class="cool">
-            <td var="curintia">...</td>
+            <td vai="curintia">...</td>
         </tr>
     </thead>
 </table>
@@ -127,14 +186,14 @@ attributes.Add("nhan", "deru");
 table.ToHtmlTable(attributes);
 ```
 
-##### Exceptions
+#### Exceptions
 * `InvalidFormulaException`: Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
 * `TableNotCalculatedException`: Thrown when a porperty is called before the table was calculated, i.e. before the `Calculate` method is called and the "calculate" parameter in constructor is not set as true.
 * `TooMuchArgumentsInTruthTableException`: When the arguments and its values pass the limit of the memory.
 * `TooMuchExpressionsInTruthTableException`: When the expressions and its values pass the limit of the memory.
 * `TooMuchInformationInTruthTableException`: When another thing in the table pass the limit of the memory.
 
-### To-do list
+## To-do list
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
 * Finish read me file.
@@ -142,5 +201,5 @@ table.ToHtmlTable(attributes);
 * TruthTable method to convert the table data to a CSV text.
 * Formula D.
 
-### License
+## License
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

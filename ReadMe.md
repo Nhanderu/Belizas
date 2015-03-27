@@ -21,6 +21,7 @@ Just make an instance of TruthTable, pass the formula and calculate.
 var table = new TruthTable("a.b'+(a-c)'");
 table.Calculate();
 ```
+
 Or you can calculate automatically from the constructor:
 ```c#
 var table = new TruthTable("a.b", true);
@@ -30,41 +31,41 @@ var table = new TruthTable("a.b", true);
 
 There's a property for every operator (and the brackets).
 
-* #### `Char` Not *(get and set)*
- ###### Defaults to `'`
- The character that represents the "not" operator.
+* __`Char` Not__ *(get and set)*  
+  The character that represents the "not" operator.  
+  Defaults to `'`.
 
-* #### `Char` And *(get and set)*
- ###### Defaults to `.`
- The character that represents the "and" operator.
+* __`Char` And__ *(get and set)*  
+  The character that represents the "and" operator.  
+  Defaults to `.`.
 
-* #### `Char` Or *(get and set)*
- ###### Defaults to `+`
- The character that represents the "or" operator.
+* __`Char` Or__ *(get and set)*  
+  The character that represents the "or" operator.  
+  Defaults to `+`.
 
-* #### `Char` Xor *(get and set)*
- ###### Defaults to `:`
- The character that represents the "xor" operator.
+* __`Char` Xor__ *(get and set)*  
+  The character that represents the "xor" operator.  
+  Defaults to `:`.
 
-* #### `Char` IfThen *(get and set)*
- ###### Defaults to `>`
- The character that represents the "if then" operator.
+* __`Char` IfThen__ *(get and set)*  
+  The character that represents the "if then" operator.  
+  Defaults to `>`.
 
-* #### `Char` ThenIf *(get and set)*
- ###### Defaults to `<`
- The character that represents the "then if" operator.
+* __`Char` ThenIf__ *(get and set)*  
+  The character that represents the "then if" operator.  
+  Defaults to `<`.
 
-* #### `Char` IfAndOnlyIf *(get and set)*
- ###### Defaults to `-`
- The character that represents the "if and only if" operator.
+* __`Char` IfAndOnlyIf__ *(get and set)*  
+  The character that represents the "if and only if" operator.  
+  Defaults to `-`.
 
-* #### `Char` OpeningBracket *(get and set)*
- ###### Defaults to `(`
- The character that represents the opening bracket.
+* __`Char` OpeningBracket__ *(get and set)*  
+  The character that represents the opening bracket.  
+  Defaults to `(`.
 
-* #### `Char` ClosingBracket *(get and set)*
- ###### Defaults to `)`
- The character that represents the closing bracket.
+* __`Char` ClosingBracket__ *(get and set)*  
+  The character that represents the closing bracket.  
+  Defaults to `)`.
 
 You can change the values of the operators due to your necessities, e.g.:
 
@@ -74,75 +75,102 @@ table.ClosingBracket = '}';
 ```
 
 All the following properties are only set by the `Calculate` method, but `Formula`.
-* #### `String` Formula *(get and set)*
- The formula that generated the table. Everytime it is set, the other properties are set as `null` and can only be updated when `Calculate` method is called.
 
-* #### `IList<Char>` Arguments *(get)*
- The arguments of the table (only letters, e.g. "a").
+* __`String` Formula__ *(get and set)*  
+  The formula that generated the table. Everytime it is set, the other properties are set as `null` and can only be updated when `Calculate` method is called.
 
-* #### `Boolean[,]` ArgumentsValues *(get)*
- The binary values of the arguments.
+* __`IList<Char>` Arguments__ *(get)*  
+  The arguments of the table (only letters, e.g. "a").
 
-* #### `IList<String>` Expressions *(get)*
- The expressions in order to be calculated (e.g. "a+b").
+* __`Boolean[,]` ArgumentsValues__ *(get)*  
+  The binary values of the arguments.
 
-* #### `IList<Boolean[]>` ExpressionsValues *(get)*
- The binary values of the expressions.
+* __`IList<String>` Expressions__ *(get)*  
+  The expressions in order to be calculated (e.g. "a+b").
+
+* __`IList<Boolean[]>` ExpressionsValues__ *(get)*  
+  The binary values of the expressions.
 
 ### Methods of the TruthTable class
 
 The methods will be explained and followed by their parameters.
 
-* #### `Boolean` ValidateFormula
- Verifies if the formula is valid - if it is under all conditions to be a consistent truth table formula.
- * __`String` formula__ *(optional)*
-  The formula to be validated. If not defined, it validates the formula that rules the instance.
+* __`Boolean` ValidateFormula__  
+  Verifies if the formula is valid - if it is under all conditions to be a consistent truth table formula.  
+  Parameters:
+  * __`String` formula__ *(optional)*  
+    The formula to be validated. If not defined, it validates the formula that rules the instance.
 
-* #### `static Boolean` ValidateFormula
- Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.
- ##### Parameters:
- * __`String` formula__
-  The formula to be validated.
- * __`IEnumerable<Char>` characters__ *(optional)*
-  The caracters that will represent the operators (same rules of the "characters" in the constructor).
+* __`static Boolean` ValidateFormula__  
+  Verifies if the formula is valid. A static version of the `ValidateFormula` above, to make a validation before making a instance.  
+  Parameters:
+  * __`String` formula__  
+    The formula to be validated.
+  * __`IEnumerable<Char>` characters__ *(optional)*  
+    The caracters that will represent the operators (same rules of the "characters" in the constructor).
 
-* #### `void` Calculate
- Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. __Call this method after setting the formula!__
+* __`void` Calculate__  
+  Necessary to calculate the values of the arguments and the expressions. The `Arguments`, `ArgumentsValues`, `Expressions` and `ExpressionsValues` properties are only populated after this method is called. __Call this method after setting the formula!__
 
-* #### `IList<Char>` EnumerateOperators
- Returns a list with all the operators.
- * `Boolean includeNot` *(optional)*: If the "not" operator should be included in the list. Defaults to `true`.
- * `Boolean includeBrackets` *(optional)*: If the brackets should be included in the list. Defaults to `true`.
+* __`IList<Char>` EnumerateOperators__  
+  Returns a list with all the operators.  
+  Parameters:
+  * `Boolean` includeNot *(optional)*  
+    If the "not" operator should be included in the list.  
+    Defaults to `true`.
+  * `Boolean` includeBrackets *(optional)*  
+    If the brackets should be included in the list.  
+    Defaults to `true`.
 
-* #### `Boolean` IsAnOperator
- Verifies if the character passed is an operator.
- * `Char character`: The character to be verified.
- * `Boolean includeNot` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
- * `Boolean includeBrackets` *(optional)*: If the "not" operator should be counted in the verification. Defaults to `true`.
+* __`Boolean` IsAnOperator__  
+  Verifies if the character passed is an operator.  
+  Parameters:
+  * `Char` character *(optional)*  
+    The character to be verified.
+  * `Boolean` includeNot *(optional)*  
+    If the "not" operator should be counted in the verification.  
+    Defaults to `true`.
+  * `Boolean` includeBrackets *(optional)*  
+    If the "not" operator should be counted in the verification.  
+    Defaults to `true`.
 
-* #### `String` ToString
- Converts the table to a text.
+* __`String` ToString__  
+  Converts the table to a text. 
 
 The following method is under construction (in the branch "test").
-* `ToHtmlTable`: Converts the truth table to a HTML code.
- * `Object tableAttributes` *(optional)*: The attributes of the tag "table".
- * `Object theadAttributes` *(optional)*: The attributes of the tag "thead".
- * `Object tbodyAttributes` *(optional)*: The attributes of the tag "tbody".
- * `Object trAttributes` *(optional)*: The attributes of the tag "tr".
- * `Object thAttributes` *(optional)*: The attributes of the tag "th".
- * `Object tdAttributes` *(optional)*: The attributes of the tag "td".
+
+* __ToHtmlTable__  
+  Converts the truth table to a HTML code.  
+  Parameters:
+  * `Object` tableAttributes *(optional)*  
+    The attributes of the tag `<table>`.
+  * `Object` theadAttributes *(optional)*  
+    The attributes of the tag `<thead>`.
+  * `Object` tbodyAttributes *(optional)*  
+    The attributes of the tag `<tbody>`.
+  * `Object` trAttributes *(optional)*  
+    The attributes of the tag `<tr>`.
+  * `Object` thAttributes *(optional)*  
+    The attributes of the tag `<th>`.
+  * `Object` tdAttributes *(optional)*  
+    The attributes of the tag `<td>`.
 
 The usage of the parameters is exactly the same as in the ASP.NET HTML helpers. For example, something like this:
+
 ```c#
 table.ToHtmlTable(new { foo = "bar", nhan = "deru" });
 ```
+
 Will return this:
+
 ```html
 <table foo="bar" nhan="deru">
 ...
 </table>
 ```
+
 If some tags will have attributes and others won't, you can use named parameters or just pass `null` to some parameters. See below both ways:
+
 ```c#
 // Named parameters.
 table.ToHtmlTable(
@@ -154,7 +182,9 @@ table.ToHtmlTable(
 // Null parameters.
 table.ToHtmlTable(new { note_the_underline = "now-it-is-a-hyphen" }, null, null, new { @class ="cool" }, null, new { vai = "curintia" });
 ```
+
 Which results to this:
+
 ```html
 <table note-the-underline="now-it-is-a-hyphen">
     <thead>
@@ -169,13 +199,22 @@ Which results to this:
 ```
 
 Or, besides the example above, you can use this overload:
-* `ToHtmlTable`: Converts the truth table to a HTML code.
- * `IDictionary<String, Object> tableAttributes` *(optional)*: The attributes of the tag "table".
- * `IDictionary<String, Object> theadAttributes` *(optional)*: The attributes of the tag "thead".
- * `IDictionary<String, Object> tbodyAttributes` *(optional)*: The attributes of the tag "tbody".
- * `IDictionary<String, Object> trAttributes` *(optional)*: The attributes of the tag "tr".
- * `IDictionary<String, Object> thAttributes` *(optional)*: The attributes of the tag "th".
- * `IDictionary<String, Object> tdAttributes` *(optional)*: The attributes of the tag "td".
+
+* __ToHtmlTable__  
+  Converts the truth table to a HTML code.  
+  Parameters:
+  * `IDictionary<String, Object>` tableAttributes *(optional)*  
+    The attributes of the tag "table".
+  * `IDictionary<String, Object>` theadAttributes *(optional)*  
+    The attributes of the tag "thead".
+  * `IDictionary<String, Object>` tbodyAttributes *(optional)*  
+    The attributes of the tag "tbody".
+  * `IDictionary<String, Object>` trAttributes *(optional)*  
+    The attributes of the tag "tr".
+  * `IDictionary<String, Object>` thAttributes *(optional)*  
+    The attributes of the tag "th".
+  * `IDictionary<String, Object>` tdAttributes *(optional)*  
+    The attributes of the tag "td".
 
 In practice:
 ```c#
@@ -187,11 +226,16 @@ table.ToHtmlTable(attributes);
 ```
 
 #### Exceptions
-* `InvalidFormulaException`: Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
-* `TableNotCalculatedException`: Thrown when a porperty is called before the table was calculated, i.e. before the `Calculate` method is called and the "calculate" parameter in constructor is not set as true.
-* `TooMuchArgumentsInTruthTableException`: When the arguments and its values pass the limit of the memory.
-* `TooMuchExpressionsInTruthTableException`: When the expressions and its values pass the limit of the memory.
-* `TooMuchInformationInTruthTableException`: When another thing in the table pass the limit of the memory.
+* __InvalidFormulaException__  
+  Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
+* __TableNotCalculatedException__  
+  Thrown when a porperty is called before the table was calculated, i.e. before the `Calculate` method is called and the "calculate" parameter in constructor is not set as true.
+* __TooMuchArgumentsInTruthTableException__  
+  When the arguments and its values pass the limit of the memory.
+* __TooMuchExpressionsInTruthTableException__  
+  When the expressions and its values pass the limit of the memory.
+* __TooMuchInformationInTruthTableException__  
+  When another thing in the table pass the limit of the memory.
 
 ## To-do list
 * Add comments and XML docs in all code.

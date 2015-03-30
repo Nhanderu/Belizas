@@ -115,22 +115,22 @@ The methods will be explained and followed by their parameters.
 * __`IList<Char>` EnumerateOperators__  
   Returns a list with all the operators.  
   Parameters:
-  * `Boolean` includeNot *(optional)*  
+  * __`Boolean` includeNot__ *(optional)*  
     If the "not" operator should be included in the list.  
     Defaults to `true`.
-  * `Boolean` includeBrackets *(optional)*  
+  * __`Boolean` includeBrackets__ *(optional)*  
     If the brackets should be included in the list.  
     Defaults to `true`.
 
 * __`Boolean` IsAnOperator__  
   Verifies if the character passed is an operator.  
   Parameters:
-  * `Char` character *(optional)*  
+  * __`Char` character__  
     The character to be verified.
-  * `Boolean` includeNot *(optional)*  
+  * __`Boolean` includeNot__ *(optional)*  
     If the "not" operator should be counted in the verification.  
     Defaults to `true`.
-  * `Boolean` includeBrackets *(optional)*  
+  * __`Boolean` includeBrackets__ *(optional)*  
     If the "not" operator should be counted in the verification.  
     Defaults to `true`.
 
@@ -142,17 +142,17 @@ The following method is under construction (in the branch "test").
 * __ToHtmlTable__  
   Converts the truth table to a HTML code.  
   Parameters:
-  * `Object` tableAttributes *(optional)*  
+  * __`Object` tableAttributes__ *(optional)*  
     The attributes of the tag `<table>`.
-  * `Object` theadAttributes *(optional)*  
+  * __`Object` theadAttributes__ *(optional)*  
     The attributes of the tag `<thead>`.
-  * `Object` tbodyAttributes *(optional)*  
+  * __`Object` tbodyAttributes__ *(optional)*  
     The attributes of the tag `<tbody>`.
-  * `Object` trAttributes *(optional)*  
+  * __`Object` trAttributes__ *(optional)*  
     The attributes of the tag `<tr>`.
-  * `Object` thAttributes *(optional)*  
+  * __`Object` thAttributes__ *(optional)*  
     The attributes of the tag `<th>`.
-  * `Object` tdAttributes *(optional)*  
+  * __`Object` tdAttributes__ *(optional)*  
     The attributes of the tag `<td>`.
 
 The usage of the parameters is exactly the same as in the ASP.NET HTML helpers. For example, something like this:
@@ -203,17 +203,17 @@ Or, besides the example above, you can use this overload:
 * __ToHtmlTable__  
   Converts the truth table to a HTML code.  
   Parameters:
-  * `IDictionary<String, Object>` tableAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tableAttributes__ *(optional)*  
     The attributes of the tag "table".
-  * `IDictionary<String, Object>` theadAttributes *(optional)*  
+  * __`IDictionary<String, Object>` theadAttributes__ *(optional)*  
     The attributes of the tag "thead".
-  * `IDictionary<String, Object>` tbodyAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tbodyAttributes__ *(optional)*  
     The attributes of the tag "tbody".
-  * `IDictionary<String, Object>` trAttributes *(optional)*  
+  * __`IDictionary<String, Object>` trAttributes__ *(optional)*  
     The attributes of the tag "tr".
-  * `IDictionary<String, Object>` thAttributes *(optional)*  
+  * __`IDictionary<String, Object>` thAttributes__ *(optional)*  
     The attributes of the tag "th".
-  * `IDictionary<String, Object>` tdAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tdAttributes__ *(optional)*  
     The attributes of the tag "td".
 
 In practice:

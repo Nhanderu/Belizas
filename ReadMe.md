@@ -67,11 +67,22 @@ There's a property for every operator (and the brackets).
   The character that represents the closing bracket.  
   Defaults to `)`.
 
-You can change the values of the operators due to your necessities, e.g.:
+You can change the values of the operators due to your necessities, for example:
 
 ```c#
 table.OpeningBracket = '[';
 table.ClosingBracket = '}';
+```
+
+After setting an operator, the old character(s) will need to be removed from the formula, otherwise it'll be considered invalid. See the situation below:
+
+```c#
+table.ValidateFormula("a+b.c"); //true
+
+table.And = '$';
+table.Or = '%';
+
+table.ValidateFormula("a+b.c"); //false
 ```
 
 All the following properties are only set by the `Calculate` method, but `Formula`.
@@ -240,7 +251,6 @@ table.ToHtmlTable(attributes);
 ## To-do list
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
-* Finish read me file.
 * TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
 * TruthTable method to convert the table data to a CSV text.
 * Formula D.

@@ -237,6 +237,7 @@ table.ToHtmlTable(attributes);
 ```
 
 #### Exceptions
+
 * __InvalidFormulaException__  
   Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
 * __TableNotCalculatedException__  
@@ -249,6 +250,7 @@ table.ToHtmlTable(attributes);
   When another thing in the table pass the limit of the memory.
 
 ## To-do list
+
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
 * TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
@@ -256,4 +258,5 @@ table.ToHtmlTable(attributes);
 * Formula D.
 
 ## License
+
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

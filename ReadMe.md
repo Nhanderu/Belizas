@@ -2,7 +2,7 @@
 
 Belizas is a simple .NET library for truth table calculus.
 
-## Index
+### Index
 
 1. [Usage](#usage)
  1. [How to start](#how-to-start)
@@ -12,9 +12,9 @@ Belizas is a simple .NET library for truth table calculus.
 2. [To-do list](#to-do-list)
 3. [License](#license)
 
-## Usage
+### Usage
 
-### How to start
+#### How to start
 
 Just make an instance of TruthTable, pass the formula and calculate.
 ```c#
@@ -27,7 +27,7 @@ Or you can calculate automatically from the constructor:
 var table = new TruthTable("a.b", true);
 ```
 
-### Properties of the TruthTable class
+#### Properties of the TruthTable class
 
 There's a property for every operator (and the brackets).
 
@@ -102,7 +102,7 @@ All the following properties are only set by the `Calculate` method, but `Formul
 * __`IList<Boolean[]>` ExpressionsValues__ *(get)*  
   The binary values of the expressions.
 
-### Methods of the TruthTable class
+#### Methods of the TruthTable class
 
 The methods will be explained and followed by their parameters.
 
@@ -249,7 +249,7 @@ table.ToHtmlTable(attributes);
 * __TooMuchInformationInTruthTableException__  
   When another thing in the table pass the limit of the memory.
 
-## To-do list
+### To-do list
 
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
@@ -257,6 +257,6 @@ table.ToHtmlTable(attributes);
 * TruthTable method to convert the table data to a CSV text.
 * Formula D.
 
-## License
+### License
 
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

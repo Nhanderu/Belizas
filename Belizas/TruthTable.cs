@@ -580,10 +580,11 @@ namespace Nhanderu.Belizas
             if (tdAttributes != null) td.MergeAttributes(tdAttributes);
 
             // Iterates through the arguments and the expressions, sets a <th> and adds it in the <tr>.
+            tr.InnerHtml = "\n";
             foreach (Char argument in Arguments)
             {
                 th.SetInnerText(argument.ToString());
-                tr.InnerHtml += th.ToString();
+                tr.InnerHtml += th.ToString() + "\n";
             }
             foreach (String expression in Expressions)
             {
@@ -592,7 +593,7 @@ namespace Nhanderu.Belizas
             }
 
             // Adds the <tr> in the <thead>.
-            thead.InnerHtml = tr.ToString();
+            thead.InnerHtml = "\n" + tr.ToString() + "\n";
 
             // Gets the table values (i.e. everything but the arguments and the expressions) as some Strings, one for line.
             String[] tableValues = ToString().Split('\n');
@@ -601,18 +602,20 @@ namespace Nhanderu.Belizas
                 tableValues[index] = tableValues[index].Replace(" ", "");
 
             // Iterates through the table values, sets a <td> and adds it in the <tr>. When a <tr> is done, adds it in the <tbody>.
+            tbody.InnerHtml = "\n";
             for (Int32 index = 1; index < tableValues.Length; index++)
             {
+                tr.InnerHtml = "\n";
                 foreach (Char item in tableValues[index])
                 {
                     td.SetInnerText(item.ToString());
-                    tr.InnerHtml += td.ToString();
+                    tr.InnerHtml += td.ToString() + "\n";
                 }
-                tbody.InnerHtml += tr.ToString();
+                tbody.InnerHtml += "\n" + tr.ToString() + "\n";
             }
 
             // Puts the <thead> and the <tbody> in the <table>.
-            table.InnerHtml = thead.ToString() + tbody.ToString();
+            table.InnerHtml = "\n" + thead.ToString() + "\n\n" + tbody.ToString() + "\n";
 
             return table.ToString();
         }

@@ -287,9 +287,7 @@ table.ToHtmlTable(attributes);
 ### To-do list
 
 * Add comments and XML docs in all code.
-* Make unit tests for every method.
-* TruthTable method to convert the table data to a CSV text.
-* Formula D.
+* Add a CSV file writer method.
 
 ### License
 

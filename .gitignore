@@ -23,9 +23,6 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
-<<<<<<< HEAD
-#NUNIT
-=======
 # NUNIT
 >>>>>>> origin/test
 *.VisualState.xml
@@ -83,24 +80,11 @@ $tf/
 # Guidance Automation Toolkit
 *.gpState
 
-<<<<<<< HEAD
-# ReSharper is a .NET coding add-in
-=======
 # ReSharper
->>>>>>> origin/test
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-<<<<<<< HEAD
-# JustCode is a .NET coding addin-in
-.JustCode
-
-# TeamCity is a build add-in
-_TeamCity*
-
-# DotCover is a Code Coverage Tool
-=======
 # JustCode
 .JustCode
 
@@ -108,7 +92,6 @@ _TeamCity*
 _TeamCity*
 
 # DotCover
->>>>>>> origin/test
 *.dotCover
 
 # NCrunch
@@ -125,11 +108,7 @@ AutoTest.Net/
 # Installshield output folder
 [Ee]xpress/
 
-<<<<<<< HEAD
-# DocProject is a documentation generator add-in
-=======
 # DocProject
->>>>>>> origin/test
 DocProject/buildhelp/
 DocProject/Help/*.HxT
 DocProject/Help/*.HxC

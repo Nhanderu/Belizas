@@ -634,6 +634,10 @@ namespace Nhanderu.Belizas
             return table.ToString();
         }
 
+        /// <summary>
+        /// Generates a CSV (comma separated values) data that represents the truth table.
+        /// </summary>
+        /// <returns>The values of the table separated by a comma.</returns>
         public String ToCsvData()
         {
             StringBuilder csv = new StringBuilder();

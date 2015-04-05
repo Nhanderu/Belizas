@@ -630,13 +630,31 @@ namespace Nhanderu.Belizas
             }
             catch (OutOfMemoryException) { throw new TooMuchArgumentsInTruthTableException(Arguments.Count); }
 
+            // Every line is a binary representation of the number of the line.
+            // Line 0: 0 0 0;
+            // Line 1: 0 0 1;
+            // Line 2: 0 1 0;
+            // Line 3: 0 1 1;
+            // Line 4: 1 0 0;
+            // Line 5: 1 0 1;
+            // Line 6: 1 1 0;
+            // Line 7: 1 1 1;
 
+            // The quantity of values an argument has is always 2 power the quantity of values.
+            // Iterates through the lines and the columns of the table and sets the values.
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
+                // Sets another variable with the value of the line for calculation.
                 Int32 calculableLine = line;
                 for (Int32 column = 0; column < Arguments.Count; column++)
                 {
+                    // line >= 2^(args - col)
+                    // (args - col): the number of the column from right to left.
+                    // 2^x: 2 power column, for the value of every 1 (true) in binary.
+                    // line >= x: if line is bigger than the value of the binary field, it is set as 1 (true).
                     ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (Arguments.Count - 1) - column);
+
+                    // Subtract the value of the binary field from the line if it was set as true, exactly in binary calculation.
                     if (ArgumentsValues[line, column])
                         calculableLine -= (Int32)Math.Pow(2, (Arguments.Count - 1) - column);
                 }

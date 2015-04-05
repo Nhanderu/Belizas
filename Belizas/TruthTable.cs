@@ -353,7 +353,7 @@ namespace Nhanderu.Belizas
 
             return true;
         }
-        
+
         /// <summary>
         /// Verifies the formula, if it is under all the conditions to be a consistent truth table formula. 
         /// </summary>
@@ -632,6 +632,37 @@ namespace Nhanderu.Belizas
             table.InnerHtml = thead.ToString() + tbody.ToString();
 
             return table.ToString();
+        }
+
+        public String ToCsvData()
+        {
+            StringBuilder csv = new StringBuilder();
+
+            // Iterates through the arguments and the expressions to make the first line.
+            foreach (Char item in Arguments)
+                TryAppend(csv, item.ToString() + ",");
+            for (Int32 index = 0; index < Expressions.Count; index++)
+                // If it is the last value of the line, append a new line instead of a comma.
+                if (index != Expressions.Count - 1)
+                    TryAppend(csv, Expressions[index] + ",");
+                else
+                    TryAppend(csv, Expressions[index] + "\n");
+
+            // Iterates through the table values.
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+                for (Int32 column = 0; column < Arguments.Count + Expressions.Count; column++)
+                    if (column < Arguments.Count)
+                        TryAppend(csv, Convert.ToInt32(ArgumentsValues[line, column]).ToString() + ",");
+                    else
+                    {
+                        // If it is the last value of the line, append a new line instead of a comma.
+                        if (column != Arguments.Count + Expressions.Count - 1)
+                            TryAppend(csv, Convert.ToInt32(ExpressionsValues[column - Arguments.Count]).ToString() + ",");
+                        else
+                            TryAppend(csv, Convert.ToInt32(ExpressionsValues[column - Arguments.Count]).ToString() + "\n");
+                    }
+
+            return csv.ToString();
         }
 
         #region Private helper methods

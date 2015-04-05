@@ -3,10 +3,14 @@
 Belizas is a simple .NET library for truth table calculus.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Index
 =======
 ### Index
 >>>>>>> origin/test
+=======
+### Index
+>>>>>>> 77169cd54cc1d2634357a3f7a66410e94a53ff7c
 
 1. [Usage](#usage)
  1. [How to start](#how-to-start)
@@ -17,6 +21,7 @@ Belizas is a simple .NET library for truth table calculus.
 3. [License](#license)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## Usage
 
 ### How to start
@@ -25,6 +30,11 @@ Belizas is a simple .NET library for truth table calculus.
 
 #### How to start
 >>>>>>> origin/test
+=======
+### Usage
+
+#### How to start
+>>>>>>> 77169cd54cc1d2634357a3f7a66410e94a53ff7c
 
 Just make an instance of TruthTable, pass the formula and calculate.
 ```c#
@@ -38,10 +48,14 @@ var table = new TruthTable("a.b", true);
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### Properties of the TruthTable class
 =======
 #### Properties of the TruthTable class
 >>>>>>> origin/test
+=======
+#### Properties of the TruthTable class
+>>>>>>> 77169cd54cc1d2634357a3f7a66410e94a53ff7c
 
 There's a property for every operator (and the brackets).
 
@@ -82,15 +96,30 @@ There's a property for every operator (and the brackets).
   Defaults to `)`.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 You can change the values of the operators due to your necessities, e.g.:
 =======
 You can change the values of the operators due to your necessities, for example:
 >>>>>>> origin/test
+=======
+You can change the values of the operators due to your necessities, for example:
+>>>>>>> 77169cd54cc1d2634357a3f7a66410e94a53ff7c
 
 ```c#
 table.OpeningBracket = '[';
 table.ClosingBracket = '}';
 <<<<<<< HEAD
+```
+
+After setting an operator, the old character(s) will need to be removed from the formula, otherwise it'll be considered invalid. See the situation below:
+
+```c#
+table.ValidateFormula("a+b.c"); //true
+
+table.And = '$';
+table.Or = '%';
+
+table.ValidateFormula("a+b.c"); //false
 ```
 
 All the following properties are only set by the `Calculate` method, but `Formula`.
@@ -110,7 +139,7 @@ All the following properties are only set by the `Calculate` method, but `Formul
 * __`IList<Boolean[]>` ExpressionsValues__ *(get)*  
   The binary values of the expressions.
 
-### Methods of the TruthTable class
+#### Methods of the TruthTable class
 
 The methods will be explained and followed by their parameters.
 
@@ -134,44 +163,42 @@ The methods will be explained and followed by their parameters.
 * __`IList<Char>` EnumerateOperators__  
   Returns a list with all the operators.  
   Parameters:
-  * `Boolean` includeNot *(optional)*  
+  * __`Boolean` includeNot__ *(optional)*  
     If the "not" operator should be included in the list.  
     Defaults to `true`.
-  * `Boolean` includeBrackets *(optional)*  
+  * __`Boolean` includeBrackets__ *(optional)*  
     If the brackets should be included in the list.  
     Defaults to `true`.
 
 * __`Boolean` IsAnOperator__  
   Verifies if the character passed is an operator.  
   Parameters:
-  * `Char` character *(optional)*  
+  * __`Char` character__  
     The character to be verified.
-  * `Boolean` includeNot *(optional)*  
+  * __`Boolean` includeNot__ *(optional)*  
     If the "not" operator should be counted in the verification.  
     Defaults to `true`.
-  * `Boolean` includeBrackets *(optional)*  
+  * __`Boolean` includeBrackets__ *(optional)*  
     If the "not" operator should be counted in the verification.  
     Defaults to `true`.
 
 * __`String` ToString__  
   Converts the table to a text. 
 
-The following method is under construction (in the branch "test").
-
-* __ToHtmlTable__  
+* __`String` ToHtmlTable__  
   Converts the truth table to a HTML code.  
   Parameters:
-  * `Object` tableAttributes *(optional)*  
+  * __`Object` tableAttributes__ *(optional)*  
     The attributes of the tag `<table>`.
-  * `Object` theadAttributes *(optional)*  
+  * __`Object` theadAttributes__ *(optional)*  
     The attributes of the tag `<thead>`.
-  * `Object` tbodyAttributes *(optional)*  
+  * __`Object` tbodyAttributes__ *(optional)*  
     The attributes of the tag `<tbody>`.
-  * `Object` trAttributes *(optional)*  
+  * __`Object` trAttributes__ *(optional)*  
     The attributes of the tag `<tr>`.
-  * `Object` thAttributes *(optional)*  
+  * __`Object` thAttributes__ *(optional)*  
     The attributes of the tag `<th>`.
-  * `Object` tdAttributes *(optional)*  
+  * __`Object` tdAttributes__ *(optional)*  
     The attributes of the tag `<td>`.
 
 The usage of the parameters is exactly the same as in the ASP.NET HTML helpers. For example, something like this:
@@ -219,20 +246,20 @@ Which results to this:
 
 Or, besides the example above, you can use this overload:
 
-* __ToHtmlTable__  
+* __`String` ToHtmlTable__  
   Converts the truth table to a HTML code.  
   Parameters:
-  * `IDictionary<String, Object>` tableAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tableAttributes__ *(optional)*  
     The attributes of the tag "table".
-  * `IDictionary<String, Object>` theadAttributes *(optional)*  
+  * __`IDictionary<String, Object>` theadAttributes__ *(optional)*  
     The attributes of the tag "thead".
-  * `IDictionary<String, Object>` tbodyAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tbodyAttributes__ *(optional)*  
     The attributes of the tag "tbody".
-  * `IDictionary<String, Object>` trAttributes *(optional)*  
+  * __`IDictionary<String, Object>` trAttributes__ *(optional)*  
     The attributes of the tag "tr".
-  * `IDictionary<String, Object>` thAttributes *(optional)*  
+  * __`IDictionary<String, Object>` thAttributes__ *(optional)*  
     The attributes of the tag "th".
-  * `IDictionary<String, Object>` tdAttributes *(optional)*  
+  * __`IDictionary<String, Object>` tdAttributes__ *(optional)*  
     The attributes of the tag "td".
 
 In practice:
@@ -245,6 +272,7 @@ table.ToHtmlTable(attributes);
 ```
 
 #### Exceptions
+
 * __InvalidFormulaException__  
   Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
 * __TableNotCalculatedException__  
@@ -256,15 +284,15 @@ table.ToHtmlTable(attributes);
 * __TooMuchInformationInTruthTableException__  
   When another thing in the table pass the limit of the memory.
 
-## To-do list
+### To-do list
+
 * Add comments and XML docs in all code.
 * Make unit tests for every method.
-* Finish read me file.
-* TruthTable method to convert the table data to a HTML table (in construcion in "test" branch).
 * TruthTable method to convert the table data to a CSV text.
 * Formula D.
 
-## License
+### License
+
 This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.
 =======
 ```

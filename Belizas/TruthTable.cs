@@ -1,7 +1,9 @@
 using Nhanderu.Belizas.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Web.Mvc;
 
 namespace Nhanderu.Belizas
 {
@@ -24,7 +26,7 @@ namespace Nhanderu.Belizas
 
         #region Operators
         /// <summary>
-        /// Gets and sets the character that represents the operator "not".
+        /// Gets and sets the character that represents the "not" operator.
         /// </summary>
         public Char Not
         {
@@ -37,7 +39,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "and".
+        /// Gets and sets the character that represents the "and" operator.
         /// </summary>
         public Char And
         {
@@ -50,7 +52,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "or".
+        /// Gets and sets the character that represents the "or" operator.
         /// </summary>
         public Char Or
         {
@@ -63,7 +65,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "xor".
+        /// Gets and sets the character that represents the "xor" operator.
         /// </summary>
         public Char Xor
         {
@@ -76,7 +78,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "if then".
+        /// Gets and sets the character that represents the "if then" operator.
         /// </summary>
         public Char IfThen
         {
@@ -89,7 +91,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "then if".
+        /// Gets and sets the character that represents the "then if" operator.
         /// </summary>
         public Char ThenIf
         {
@@ -102,7 +104,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "if and only if".
+        /// Gets and sets the character that represents the "if and only if" operator.
         /// </summary>
         public Char IfAndOnlyIf
         {
@@ -294,7 +296,11 @@ namespace Nhanderu.Belizas
                     return false;
             }
 
-            // Iterates through the sentence to verify the sequence of characters.
+            // If the sentence has one char only, verify if it is an argument.
+            if (sentence.Length == 1)
+                return Char.IsLetter(sentence[0]);
+
+            // If the sentence has more than one char, iterates through it to verify the sequence of characters.
             for (Int32 index = 0; index < sentence.Length; index++)
                 if (index == 0)
                 {
@@ -475,10 +481,193 @@ namespace Nhanderu.Belizas
                             TryAppend(table, " ");
                     }
 
-                TryAppend(table, "\n");
+                // Adds another line, unless it is the last one.
+                if (line != Math.Pow(2, Arguments.Count) - 1)
+                    TryAppend(table, "\n");
             }
 
             return table.ToString();
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable()
+        {
+            return ToHtmlTable(null, null, null, null, null, null);
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <param name="tableAttributes">The attributes of the "table" tag.</param>
+        /// <param name="theadAttributes">The attributes of the "thead" tag.</param>
+        /// <param name="tbodyAttributes">The attributes of the "tbody" tag.</param>
+        /// <param name="trAttributes">The attributes of the "tr" tag.</param>
+        /// <param name="thAttributes">The attributes of the "th" tag.</param>
+        /// <param name="tdAttributes">The attributes of the "td" tag.</param>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable
+        (
+            Object tableAttributes = null,
+            Object theadAttributes = null,
+            Object tbodyAttributes = null,
+            Object trAttributes = null,
+            Object thAttributes = null,
+            Object tdAttributes = null
+        )
+        {
+            IDictionary<String, Object> tableAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> theadAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> tbodyAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> trAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> thAttributesDictionary = new Dictionary<String, Object>();
+            IDictionary<String, Object> tdAttributesDictionary = new Dictionary<String, Object>();
+
+            //Converts the properties in a object to the values in a dictionary, iterating through them.
+            if (tableAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tableAttributes))
+                    tableAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tableAttributes));
+            else tableAttributesDictionary = null;
+
+            if (theadAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(theadAttributes))
+                    theadAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(theadAttributes));
+            else theadAttributesDictionary = null;
+
+            if (tbodyAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tbodyAttributes))
+                    tbodyAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tbodyAttributes));
+            else tbodyAttributesDictionary = null;
+
+            if (trAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(trAttributes))
+                    trAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(trAttributes));
+            else trAttributesDictionary = null;
+
+            if (thAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(thAttributes))
+                    thAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(thAttributes));
+            else thAttributesDictionary = null;
+
+            if (tdAttributes != null)
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(tdAttributes))
+                    tdAttributesDictionary.Add(property.Name.Replace('_', '-'), property.GetValue(tdAttributes));
+            else tdAttributesDictionary = null;
+
+            // Returns the table.
+            return ToHtmlTable(tableAttributesDictionary, theadAttributesDictionary, tbodyAttributesDictionary, trAttributesDictionary, thAttributesDictionary, tdAttributesDictionary);
+        }
+
+        /// <summary>
+        /// Generates a HTML code with a "table" tag that represents the truth table.
+        /// </summary>
+        /// <param name="tableAttributes">The attributes of the "table" tag.</param>
+        /// <param name="theadAttributes">The attributes of the "thead" tag.</param>
+        /// <param name="tbodyAttributes">The attributes of the "tbody" tag.</param>
+        /// <param name="trAttributes">The attributes of the "tr" tag.</param>
+        /// <param name="thAttributes">The attributes of the "th" tag.</param>
+        /// <param name="tdAttributes">The attributes of the "td" tag.</param>
+        /// <returns>The truth table in a "table" HTML tag.</returns>
+        public String ToHtmlTable
+        (
+            IDictionary<String, Object> tableAttributes = null,
+            IDictionary<String, Object> theadAttributes = null,
+            IDictionary<String, Object> tbodyAttributes = null,
+            IDictionary<String, Object> trAttributes = null,
+            IDictionary<String, Object> thAttributes = null,
+            IDictionary<String, Object> tdAttributes = null
+        )
+        {
+            // Creates the <table>, the <thead>, the <tbody>, the <th>, the <tr> and the <td>.
+            TagBuilder table = new TagBuilder("table");
+            TagBuilder thead = new TagBuilder("thead");
+            TagBuilder tbody = new TagBuilder("tbody");
+            TagBuilder tr = new TagBuilder("tr");
+            TagBuilder th = new TagBuilder("th");
+            TagBuilder td = new TagBuilder("td");
+
+            // Sets the attributes.
+            if (tableAttributes != null) table.MergeAttributes(tableAttributes);
+            if (theadAttributes != null) thead.MergeAttributes(theadAttributes);
+            if (tbodyAttributes != null) tbody.MergeAttributes(tbodyAttributes);
+            if (trAttributes != null) tr.MergeAttributes(trAttributes);
+            if (thAttributes != null) th.MergeAttributes(thAttributes);
+            if (tdAttributes != null) td.MergeAttributes(tdAttributes);
+
+            // Iterates through the arguments and the expressions, sets a <th> and adds it in the <tr>.
+            foreach (Char argument in Arguments)
+            {
+                th.SetInnerText(argument.ToString());
+                tr.InnerHtml += th.ToString();
+            }
+            foreach (String expression in Expressions)
+            {
+                th.SetInnerText(expression.ToString());
+                tr.InnerHtml += th.ToString();
+            }
+
+            // Adds the <tr> in the <thead>.
+            thead.InnerHtml = tr.ToString();
+
+            // Gets the table values (i.e. everything but the arguments and the expressions) as some Strings, one for line.
+            String[] tableValues = ToString().Split('\n');
+
+            for (Int32 index = 1; index < tableValues.Length; index++)
+                tableValues[index] = tableValues[index].Replace(" ", "");
+
+            // Iterates through the table values, sets a <td> and adds it in the <tr>. When a <tr> is done, adds it in the <tbody>.
+            for (Int32 index = 1; index < tableValues.Length; index++)
+            {
+                tr.InnerHtml = "";
+                foreach (Char item in tableValues[index])
+                {
+                    td.SetInnerText(item.ToString());
+                    tr.InnerHtml += td.ToString();
+                }
+                tbody.InnerHtml += tr.ToString();
+            }
+
+            // Puts the <thead> and the <tbody> in the <table>.
+            table.InnerHtml = thead.ToString() + tbody.ToString();
+
+            return table.ToString();
+        }
+
+        /// <summary>
+        /// Generates a CSV (comma separated values) data that represents the truth table.
+        /// </summary>
+        /// <returns>The values of the table separated by a comma.</returns>
+        public String ToCsvData()
+        {
+            StringBuilder csv = new StringBuilder();
+
+            // Iterates through the arguments and the expressions to make the first line.
+            foreach (Char item in Arguments)
+                TryAppend(csv, item.ToString() + ",");
+            for (Int32 index = 0; index < Expressions.Count; index++)
+                // If it is the last value of the line, append a new line instead of a comma.
+                if (index != Expressions.Count - 1)
+                    TryAppend(csv, Expressions[index] + ",");
+                else
+                    TryAppend(csv, Expressions[index] + "\n");
+
+            // Iterates through the table values.
+            for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
+                for (Int32 column = 0; column < Arguments.Count + Expressions.Count; column++)
+                    if (column < Arguments.Count)
+                        TryAppend(csv, Convert.ToInt32(ArgumentsValues[line, column]).ToString() + ",");
+                    else
+                    {
+                        // If it is the last value of the line, append a new line instead of a comma.
+                        if (column != Arguments.Count + Expressions.Count - 1)
+                            TryAppend(csv, Convert.ToInt32(ExpressionsValues[column - Arguments.Count]).ToString() + ",");
+                        else
+                            TryAppend(csv, Convert.ToInt32(ExpressionsValues[column - Arguments.Count]).ToString() + "\n");
+                    }
+
+            return csv.ToString();
         }
 
         #region Private helper methods
@@ -491,13 +680,31 @@ namespace Nhanderu.Belizas
             }
             catch (OutOfMemoryException) { throw new TooMuchArgumentsInTruthTableException(Arguments.Count); }
 
+            // Every line is a binary representation of the number of the line.
+            // Line 0: 0 0 0;
+            // Line 1: 0 0 1;
+            // Line 2: 0 1 0;
+            // Line 3: 0 1 1;
+            // Line 4: 1 0 0;
+            // Line 5: 1 0 1;
+            // Line 6: 1 1 0;
+            // Line 7: 1 1 1;
 
+            // The quantity of values an argument has is always 2 power the quantity of values.
+            // Iterates through the lines and the columns of the table and sets the values.
             for (Int32 line = 0; line < Math.Pow(2, Arguments.Count); line++)
             {
+                // Sets another variable with the value of the line for calculation.
                 Int32 calculableLine = line;
                 for (Int32 column = 0; column < Arguments.Count; column++)
                 {
+                    // line >= 2^(args - col)
+                    // (args - col): the number of the column from right to left.
+                    // 2^x: 2 power column, for the value of every 1 (true) in binary.
+                    // line >= x: if line is bigger than the value of the binary field, it is set as 1 (true).
                     ArgumentsValues[line, column] = calculableLine >= Math.Pow(2, (Arguments.Count - 1) - column);
+
+                    // Subtract the value of the binary field from the line if it was set as true, exactly in binary calculation.
                     if (ArgumentsValues[line, column])
                         calculableLine -= (Int32)Math.Pow(2, (Arguments.Count - 1) - column);
                 }
@@ -712,15 +919,13 @@ namespace Nhanderu.Belizas
 
         private Boolean HasER(String expression)
         {
-            Boolean hasChurros = false;
-
+            // If the char is bigger than _er, it is a "expression representation".
             foreach (Char item in expression)
-                if (!hasChurros)
-                    hasChurros = Convert.ToInt32(item) >= _er;
-                else
-                    break;
+                if (Convert.ToInt32(item) >= _er)
+                    return true;
 
-            return hasChurros;
+            // Returns false if it isn't a ER.
+            return false;
         }
 
         private Boolean ContainsCode(List<Int32[]> list, Int32[] code)

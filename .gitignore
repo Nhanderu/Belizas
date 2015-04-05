@@ -23,7 +23,7 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
-#NUNIT
+# NUNIT
 *.VisualState.xml
 TestResult.xml
 
@@ -79,18 +79,18 @@ $tf/
 # Guidance Automation Toolkit
 *.gpState
 
-# ReSharper is a .NET coding add-in
+# ReSharper
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# JustCode is a .NET coding addin-in
+# JustCode
 .JustCode
 
-# TeamCity is a build add-in
+# TeamCity
 _TeamCity*
 
-# DotCover is a Code Coverage Tool
+# DotCover
 *.dotCover
 
 # NCrunch
@@ -107,7 +107,7 @@ AutoTest.Net/
 # Installshield output folder
 [Ee]xpress/
 
-# DocProject is a documentation generator add-in
+# DocProject
 DocProject/buildhelp/
 DocProject/Help/*.HxT
 DocProject/Help/*.HxC
@@ -178,3 +178,6 @@ UpgradeLog*.htm
 
 # Microsoft fakes
 FakesAssemblies/
+
+# Demo Project
+Belizas.Demo/

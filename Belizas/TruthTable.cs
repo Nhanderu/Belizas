@@ -285,7 +285,11 @@ namespace Nhanderu.Belizas
                     return false;
             }
 
-            // Iterates through the sentence to verify the sequence of characters.
+            // If the sentence has one char only, verify if it is an argument.
+            if (sentence.Length == 1)
+                return Char.IsLetter(sentence[0]);
+
+            // If the sentence has more than one char, iterates through it to verify the sequence of characters.
             for (Int32 index = 0; index < sentence.Length; index++)
                 if (index == 0)
                 {

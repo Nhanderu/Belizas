@@ -869,15 +869,12 @@ namespace Nhanderu.Belizas
 
         private Boolean HasER(String expression)
         {
-            Boolean hasChurros = false;
-
             foreach (Char item in expression)
-                if (!hasChurros)
-                    hasChurros = Convert.ToInt32(item) >= _er;
-                else
-                    break;
+                if (Convert.ToInt32(item) >= _er)
+                    return true;
 
-            return hasChurros;
+            // Returns false if it isn't a ER.
+            return false;
         }
 
         private Boolean ContainsCode(List<Int32[]> list, Int32[] code)

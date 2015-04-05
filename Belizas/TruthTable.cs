@@ -353,6 +353,16 @@ namespace Nhanderu.Belizas
 
             return true;
         }
+        
+        /// <summary>
+        /// Verifies the formula, if it is under all the conditions to be a consistent truth table formula. 
+        /// </summary>
+        /// <param name="formula">The formula to be validated.</param>
+        /// <returns>True if the formula is under all the conditions, false if not.</returns>
+        public static Boolean ValidateFormula(String formula, IEnumerable<Char> characters = null)
+        {
+            return (new TruthTable(formula, true, characters)).ValidateFormula();
+        }
 
         /// <summary>
         /// Calculates the truth table using the formula.

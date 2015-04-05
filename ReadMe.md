@@ -40,9 +40,6 @@ All the following properties are only set by the `Calculate` method, but `Formul
 
 ### To-do list
 * Add comments and XML docs in all code.
-* Finish tests.
-* Finish read me file.
-* TruthTable method to convert the table data to a HTML table.
 * Add a exception for invalid character set to an operator.
 
 ### Licence

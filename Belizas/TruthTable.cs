@@ -605,6 +605,7 @@ namespace Nhanderu.Belizas
             // Iterates through the table values, sets a <td> and adds it in the <tr>. When a <tr> is done, adds it in the <tbody>.
             for (Int32 index = 1; index < tableValues.Length; index++)
             {
+                tr.InnerHtml = "";
                 foreach (Char item in tableValues[index])
                 {
                     td.SetInnerText(item.ToString());

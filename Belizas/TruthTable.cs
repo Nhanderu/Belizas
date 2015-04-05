@@ -26,7 +26,7 @@ namespace Nhanderu.Belizas
 
         #region Operators
         /// <summary>
-        /// Gets and sets the character that represents the operator "not".
+        /// Gets and sets the character that represents the "not" operator.
         /// </summary>
         public Char Not
         {
@@ -39,7 +39,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "and".
+        /// Gets and sets the character that represents the "and" operator.
         /// </summary>
         public Char And
         {
@@ -52,7 +52,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "or".
+        /// Gets and sets the character that represents the "or" operator.
         /// </summary>
         public Char Or
         {
@@ -65,7 +65,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "xor".
+        /// Gets and sets the character that represents the "xor" operator.
         /// </summary>
         public Char Xor
         {
@@ -78,7 +78,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "if then".
+        /// Gets and sets the character that represents the "if then" operator.
         /// </summary>
         public Char IfThen
         {
@@ -91,7 +91,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "then if".
+        /// Gets and sets the character that represents the "then if" operator.
         /// </summary>
         public Char ThenIf
         {
@@ -104,7 +104,7 @@ namespace Nhanderu.Belizas
         }
 
         /// <summary>
-        /// Gets and sets the character that represents the operator "if and only if".
+        /// Gets and sets the character that represents the "if and only if" operator.
         /// </summary>
         public Char IfAndOnlyIf
         {
@@ -869,6 +869,7 @@ namespace Nhanderu.Belizas
 
         private Boolean HasER(String expression)
         {
+            // If the char is bigger than _er, it is a "expression representation".
             foreach (Char item in expression)
                 if (Convert.ToInt32(item) >= _er)
                     return true;

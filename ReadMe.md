@@ -1,6 +1,6 @@
 # Belizas
 
-Belizas is a simple .NET library for truth table calculus.
+Belizas is a simple .NET library for truth table calculus!
 
 ### Index
 

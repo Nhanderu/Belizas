@@ -242,8 +242,8 @@ table.ToHtmlTable(attributes);
 
 ### To-do list
 
-* Add comments and XML docs in all code.
-* Add a CSV file writer method.
+* Add comments and XML docs in all code
+* Add a CSV file writer method
 * Stop being lazy
 
 ### License

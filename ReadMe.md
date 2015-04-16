@@ -244,7 +244,8 @@ table.ToHtmlTable(attributes);
 
 * Add comments and XML docs in all code.
 * Add a CSV file writer method.
+* Stop being lazy
 
 ### License
 
-This project is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.
+This project code is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.

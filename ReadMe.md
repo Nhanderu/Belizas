@@ -135,7 +135,7 @@ The methods will be explained and followed by their parameters.
     If the "not" operator should be counted in the verification.  
     Defaults to `true`.
   * __`Boolean` includeBrackets__ *(optional)*  
-    If the "not" operator should be counted in the verification.  
+    If the brackets should be counted in the verification.  
     Defaults to `true`.
 
 * __`String` ToString__  
@@ -193,10 +193,12 @@ Which results to this:
         <tr class="cool">
             <th>...</th>
         </tr>
+    </thead>
+    <tbody>
         <tr class="cool">
             <td vai="curintia">...</td>
         </tr>
-    </thead>
+    </tbody>
 </table>
 ```
 

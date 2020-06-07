@@ -1,8 +1,12 @@
-# Belizas
+# Belizas (deprecated)
 
 Belizas is a simple .NET library for truth table calculus!
 
-### Index
+## Deprecated
+
+Don't use it! I made this code when I was 17, on my freshman year, and I haven't care for it since then. It was my first open source project and I'm keeping it just for my emotional attachment. So, again, don't use this code! You've been warned!
+
+## Index
 
 1. [Usage](#usage)
  1. [How to start](#how-to-start)
@@ -12,9 +16,9 @@ Belizas is a simple .NET library for truth table calculus!
 2. [To-do list](#to-do-list)
 3. [License](#license)
 
-### Usage
+## Usage
 
-#### How to start
+### How to start
 
 Just make an instance of TruthTable, pass the formula and calculate.
 ```c#
@@ -27,7 +31,7 @@ Or you can calculate automatically from the constructor:
 var table = new TruthTable("a.b", true);
 ```
 
-#### Properties of the TruthTable class
+### Properties of the TruthTable class
 
 There's a property for every operator (and the brackets).
 
@@ -95,7 +99,7 @@ All the following properties are only set by the `Calculate` method, but `Formul
 * __`IList<Boolean[]>` ExpressionsValues__ *(get)*  
   The binary values of the expressions.
 
-#### Methods of the TruthTable class
+### Methods of the TruthTable class
 
 The methods will be explained and followed by their parameters.
 
@@ -229,7 +233,7 @@ attributes.Add("nhan", "deru");
 table.ToHtmlTable(attributes);
 ```
 
-#### Exceptions
+### Exceptions
 
 * __InvalidFormulaException__  
   Only thrown in `Calculate` method if the formula is not valid. That's why it's highly recommendable to validate your formula before calculate.
@@ -242,12 +246,12 @@ table.ToHtmlTable(attributes);
 * __TooMuchInformationInTruthTableException__  
   When another thing in the table pass the limit of the memory.
 
-### To-do list
+## To-do list
 
 * Add comments and XML docs in all code
 * Add a CSV file writer method
 * Stop being lazy
 
-### License
+## License
 
 This project code is released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.
